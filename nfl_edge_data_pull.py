@@ -43,7 +43,14 @@ BASELINE_SEASON = 2025      # ← Prior completed season  (change to 2025 for 20
 CURRENT_SEASON  = 2026      # ← Season being projected  (change to 2026 for 2026 Week 1)
 SEASON          = BASELINE_SEASON  # used throughout script as the data pull year
 
-OUTPUT_DIR   = Path(r'C:\Users\gator\OneDrive\Desktop\NFL Models\NFL Edge Model')
+# v2.36: was a hardcoded Windows path (C:\Users\gator\...) — worked fine on
+# your laptop but crashed immediately (exit code 1) when this script ran
+# on GitHub Actions, since that folder only ever existed on your machine.
+# Path(__file__).parent resolves to wherever the script itself actually
+# is, on any computer — same folder as today when run locally, and the
+# repo root automatically when run by the GitHub Actions workflow (which
+# is exactly where its commit step expects to find the output).
+OUTPUT_DIR   = Path(__file__).parent
 OUTPUT_FILE  = OUTPUT_DIR / "nfl_model_data.json"
 # ── Prospect Analyzer — search multiple common locations ──────────────
 _PA_SEARCH_DIRS = [
