@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-07T10:06:13.642258",
+  "generated": "2026-09-08T10:06:30.624890",
   "season": 2025,
   "baseline_season": 2025,
   "current_season": 2026,
@@ -14917,6 +14917,15 @@
       "nflGames": 0,
       "source": "roster_2026_skeleton"
     },
+    "Thomas Odukoya": {
+      "name": "Thomas Odukoya",
+      "pos": "TE",
+      "team": "KC",
+      "games": 0,
+      "isRookie": false,
+      "nflGames": 0,
+      "source": "roster_2026_skeleton"
+    },
     "Lucky Jackson": {
       "name": "Lucky Jackson",
       "pos": "WR",
@@ -15334,7 +15343,7 @@
     "Ahmani Marshall": {
       "name": "Ahmani Marshall",
       "pos": "RB",
-      "team": "CLE",
+      "team": "CAR",
       "games": 0,
       "isRookie": false,
       "nflGames": 0,
@@ -25717,7 +25726,7 @@
   ],
   "meta": {
     "teamCount": 32,
-    "playerCount": 1091,
+    "playerCount": 1092,
     "rookieCount": 0,
     "injuryCount": 0,
     "gameCount": 50
