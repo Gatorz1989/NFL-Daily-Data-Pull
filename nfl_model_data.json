@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-09T10:06:13.094574",
+  "generated": "2026-09-10T10:06:39.024601",
   "season": 2025,
   "baseline_season": 2025,
   "current_season": 2026,
@@ -17756,13 +17756,6 @@
   "injuries": {},
   "games": [
     {
-      "home": "LA",
-      "away": "SF",
-      "week": 1,
-      "date": "2026-09-10",
-      "gameId": "2026_01_SF_LA"
-    },
-    {
       "home": "CAR",
       "away": "CHI",
       "week": 1,
@@ -18104,6 +18097,13 @@
       "week": 4,
       "date": "2026-10-04",
       "gameId": "2026_04_TEN_BAL"
+    },
+    {
+      "home": "BUF",
+      "away": "NE",
+      "week": 4,
+      "date": "2026-10-04",
+      "gameId": "2026_04_NE_BUF"
     }
   ],
   "rookieData": {},
