@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-10T10:06:39.024601",
+  "generated": "2026-09-11T10:06:10.716812",
   "season": 2025,
   "baseline_season": 2025,
   "current_season": 2026,
@@ -15757,7 +15757,7 @@
     "Kyrese Rowan": {
       "name": "Kyrese Rowan",
       "pos": "WR",
-      "team": "DEN",
+      "team": "NO",
       "games": 0,
       "isRookie": false,
       "nflGames": 0,
@@ -16612,7 +16612,7 @@
     "Damon Bankston": {
       "name": "Damon Bankston",
       "pos": "RB",
-      "team": "NYG",
+      "team": "GB",
       "games": 0,
       "isRookie": false,
       "nflGames": 0,
@@ -16639,7 +16639,7 @@
     "Mark Gronowski": {
       "name": "Mark Gronowski",
       "pos": "QB",
-      "team": "MIA",
+      "team": "HOU",
       "games": 0,
       "isRookie": false,
       "nflGames": 0,
@@ -16936,7 +16936,7 @@
     "Kenny Fletcher Jr.": {
       "name": "Kenny Fletcher Jr.",
       "pos": "TE",
-      "team": "TB",
+      "team": "IND",
       "games": 0,
       "isRookie": false,
       "nflGames": 0,
