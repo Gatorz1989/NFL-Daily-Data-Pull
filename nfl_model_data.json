@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-12T10:06:04.131043",
+  "generated": "2026-09-13T10:13:18.923673",
   "season": 2025,
   "baseline_season": 2025,
   "current_season": 2026,
@@ -17756,97 +17756,6 @@
   "injuries": {},
   "games": [
     {
-      "home": "CAR",
-      "away": "CHI",
-      "week": 1,
-      "date": "2026-09-13",
-      "gameId": "2026_01_CHI_CAR"
-    },
-    {
-      "home": "CIN",
-      "away": "TB",
-      "week": 1,
-      "date": "2026-09-13",
-      "gameId": "2026_01_TB_CIN"
-    },
-    {
-      "home": "DET",
-      "away": "NO",
-      "week": 1,
-      "date": "2026-09-13",
-      "gameId": "2026_01_NO_DET"
-    },
-    {
-      "home": "HOU",
-      "away": "BUF",
-      "week": 1,
-      "date": "2026-09-13",
-      "gameId": "2026_01_BUF_HOU"
-    },
-    {
-      "home": "IND",
-      "away": "BAL",
-      "week": 1,
-      "date": "2026-09-13",
-      "gameId": "2026_01_BAL_IND"
-    },
-    {
-      "home": "JAX",
-      "away": "CLE",
-      "week": 1,
-      "date": "2026-09-13",
-      "gameId": "2026_01_CLE_JAX"
-    },
-    {
-      "home": "PIT",
-      "away": "ATL",
-      "week": 1,
-      "date": "2026-09-13",
-      "gameId": "2026_01_ATL_PIT"
-    },
-    {
-      "home": "TEN",
-      "away": "NYJ",
-      "week": 1,
-      "date": "2026-09-13",
-      "gameId": "2026_01_NYJ_TEN"
-    },
-    {
-      "home": "LAC",
-      "away": "ARI",
-      "week": 1,
-      "date": "2026-09-13",
-      "gameId": "2026_01_ARI_LAC"
-    },
-    {
-      "home": "LV",
-      "away": "MIA",
-      "week": 1,
-      "date": "2026-09-13",
-      "gameId": "2026_01_MIA_LV"
-    },
-    {
-      "home": "MIN",
-      "away": "GB",
-      "week": 1,
-      "date": "2026-09-13",
-      "gameId": "2026_01_GB_MIN"
-    },
-    {
-      "home": "PHI",
-      "away": "WAS",
-      "week": 1,
-      "date": "2026-09-13",
-      "gameId": "2026_01_WAS_PHI"
-    },
-    {
-      "home": "NYG",
-      "away": "DAL",
-      "week": 1,
-      "date": "2026-09-13",
-      "gameId": "2026_01_DAL_NYG"
-    },
-    {
       "home": "KC",
       "away": "DEN",
       "week": 1,
@@ -18104,6 +18013,97 @@
       "week": 4,
       "date": "2026-10-04",
       "gameId": "2026_04_NE_BUF"
+    },
+    {
+      "home": "CHI",
+      "away": "NYJ",
+      "week": 4,
+      "date": "2026-10-04",
+      "gameId": "2026_04_NYJ_CHI"
+    },
+    {
+      "home": "CIN",
+      "away": "JAX",
+      "week": 4,
+      "date": "2026-10-04",
+      "gameId": "2026_04_JAX_CIN"
+    },
+    {
+      "home": "HOU",
+      "away": "DAL",
+      "week": 4,
+      "date": "2026-10-04",
+      "gameId": "2026_04_DAL_HOU"
+    },
+    {
+      "home": "NYG",
+      "away": "ARI",
+      "week": 4,
+      "date": "2026-10-04",
+      "gameId": "2026_04_ARI_NYG"
+    },
+    {
+      "home": "PHI",
+      "away": "LA",
+      "week": 4,
+      "date": "2026-10-04",
+      "gameId": "2026_04_LA_PHI"
+    },
+    {
+      "home": "TB",
+      "away": "GB",
+      "week": 4,
+      "date": "2026-10-04",
+      "gameId": "2026_04_GB_TB"
+    },
+    {
+      "home": "MIN",
+      "away": "MIA",
+      "week": 4,
+      "date": "2026-10-04",
+      "gameId": "2026_04_MIA_MIN"
+    },
+    {
+      "home": "LV",
+      "away": "KC",
+      "week": 4,
+      "date": "2026-10-04",
+      "gameId": "2026_04_KC_LV"
+    },
+    {
+      "home": "SEA",
+      "away": "LAC",
+      "week": 4,
+      "date": "2026-10-04",
+      "gameId": "2026_04_LAC_SEA"
+    },
+    {
+      "home": "SF",
+      "away": "DEN",
+      "week": 4,
+      "date": "2026-10-04",
+      "gameId": "2026_04_DEN_SF"
+    },
+    {
+      "home": "CAR",
+      "away": "DET",
+      "week": 4,
+      "date": "2026-10-04",
+      "gameId": "2026_04_DET_CAR"
+    },
+    {
+      "home": "NO",
+      "away": "ATL",
+      "week": 4,
+      "date": "2026-10-05",
+      "gameId": "2026_04_ATL_NO"
+    },
+    {
+      "home": "DAL",
+      "away": "TB",
+      "week": 5,
+      "date": "2026-10-08",
+      "gameId": "2026_05_TB_DAL"
     }
   ],
   "rookieData": {},
