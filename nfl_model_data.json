@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-13T10:13:18.923673",
+  "generated": "2026-09-14T10:06:28.022593",
   "season": 2025,
   "baseline_season": 2025,
   "current_season": 2026,
@@ -555,8 +555,8 @@
       "qb": "Drake Maye",
       "te": "Hunter Henry",
       "rbTop": "Rhamondre Stevenson",
-      "wr1": "A.J. Brown",
-      "wr2": "Romeo Doubs"
+      "wr1": "Romeo Doubs",
+      "wr2": "A.J. Brown"
     },
     "NO": {
       "games": 17,
@@ -17756,13 +17756,6 @@
   "injuries": {},
   "games": [
     {
-      "home": "KC",
-      "away": "DEN",
-      "week": 1,
-      "date": "2026-09-14",
-      "gameId": "2026_01_DEN_KC"
-    },
-    {
       "home": "BUF",
       "away": "DET",
       "week": 2,
@@ -18104,6 +18097,13 @@
       "week": 5,
       "date": "2026-10-08",
       "gameId": "2026_05_TB_DAL"
+    },
+    {
+      "home": "JAX",
+      "away": "PHI",
+      "week": 5,
+      "date": "2026-10-11",
+      "gameId": "2026_05_PHI_JAX"
     }
   ],
   "rookieData": {},
@@ -18400,17 +18400,17 @@
           "slot": "wr1",
           "pos": "WR",
           "old_starter": "Stefon Diggs",
-          "new_starter": "A.J. Brown",
+          "new_starter": "Romeo Doubs",
           "new_data_source": "2025",
-          "impact_pts": 0.43
+          "impact_pts": -0.87
         },
         {
           "slot": "wr2",
           "pos": "WR",
           "old_starter": "Kayshon Boutte",
-          "new_starter": "Romeo Doubs",
+          "new_starter": "A.J. Brown",
           "new_data_source": "2025",
-          "impact_pts": 0.35
+          "impact_pts": 1.65
         }
       ]
     },
