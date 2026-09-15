@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-14T10:06:28.022593",
+  "generated": "2026-09-15T10:07:03.876956",
   "season": 2025,
   "baseline_season": 2025,
   "current_season": 2026,
@@ -51,7 +51,7 @@
       "defQBHits": 97.0,
       "defPassDef": 87.0,
       "kickerAdj": -0.15,
-      "qb": "Tua Tagovailoa",
+      "qb": "Michael Penix Jr.",
       "te": "Kyle Pitts Sr.",
       "rbTop": "Bijan Robinson",
       "wr1": "Drake London"
@@ -680,7 +680,7 @@
       "defPassDef": 90.0,
       "kickerAdj": 0.01,
       "qb": "Aaron Rodgers",
-      "te": "Pat Freiermuth",
+      "te": "Darnell Washington",
       "rbTop": "Jaylen Warren",
       "wr1": "DK Metcalf"
     },
@@ -18131,17 +18131,8 @@
       ]
     },
     "ATL": {
-      "offAdj": 0.66,
-      "changes": [
-        {
-          "slot": "qb",
-          "pos": "QB",
-          "old_starter": "Michael Penix Jr.",
-          "new_starter": "Tua Tagovailoa",
-          "new_data_source": "2025",
-          "impact_pts": 0.66
-        }
-      ]
+      "offAdj": 0.0,
+      "changes": []
     },
     "BAL": {
       "offAdj": -0.04,
@@ -18483,8 +18474,17 @@
       ]
     },
     "PIT": {
-      "offAdj": 0.0,
-      "changes": []
+      "offAdj": -0.26,
+      "changes": [
+        {
+          "slot": "te",
+          "pos": "TE",
+          "old_starter": "Pat Freiermuth",
+          "new_starter": "Darnell Washington",
+          "new_data_source": "2025",
+          "impact_pts": -0.26
+        }
+      ]
     },
     "SEA": {
       "offAdj": -2.47,
