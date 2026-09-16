@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-15T10:07:03.876956",
+  "generated": "2026-09-16T10:06:15.285550",
   "season": 2025,
   "baseline_season": 2025,
   "current_season": 2026,
@@ -15388,7 +15388,7 @@
     "Chandler Brayboy": {
       "name": "Chandler Brayboy",
       "pos": "WR",
-      "team": "JAX",
+      "team": "NE",
       "games": 0,
       "isRookie": false,
       "nflGames": 0,
@@ -15641,15 +15641,6 @@
       "name": "CJ Dippre",
       "pos": "TE",
       "team": "TB",
-      "games": 0,
-      "isRookie": false,
-      "nflGames": 0,
-      "source": "roster_2026_skeleton"
-    },
-    "Brock Lampe": {
-      "name": "Brock Lampe",
-      "pos": "RB",
-      "team": "SEA",
       "games": 0,
       "isRookie": false,
       "nflGames": 0,
@@ -25726,7 +25717,7 @@
   ],
   "meta": {
     "teamCount": 32,
-    "playerCount": 1092,
+    "playerCount": 1091,
     "rookieCount": 0,
     "injuryCount": 0,
     "gameCount": 50
