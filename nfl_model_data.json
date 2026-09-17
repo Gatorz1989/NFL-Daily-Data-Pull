@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-16T10:06:15.285550",
+  "generated": "2026-09-17T10:06:13.185502",
   "season": 2025,
   "baseline_season": 2025,
   "current_season": 2026,
@@ -15619,10 +15619,10 @@
       "nflGames": 0,
       "source": "roster_2026_skeleton"
     },
-    "Quincy Skinner Jr.": {
-      "name": "Quincy Skinner Jr.",
+    "Quincy Skinner": {
+      "name": "Quincy Skinner",
       "pos": "WR",
-      "team": "NYJ",
+      "team": "GB",
       "games": 0,
       "isRookie": false,
       "nflGames": 0,
@@ -17747,13 +17747,6 @@
   "injuries": {},
   "games": [
     {
-      "home": "BUF",
-      "away": "DET",
-      "week": 2,
-      "date": "2026-09-17",
-      "gameId": "2026_02_DET_BUF"
-    },
-    {
       "home": "ATL",
       "away": "CAR",
       "week": 2,
@@ -18095,6 +18088,13 @@
       "week": 5,
       "date": "2026-10-11",
       "gameId": "2026_05_PHI_JAX"
+    },
+    {
+      "home": "MIA",
+      "away": "CIN",
+      "week": 5,
+      "date": "2026-10-11",
+      "gameId": "2026_05_CIN_MIA"
     }
   ],
   "rookieData": {},
