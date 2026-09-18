@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-17T10:06:13.185502",
+  "generated": "2026-09-18T10:06:25.369751",
   "season": 2025,
   "baseline_season": 2025,
   "current_season": 2026,
@@ -29,7 +29,8 @@
       "qb": "Jacoby Brissett",
       "te": "Trey McBride",
       "rbTop": "Jeremiyah Love",
-      "wr1": "Marvin Harrison Jr."
+      "wr1": "Michael Wilson",
+      "wr2": "Marvin Harrison Jr."
     },
     "ATL": {
       "games": 17,
@@ -15619,8 +15620,8 @@
       "nflGames": 0,
       "source": "roster_2026_skeleton"
     },
-    "Quincy Skinner": {
-      "name": "Quincy Skinner",
+    "Quincy Skinner Jr.": {
+      "name": "Quincy Skinner Jr.",
       "pos": "WR",
       "team": "GB",
       "games": 0,
@@ -18101,7 +18102,7 @@
   "coaching_context": {},
   "roster_changes": {
     "ARI": {
-      "offAdj": -5.67,
+      "offAdj": -5.16,
       "changes": [
         {
           "slot": "rbTop",
@@ -18110,14 +18111,6 @@
           "new_starter": "Jeremiyah Love",
           "new_data_source": "estimate",
           "impact_pts": -5.16
-        },
-        {
-          "slot": "wr1",
-          "pos": "WR",
-          "old_starter": "Michael Wilson",
-          "new_starter": "Marvin Harrison Jr.",
-          "new_data_source": "2025",
-          "impact_pts": -0.51
         }
       ]
     },
