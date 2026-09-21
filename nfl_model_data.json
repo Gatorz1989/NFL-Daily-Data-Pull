@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-20T10:06:06.572069",
+  "generated": "2026-09-21T10:06:07.122000",
   "season": 2025,
   "baseline_season": 2025,
   "current_season": 2026,
@@ -17748,13 +17748,6 @@
   "injuries": {},
   "games": [
     {
-      "home": "LA",
-      "away": "NYG",
-      "week": 2,
-      "date": "2026-09-21",
-      "gameId": "2026_02_NYG_LA"
-    },
-    {
       "home": "GB",
       "away": "ATL",
       "week": 3,
@@ -18096,6 +18089,13 @@
       "week": 6,
       "date": "2026-10-18",
       "gameId": "2026_06_HOU_JAX"
+    },
+    {
+      "home": "ATL",
+      "away": "CHI",
+      "week": 6,
+      "date": "2026-10-18",
+      "gameId": "2026_06_CHI_ATL"
     }
   ],
   "rookieData": {},
