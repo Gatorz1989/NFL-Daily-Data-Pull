@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-21T10:06:07.122000",
+  "generated": "2026-09-22T10:06:57.121442",
   "season": 2025,
   "baseline_season": 2025,
   "current_season": 2026,
@@ -205,7 +205,8 @@
       "qb": "Deshaun Watson",
       "te": "Harold Fannin Jr.",
       "rbTop": "Quinshon Judkins",
-      "wr1": "Jerry Jeudy"
+      "wr1": "Denzel Boston",
+      "wr2": "Jerry Jeudy"
     },
     "DAL": {
       "games": 17,
@@ -381,7 +382,8 @@
       "qb": "Trevor Lawrence",
       "te": "Brenton Strange",
       "rbTop": "Bhayshul Tuten",
-      "wr1": "Brian Thomas Jr."
+      "wr1": "Parker Washington",
+      "wr2": "Brian Thomas Jr."
     },
     "KC": {
       "games": 17,
@@ -454,7 +456,7 @@
       "defPassDef": 84.0,
       "kickerAdj": 0.39,
       "qb": "Justin Herbert",
-      "te": "Charlie Kolar",
+      "te": "Oronde Gadsden",
       "rbTop": "Omarion Hampton",
       "wr1": "Ladd McConkey"
     },
@@ -681,7 +683,7 @@
       "defPassDef": 90.0,
       "kickerAdj": 0.01,
       "qb": "Aaron Rodgers",
-      "te": "Darnell Washington",
+      "te": "Pat Freiermuth",
       "rbTop": "Jaylen Warren",
       "wr1": "DK Metcalf"
     },
@@ -18166,7 +18168,7 @@
       "changes": []
     },
     "CLE": {
-      "offAdj": -0.18,
+      "offAdj": 0.0,
       "changes": [
         {
           "slot": "qb",
@@ -18175,6 +18177,22 @@
           "new_starter": "Deshaun Watson",
           "new_data_source": "2025",
           "impact_pts": -0.18
+        },
+        {
+          "slot": "wr1",
+          "pos": "WR",
+          "old_starter": "Jerry Jeudy",
+          "new_starter": "Denzel Boston",
+          "new_data_source": "estimate",
+          "impact_pts": -0.32
+        },
+        {
+          "slot": "wr2",
+          "pos": "WR",
+          "old_starter": "David Bell",
+          "new_starter": "Jerry Jeudy",
+          "new_data_source": "2025",
+          "impact_pts": 0.5
         }
       ]
     },
@@ -18247,7 +18265,7 @@
       "changes": []
     },
     "JAX": {
-      "offAdj": -3.92,
+      "offAdj": -3.87,
       "changes": [
         {
           "slot": "rbTop",
@@ -18258,12 +18276,12 @@
           "impact_pts": -3.77
         },
         {
-          "slot": "wr1",
+          "slot": "wr2",
           "pos": "WR",
-          "old_starter": "Parker Washington",
+          "old_starter": "Jakobi Meyers",
           "new_starter": "Brian Thomas Jr.",
           "new_data_source": "2025",
-          "impact_pts": -0.15
+          "impact_pts": -0.1
         }
       ]
     },
@@ -18285,7 +18303,7 @@
       "changes": []
     },
     "LAC": {
-      "offAdj": -2.43,
+      "offAdj": -0.43,
       "changes": [
         {
           "slot": "wr1",
@@ -18294,14 +18312,6 @@
           "new_starter": "Ladd McConkey",
           "new_data_source": "2025",
           "impact_pts": -0.43
-        },
-        {
-          "slot": "te",
-          "pos": "TE",
-          "old_starter": "Oronde Gadsden II",
-          "new_starter": "Charlie Kolar",
-          "new_data_source": "2025",
-          "impact_pts": -2.0
         }
       ]
     },
@@ -18458,17 +18468,8 @@
       ]
     },
     "PIT": {
-      "offAdj": -0.26,
-      "changes": [
-        {
-          "slot": "te",
-          "pos": "TE",
-          "old_starter": "Pat Freiermuth",
-          "new_starter": "Darnell Washington",
-          "new_data_source": "2025",
-          "impact_pts": -0.26
-        }
-      ]
+      "offAdj": 0.0,
+      "changes": []
     },
     "SEA": {
       "offAdj": -2.47,
