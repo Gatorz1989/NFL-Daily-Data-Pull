@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-22T10:06:57.121442",
+  "generated": "2026-09-23T10:05:43.790871",
   "season": 2025,
   "baseline_season": 2025,
   "current_season": 2026,
@@ -606,7 +606,7 @@
       "defQBHits": 96.0,
       "defPassDef": 77.0,
       "kickerAdj": 0.17,
-      "qb": "Jaxson Dart",
+      "qb": "Jameis Winston",
       "te": "Isaiah Likely",
       "rbTop": "Cam Skattebo",
       "wr1": "Malik Nabers"
@@ -632,7 +632,7 @@
       "defPassDef": 67.0,
       "kickerAdj": 0.5,
       "qb": "Geno Smith",
-      "te": "Mason Taylor",
+      "te": "Kenyon Sadiq",
       "rbTop": "Breece Hall",
       "wr1": "Garrett Wilson"
     },
@@ -18413,16 +18413,8 @@
       ]
     },
     "NYG": {
-      "offAdj": -8.0,
+      "offAdj": -0.58,
       "changes": [
-        {
-          "slot": "qb",
-          "pos": "QB",
-          "old_starter": "Jameis Winston",
-          "new_starter": "Jaxson Dart",
-          "new_data_source": "2025",
-          "impact_pts": -7.81
-        },
         {
           "slot": "te",
           "pos": "TE",
@@ -18443,6 +18435,14 @@
           "new_starter": "Geno Smith",
           "new_data_source": "2025",
           "impact_pts": 9.93
+        },
+        {
+          "slot": "te",
+          "pos": "TE",
+          "old_starter": "Mason Taylor",
+          "new_starter": "Kenyon Sadiq",
+          "new_data_source": "estimate",
+          "impact_pts": -0.5
         }
       ]
     },
