@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-23T10:05:43.790871",
+  "generated": "2026-09-24T10:06:12.579692",
   "season": 2025,
   "baseline_season": 2025,
   "current_season": 2026,
@@ -357,7 +357,8 @@
       "qb": "Daniel Jones",
       "te": "Tyler Warren",
       "rbTop": "Jonathan Taylor",
-      "wr1": "Alec Pierce"
+      "wr1": "Josh Downs",
+      "wr2": "Alec Pierce"
     },
     "JAX": {
       "games": 17,
@@ -456,7 +457,7 @@
       "defPassDef": 84.0,
       "kickerAdj": 0.39,
       "qb": "Justin Herbert",
-      "te": "Oronde Gadsden",
+      "te": "Charlie Kolar",
       "rbTop": "Omarion Hampton",
       "wr1": "Ladd McConkey"
     },
@@ -17146,7 +17147,7 @@
     "Cody Hardy": {
       "name": "Cody Hardy",
       "pos": "TE",
-      "team": "NO",
+      "team": "NYJ",
       "games": 0,
       "isRookie": false,
       "nflGames": 0,
@@ -17272,15 +17273,6 @@
     "Kaden Wetjen": {
       "name": "Kaden Wetjen",
       "pos": "WR",
-      "team": "PIT",
-      "games": 0,
-      "isRookie": false,
-      "nflGames": 0,
-      "source": "roster_2026_skeleton"
-    },
-    "Riley Nowakowski": {
-      "name": "Riley Nowakowski",
-      "pos": "TE",
       "team": "PIT",
       "games": 0,
       "isRookie": false,
@@ -17575,6 +17567,15 @@
       "nflGames": 0,
       "source": "roster_2026_skeleton"
     },
+    "Malick Meiga": {
+      "name": "Malick Meiga",
+      "pos": "WR",
+      "team": "SEA",
+      "games": 0,
+      "isRookie": false,
+      "nflGames": 0,
+      "source": "roster_2026_skeleton"
+    },
     "KC Concepcion": {
       "name": "KC Concepcion",
       "pos": "WR",
@@ -17749,13 +17750,6 @@
   },
   "injuries": {},
   "games": [
-    {
-      "home": "GB",
-      "away": "ATL",
-      "week": 3,
-      "date": "2026-09-24",
-      "gameId": "2026_03_ATL_GB"
-    },
     {
       "home": "BUF",
       "away": "LAC",
@@ -18098,6 +18092,13 @@
       "week": 6,
       "date": "2026-10-18",
       "gameId": "2026_06_CHI_ATL"
+    },
+    {
+      "home": "CLE",
+      "away": "BAL",
+      "week": 6,
+      "date": "2026-10-18",
+      "gameId": "2026_06_BAL_CLE"
     }
   ],
   "rookieData": {},
@@ -18261,8 +18262,25 @@
       ]
     },
     "IND": {
-      "offAdj": 0.0,
-      "changes": []
+      "offAdj": -0.65,
+      "changes": [
+        {
+          "slot": "wr1",
+          "pos": "WR",
+          "old_starter": "Alec Pierce",
+          "new_starter": "Josh Downs",
+          "new_data_source": "2025",
+          "impact_pts": -1.89
+        },
+        {
+          "slot": "wr2",
+          "pos": "WR",
+          "old_starter": "Michael Pittman",
+          "new_starter": "Alec Pierce",
+          "new_data_source": "2025",
+          "impact_pts": 1.24
+        }
+      ]
     },
     "JAX": {
       "offAdj": -3.87,
@@ -18303,7 +18321,7 @@
       "changes": []
     },
     "LAC": {
-      "offAdj": -0.43,
+      "offAdj": -2.43,
       "changes": [
         {
           "slot": "wr1",
@@ -18312,6 +18330,14 @@
           "new_starter": "Ladd McConkey",
           "new_data_source": "2025",
           "impact_pts": -0.43
+        },
+        {
+          "slot": "te",
+          "pos": "TE",
+          "old_starter": "Oronde Gadsden II",
+          "new_starter": "Charlie Kolar",
+          "new_data_source": "2025",
+          "impact_pts": -2.0
         }
       ]
     },
