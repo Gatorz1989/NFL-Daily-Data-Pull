@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-25T10:06:02.154072",
+  "generated": "2026-09-26T10:05:52.755044",
   "season": 2025,
   "baseline_season": 2025,
   "current_season": 2026,
@@ -306,7 +306,7 @@
       "kickerAdj": -0.36,
       "qb": "Jordan Love",
       "te": "Tucker Kraft",
-      "rbTop": "MarShawn Lloyd",
+      "rbTop": "Kaleb Johnson",
       "wr1": "Christian Watson"
     },
     "HOU": {
@@ -18236,15 +18236,15 @@
       "changes": []
     },
     "GB": {
-      "offAdj": -4.7,
+      "offAdj": -5.25,
       "changes": [
         {
           "slot": "rbTop",
           "pos": "RB",
           "old_starter": "Josh Jacobs",
-          "new_starter": "MarShawn Lloyd",
-          "new_data_source": "2024",
-          "impact_pts": -4.7
+          "new_starter": "Kaleb Johnson",
+          "new_data_source": "2025",
+          "impact_pts": -5.25
         }
       ]
     },
