@@ -43,8 +43,93 @@ BASELINE_SEASON = 2025      # ← Prior completed season  (change to 2025 for 20
 CURRENT_SEASON  = 2026      # ← Season being projected  (change to 2026 for 2026 Week 1)
 SEASON          = BASELINE_SEASON  # used throughout script as the data pull year
 
-OUTPUT_DIR   = Path(r'C:\Users\gator\OneDrive\Desktop\NFL Models\NFL Edge Model')
+import os as _os
+
+# v4.0 REAL BUG FIXED — OUTPUT_DIR was an unconditional hardcoded Windows
+# path. Confirmed via a real GitHub Actions failure: the pipeline ran
+# completely successfully end-to-end (real opportunity shares, snap counts,
+# coverage/red-zone proxies, 1000 player profiles built) and only failed on
+# the very last line — writing the output JSON — because GitHub Actions
+# runs on a Linux server, where a `C:\Users\...` path doesn't exist at all.
+# This had nothing to do with anything else changed this round; it's a
+# pre-existing gap that simply hadn't been reached by a successful run in
+# this environment before. Fixed by detecting GitHub Actions' own
+# `GITHUB_ACTIONS` environment variable (automatically set to "true" in
+# every workflow run — no configuration needed) and writing to the current
+# working directory in that case, which is the repo root right after
+# actions/checkout — exactly where the workflow's own commit step expects
+# to find it. Local Windows runs are completely unaffected.
+if _os.environ.get('GITHUB_ACTIONS') == 'true':
+    OUTPUT_DIR = Path('.')
+else:
+    OUTPUT_DIR = Path(r'C:\Users\gator\OneDrive\Desktop\NFL Models\NFL Edge Model')
 OUTPUT_FILE  = OUTPUT_DIR / "nfl_model_data.json"
+
+# v4.0 NEW — optional automatic GitHub push after a successful pull. This
+# needs the LOCAL PATH to your actual git clone of Gatorz1989/NFL-Daily-Data-Pull
+# — NOT the same folder as OUTPUT_DIR above, which is the model's own working
+# directory, not a git repo. Set this to wherever you've cloned that repo
+# locally (e.g. r'C:\Users\gator\OneDrive\Desktop\NFL Models\NFL-Daily-Data-Pull').
+# Leave as None to disable — the script will just skip the push step with a
+# clear message, exactly like it does today, rather than fail.
+GITHUB_REPO_DIR = None  # ← SET THIS to your local repo clone path to enable --push
+
+def push_output_to_github(repo_dir, output_file, commit_message=None):
+    """v4.0 NEW — copies output_file into repo_dir (if not already there) and
+    runs a real git add/commit/push. Requires repo_dir to already be a valid
+    local git clone with push access already configured (SSH key or a stored
+    HTTPS credential) — this function does not handle interactive auth; if
+    git prompts for a password, this will hang or fail, and prints a clear
+    message either way rather than crashing the whole pull. Non-fatal on any
+    failure: the local JSON write in save_output() already succeeded before
+    this ever runs, so a git problem here never loses that output."""
+    import subprocess
+    repo_dir = Path(repo_dir)
+    if not repo_dir.exists():
+        print(f"  ⚠ GitHub push skipped — repo directory not found: {repo_dir}")
+        return False
+    if not (repo_dir / '.git').exists():
+        print(f"  ⚠ GitHub push skipped — {repo_dir} is not a git repository "
+              f"(no .git folder). Clone the repo there first.")
+        return False
+
+    dest = repo_dir / output_file.name
+    try:
+        if dest.resolve() != Path(output_file).resolve():
+            import shutil
+            shutil.copy2(output_file, dest)
+            print(f"  Copied {output_file.name} into {repo_dir}")
+    except Exception as e:
+        print(f"  ⚠ GitHub push skipped — couldn't copy JSON into repo dir: {e}")
+        return False
+
+    msg = commit_message or f"Automated data pull — {datetime.now().strftime('%Y-%m-%d %H:%M')}"
+    try:
+        subprocess.run(['git', 'add', dest.name], cwd=repo_dir, check=True,
+                        capture_output=True, text=True, timeout=30)
+        _commit = subprocess.run(['git', 'commit', '-m', msg], cwd=repo_dir,
+                        capture_output=True, text=True, timeout=30)
+        if _commit.returncode != 0 and 'nothing to commit' not in (_commit.stdout + _commit.stderr).lower():
+            print(f"  ⚠ git commit reported an issue: {_commit.stderr.strip() or _commit.stdout.strip()}")
+            return False
+        if 'nothing to commit' in (_commit.stdout + _commit.stderr).lower():
+            print(f"  ℹ No changes to push — JSON is identical to what's already in the repo.")
+            return True
+        _push = subprocess.run(['git', 'push'], cwd=repo_dir, check=True,
+                        capture_output=True, text=True, timeout=60)
+        print(f"  ✅ Pushed to GitHub: {msg}")
+        return True
+    except subprocess.TimeoutExpired:
+        print(f"  ⚠ GitHub push timed out — likely waiting on a credential prompt. "
+              f"Configure a stored credential (SSH key or git credential helper) so this can run unattended.")
+        return False
+    except subprocess.CalledProcessError as e:
+        print(f"  ⚠ GitHub push failed: {(e.stderr or e.stdout or str(e)).strip()}")
+        return False
+    except Exception as e:
+        print(f"  ⚠ GitHub push failed with an unexpected error: {e}")
+        return False
+
 # ── Prospect Analyzer — search multiple common locations ──────────────
 _PA_SEARCH_DIRS = [
     Path(r'C:\Users\gator\OneDrive\Desktop\NFL Models\NFL Prospect Analyzer'),  # ← correct
@@ -4336,6 +4421,16 @@ if __name__ == '__main__':
                              'successRate, and pressureRatePerGame for past seasons and export a '
                              'JSON ready to merge into BT_BASELINE_2023/BT_BASELINE_2024 in the '
                              'HTML — supplies the fields the market-residual O/U total formula needs.')
+    parser.add_argument('--push', action='store_true',
+                        help='After a successful pull, automatically copy the output JSON into '
+                             'your local GitHub repo clone and commit+push it — so the Data tab\'s '
+                             'fetch always sees this run\'s output without a manual git step. '
+                             'Requires GITHUB_REPO_DIR to be set near the top of this file (or '
+                             'passed via --repo-dir), pointing at your actual local clone of '
+                             'Gatorz1989/NFL-Daily-Data-Pull, with push access already configured '
+                             '(SSH key or stored credential — this does not handle interactive login).')
+    parser.add_argument('--repo-dir', type=str, default=None,
+                        help='Overrides GITHUB_REPO_DIR for this run only, without editing the file.')
     args = parser.parse_args()
 
     if args.backfill_rzdef:
@@ -4349,8 +4444,23 @@ if __name__ == '__main__':
             target_season=args.season or CURRENT_SEASON,
             weeks_back=args.weeks,
         )
+        if args.push:
+            _repo = args.repo_dir or GITHUB_REPO_DIR
+            if _repo:
+                push_output_to_github(_repo, OUTPUT_FILE)
+            else:
+                print("  ⚠ --push given but no repo path set — use --repo-dir or set "
+                      "GITHUB_REPO_DIR near the top of this file.")
     else:
         main()
+        if args.push:
+            _repo = args.repo_dir or GITHUB_REPO_DIR
+            if _repo:
+                push_output_to_github(_repo, OUTPUT_FILE)
+            else:
+                print("  ⚠ --push given but no repo path set — use --repo-dir or set "
+                      "GITHUB_REPO_DIR near the top of this file.")
+
 
 # ══════════════════════════════════════════════════════════════════════
 # IN-SEASON UPDATE ENGINE
