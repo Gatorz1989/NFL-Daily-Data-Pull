@@ -18,7 +18,7 @@ Requirements:
     pip install pandas requests openpyxl pyarrow beautifulsoup4
 """
 
-import os, sys, json, re, time, warnings
+import os, sys, json, re, time, warnings, math
 from datetime import datetime
 from pathlib import Path
 
@@ -43,14 +43,7 @@ BASELINE_SEASON = 2025      # ← Prior completed season  (change to 2025 for 20
 CURRENT_SEASON  = 2026      # ← Season being projected  (change to 2026 for 2026 Week 1)
 SEASON          = BASELINE_SEASON  # used throughout script as the data pull year
 
-# v2.36: was a hardcoded Windows path (C:\Users\gator\...) — worked fine on
-# your laptop but crashed immediately (exit code 1) when this script ran
-# on GitHub Actions, since that folder only ever existed on your machine.
-# Path(__file__).parent resolves to wherever the script itself actually
-# is, on any computer — same folder as today when run locally, and the
-# repo root automatically when run by the GitHub Actions workflow (which
-# is exactly where its commit step expects to find the output).
-OUTPUT_DIR   = Path(__file__).parent
+OUTPUT_DIR   = Path(r'C:\Users\gator\OneDrive\Desktop\NFL Models\NFL Edge Model')
 OUTPUT_FILE  = OUTPUT_DIR / "nfl_model_data.json"
 # ── Prospect Analyzer — search multiple common locations ──────────────
 _PA_SEARCH_DIRS = [
@@ -129,11 +122,712 @@ CONF_ADJ = {
 }
 NFL_TRANS_FACTOR = 0.65   # college production → NFL baseline
 
+# v3.31 NEW — CFBD (College Football Data) integration, per G-Money's
+# explicit request: real per-player college production + games-played,
+# used only for rookie blending until a player has enough real NFL games
+# to no longer need a college baseline. Same env-var pattern already used
+# in the companion cfb_edge_data_pull.py script, for consistency.
+#   set CFBD_API_KEY=your_key_here        (Windows)
+#   export CFBD_API_KEY=your_key_here     (Mac/Linux)
+# Get a free key at https://collegefootballdata.com/key
+#   NOTE: env var (above) always wins if set — this only matters when it's NOT set,
+#   so GitHub Actions secrets keep working exactly as before. For local runs, set
+#   your real key on the line below ONCE and stop re-entering it every session.
+CFBD_API_KEY_LOCAL_FALLBACK = ""  # <-- paste your real CFBD key here, once
+CFBD_API_KEY = os.environ.get("CFBD_API_KEY", "") or CFBD_API_KEY_LOCAL_FALLBACK
+CFBD_BASE = "https://api.collegefootballdata.com"
+_cfbd_auth_failed = False
+_cfbd_last_call_time = 0.0
+_cfbd_quota_exhausted = False
+
+def cfbd_get(path, params=None, max_retries=3, base_delay=1.0, min_interval=0.6):
+    """Same pattern as the working helper in cfb_edge_data_pull.py.
+    v3.64 FIX — this had no rate limiting or 429 handling at all: with
+    ~200 rookies each needing 1-2 calls, requests fired back-to-back and
+    burned through CFBD's rate limit almost immediately, so most rookies
+    fell back to the CFB Reference scrape unnecessarily even with a valid
+    key. Added a minimum courtesy interval between calls plus retry with
+    exponential backoff (1s, 2s, 4s) on 429, before giving up.
+    v3.65 FIX — that backoff helps a brief burst, but a real run showed
+    EVERY single rookie hitting 429 even after full retries — a sustained
+    quota exhaustion (the free tier's hourly/daily cap already used up
+    from earlier runs this session), not a quick blip. Retrying the same
+    7-second dance for all ~200 rookies in that case wastes 20+ minutes
+    for zero benefit. Now: the first time a call exhausts every retry, that's
+    treated as confirmed quota exhaustion — CFBD is skipped for the rest
+    of this run (straight to None, no delay, no attempt), same as the
+    existing _cfbd_auth_failed short-circuit for a bad key."""
+    global _cfbd_auth_failed, _cfbd_last_call_time, _cfbd_quota_exhausted
+    if not CFBD_API_KEY or _cfbd_auth_failed or _cfbd_quota_exhausted:
+        return None
+    headers = {"Authorization": f"Bearer {CFBD_API_KEY}"}
+    for attempt in range(max_retries + 1):
+        elapsed = time.time() - _cfbd_last_call_time
+        if elapsed < min_interval:
+            time.sleep(min_interval - elapsed)
+        try:
+            r = requests.get(f"{CFBD_BASE}{path}", headers=headers, params=params or {}, timeout=20)
+            _cfbd_last_call_time = time.time()
+            if r.status_code == 429:
+                if attempt < max_retries:
+                    wait = base_delay * (2 ** attempt)
+                    print(f"  ! CFBD rate limited on {path} — waiting {wait:.0f}s and retrying "
+                          f"({attempt + 1}/{max_retries})...")
+                    time.sleep(wait)
+                    continue
+                _cfbd_quota_exhausted = True
+                print(f"  ! CFBD still rate limited on {path} after {max_retries} retries — "
+                      f"treating this as quota exhaustion for the hour, not a brief blip. "
+                      f"Skipping CFBD for the rest of this run (straight to CFB Reference scrape).")
+                return None
+            r.raise_for_status()
+            return r.json()
+        except requests.exceptions.HTTPError as e:
+            _cfbd_last_call_time = time.time()
+            if e.response is not None and e.response.status_code == 401:
+                _cfbd_auth_failed = True
+                print("  ! CFBD_API_KEY was rejected (401) — skipping further CFBD calls this run.")
+            else:
+                print(f"  ! CFBD error on {path}: {e}")
+            return None
+        except Exception as e:
+            _cfbd_last_call_time = time.time()
+            print(f"  ! CFBD error on {path}: {e}")
+        return None
+
 # Rookie threshold: games before full NFL weighting
 QB_THRESHOLD     = 5
 SKILL_THRESHOLD  = 3
 
 # Blend schedule: (college_weight, nfl_weight) by NFL games played
+def get_season_blend_weight(current_season_games, k=6):
+    """v3.39 NEW — weight for CURRENT_SEASON data in the season-transition
+    blend, scaling from 0 (no current-season games yet) to 1 (full weight
+    on current season) as games accumulate. k = games needed to reach full
+    weight; k=6 (~1/3 of a season) is the starting default — tune by
+    changing SEASON_BLEND_K below, no code change needed."""
+    if current_season_games <= 0:
+        return 0.0
+    return min(1.0, current_season_games / float(k))
+
+
+SEASON_BLEND_K = 6  # games until a player's stat line is 100% CURRENT_SEASON
+
+# v3.55 NEW — multi-year recency weighting. Named, tunable constant same
+# as SEASON_BLEND_K above: each prior year back gets this fraction of the
+# weight the year after it got. 0.5 means BASELINE_SEASON-1 gets half of
+# whatever weight BASELINE_SEASON gets, once current-season weight is
+# subtracted out.
+RECENCY_DECAY_RATE = 0.5
+
+
+def fetch_prior2_season_players(season):
+    """v3.55 NEW — fetches a SECOND prior season's full-season per-game
+    stats (BASELINE_SEASON-1), the third tier of the multi-year
+    recency-weighted blend. Mirrors fetch_current_season_partial_stats()'s
+    simple, self-contained style below — a completed season, so this is a
+    full-season total divided by games played, no partial-season
+    complexity. Returns {} on any fetch failure (older seasons
+    occasionally get reorganized in nflverse's release history, and a
+    player who wasn't in the league that year legitimately won't be
+    present) rather than raising — this tier is a genuine enhancement on
+    top of the existing 2-season blend, never something projections
+    should hard-fail without.
+    v3.67 FIX — confirmed directly against nflverse's real current
+    release assets: the old player_stats_{season}.csv this requested
+    doesn't exist anymore — nflverse renamed it to
+    stats_player_reg_{season}.csv before the 2025 season. That's why a
+    fully completed, long-available season (2024) was silently 404ing
+    here even though it's genuinely on nflverse — wrong filename, not
+    missing data. The team-stats fetch elsewhere in this file already
+    uses the equivalent new stats_team_reg_{season} pattern, which is
+    how this got caught.
+    v3.68 FIX — that rename alone didn't fix it: a real run still showed
+    zero 2024 data after the rename, with silent_404=True hiding the
+    actual reason why. This now fetches directly (bypassing fetch_csv's
+    silent error-swallowing) and prints the real HTTP status code or
+    exception on failure — no more guessing blind at what's actually
+    going wrong.
+    v3.69 FIX — the v3.68 diagnostic paid off: a real run showed the
+    actual error is ConnectionResetError (WinError 10054) — GitHub's CDN
+    dropping the connection mid-request. That confirms the v3.67 filename
+    fix was correct all along; this was a transient network drop, not a
+    wrong URL or a logic bug. Added retry-with-backoff (3 attempts, 2s/4s/6s)
+    since that's exactly the kind of failure a retry resolves — a single
+    dropped connection shouldn't cost this entire tier of the blend for
+    the whole run."""
+    url = f"{NFLVERSE_BASE}/player_stats/stats_player_reg_{season}.csv"
+    df = pd.DataFrame()
+    max_retries = 3
+    for attempt in range(max_retries + 1):
+        try:
+            r = SESSION.get(url, timeout=30, allow_redirects=True)
+            print(f"  Prior2-season fetch ({season}): HTTP {r.status_code}, "
+                  f"{len(r.content):,} bytes, content-type={r.headers.get('content-type')}")
+            r.raise_for_status()
+            from io import StringIO
+            df = pd.read_csv(StringIO(r.text), low_memory=False)
+            break
+        except Exception as e:
+            if attempt < max_retries:
+                wait = 2.0 * (attempt + 1)
+                print(f"  Prior2-season fetch ({season}) attempt {attempt + 1}/{max_retries + 1} "
+                      f"failed ({type(e).__name__}: {e}) — retrying in {wait:.0f}s...")
+                time.sleep(wait)
+                continue
+            print(f"  Prior2-season fetch ({season}) FAILED after {max_retries + 1} attempts: "
+                  f"{type(e).__name__}: {e}")
+            df = pd.DataFrame()
+    if df is None or df.empty:
+        print(f"  Prior2-season blend: no {season} data found — this tier of the blend will be skipped (players fall back to the existing 2-season blend, unchanged from today's behavior).")
+        return {}
+    if 'season_type' in df.columns:
+        df = df[df['season_type'] == 'REG']
+    if df.empty:
+        return {}
+    name_col = next((c for c in ['player_display_name', 'player_name',
+                                  'full_name', 'display_name'] if c in df.columns), None)
+    if not name_col:
+        return {}
+    stat_cols = {
+        'passing_yards':   'passYdsPG',
+        'rushing_yards':   'rushYdsPG',
+        'receiving_yards': 'recYdsPG',
+        'receptions':      'recsPG',
+    }
+    present = {raw: pg for raw, pg in stat_cols.items() if raw in df.columns}
+    if not present:
+        return {}
+    agg = {raw: 'sum' for raw in present}
+    # v3.71 FIX — the full optimizer grid showed MAE exploding from 2.165
+    # to 75+ as decay_rate gave prior2 more weight, which meant prior2's
+    # per-game values were badly wrong, not just unhelpful. Root cause:
+    # stats_player_reg_{season}.csv is very likely a season-summary file
+    # (one row per player, real season totals) with no 'week' column —
+    # the old code's fallback then counted ROWS as games (always 1 for a
+    # season-summary file), turning a full-season total into a per-game
+    # value ~17x too large. Now prefers an explicit 'games' column first
+    # — the same pattern stats_team_reg already uses successfully
+    # elsewhere in this file — before falling back to week-nunique or,
+    # as a last resort, row count (with a visible warning, since that
+    # path is exactly what produced the bad data this run).
+    if 'games' in df.columns:
+        agg['games'] = 'max'
+        grouped = df.groupby(name_col).agg(agg)
+        games = grouped['games']
+    elif 'week' in df.columns:
+        agg['week'] = 'nunique'
+        grouped = df.groupby(name_col).agg(agg)
+        games = grouped['week']
+    else:
+        grouped = df.groupby(name_col).agg(agg)
+        games = df.groupby(name_col).size()
+        print(f"  Prior2-season blend ({season}): no 'games' or 'week' column found — "
+              f"falling back to row count, which is unreliable for a season-summary file. "
+              f"Sanity-checking resulting values before trusting them.")
+    out = {}
+    dropped_implausible = 0
+    # A real per-game value for any of these stats should never realistically
+    # exceed this — catches the exact failure mode above (a season total
+    # divided by 1 "game") before it can poison the blend again.
+    PLAUSIBLE_MAX_PG = {'passYdsPG': 500, 'rushYdsPG': 250, 'recYdsPG': 250, 'recsPG': 20}
+    for raw_name, row in grouped.iterrows():
+        g = int(games.get(raw_name, 0))
+        if g <= 0:
+            continue
+        key = norm_name(raw_name)
+        vals = {pg_field: round(row[raw] / g, 1) for raw, pg_field in present.items()}
+        if any(vals.get(pg) is not None and vals[pg] > PLAUSIBLE_MAX_PG.get(pg, 1e9) for pg in vals):
+            dropped_implausible += 1
+            continue
+        out[key] = vals
+        out[key]['games'] = g
+    if dropped_implausible:
+        print(f"  Prior2-season blend ({season}): dropped {dropped_implausible} players with "
+              f"implausible per-game values (likely a games-count mismatch) rather than risk "
+              f"corrupting the blend with them.")
+    print(f"  Prior2-season blend: {len(out)} players found in {season} data")
+    return out
+
+
+def compute_opportunity_shares_from_pbp(pbp):
+    """v3.63 NEW — real per-player opportunity-share metrics computed from
+    play-by-play data: carryShare, breakawayRate, rzCarryShare (RB) and
+    rzTargetShare (WR/TE/RB). None of these existed anywhere in the
+    pipeline before — they were previously only present as hand-typed,
+    never-refreshed static values in the HTML model's PLAYER_PROPS_2026
+    object. All computed here from real PBP the pipeline already fetches
+    for season-stat aggregation — no new external data source needed.
+    Returns {} on missing/empty PBP rather than raising, matching this
+    file's existing fetch-failure convention throughout."""
+    if pbp is None or pbp.empty:
+        return {}
+
+    def safe_round(v, nd=3):
+        try:
+            f = float(v)
+            if math.isnan(f) or math.isinf(f):
+                return 0.0
+            return round(f, nd)
+        except (TypeError, ValueError):
+            return 0.0
+
+    reg = pbp[pbp["season_type"] == "REG"].copy() if "season_type" in pbp.columns else pbp.copy()
+    if "rusher_player_name" not in reg.columns or "passer_player_name" not in reg.columns:
+        return {}
+    rush = reg[(reg.get("rush_attempt", pd.Series(dtype=float)) == 1) & reg["rusher_player_name"].notna()].copy()
+    passp = reg[(reg.get("pass_attempt", pd.Series(dtype=float)) == 1) & reg["passer_player_name"].notna()].copy()
+
+    out = {}
+    if not rush.empty and "yardline_100" in rush.columns:
+        team_carries = rush.groupby("posteam")["rush_attempt"].sum().rename("team_carries")
+        rb_agg = rush.groupby(["rusher_player_name", "posteam"]).agg(
+            carries=("rush_attempt", "sum"),
+            breakaways=("rushing_yards", lambda s: (s >= 15).sum()),
+        ).reset_index()
+        rb_agg = rb_agg.merge(team_carries, on="posteam", how="left")
+        rb_agg["carryShare"] = rb_agg["carries"] / rb_agg["team_carries"].clip(lower=1)
+        rb_agg["breakawayRate"] = rb_agg["breakaways"] / rb_agg["carries"].clip(lower=1)
+
+        rz_rush = rush[rush["yardline_100"] <= 20]
+        if not rz_rush.empty:
+            team_rz_carries = rz_rush.groupby("posteam")["rush_attempt"].sum().rename("team_rz_carries")
+            rz_agg = rz_rush.groupby(["rusher_player_name", "posteam"]).agg(
+                rz_carries=("rush_attempt", "sum")).reset_index()
+            rz_agg = rz_agg.merge(team_rz_carries, on="posteam", how="left")
+            rz_agg["rzCarryShare"] = rz_agg["rz_carries"] / rz_agg["team_rz_carries"].clip(lower=1)
+            rb_agg = rb_agg.merge(
+                rz_agg[["rusher_player_name", "posteam", "rzCarryShare"]],
+                on=["rusher_player_name", "posteam"], how="left")
+
+        for _, r in rb_agg.iterrows():
+            key = norm_name(r["rusher_player_name"])
+            out[key] = {
+                "carryShare":    safe_round(r["carryShare"]),
+                "breakawayRate": safe_round(r["breakawayRate"]),
+                "rzCarryShare":  safe_round(r.get("rzCarryShare", 0)),
+            }
+
+    if not passp.empty and "yardline_100" in passp.columns and "receiver_player_name" in passp.columns:
+        rz_pass = passp[passp["yardline_100"] <= 20]
+        if not rz_pass.empty:
+            team_rz_tgts = rz_pass.groupby("posteam")["pass_attempt"].sum().rename("team_rz_tgts")
+            rz_wr = rz_pass.groupby(["receiver_player_name", "posteam"]).agg(
+                rz_tgts=("pass_attempt", "sum")).reset_index()
+            rz_wr = rz_wr.merge(team_rz_tgts, on="posteam", how="left")
+            rz_wr["rzTargetShare"] = rz_wr["rz_tgts"] / rz_wr["team_rz_tgts"].clip(lower=1)
+            for _, r in rz_wr.iterrows():
+                key = norm_name(r["receiver_player_name"])
+                out.setdefault(key, {})
+                out[key]["rzTargetShare"] = safe_round(r["rzTargetShare"])
+
+    print(f"  Opportunity shares (from PBP): {len(out)} players "
+          f"(carryShare/breakawayRate/rzCarryShare/rzTargetShare)")
+    return out
+
+
+def fetch_snap_counts(season):
+    """v3.63 NEW — real per-player snap % from nflverse's dedicated
+    snap_counts dataset (offense_pct column), season-averaged. This is a
+    genuinely new data source for this pipeline — weekly_rosters (already
+    fetched) carries roster/depth status but not snap percentage.
+    Returns {} on fetch failure, same convention as fetch_prior2_season_players."""
+    url = f"{NFLVERSE_BASE}/snap_counts/snap_counts_{season}.csv"
+    df = fetch_csv(url, f"snap_counts ({season})", silent_404=True)
+    if df is None or df.empty:
+        print(f"  Snap counts: no {season} data found — snapShare will be skipped this run.")
+        return {}
+    name_col = next((c for c in ['player', 'full_name', 'player_display_name'] if c in df.columns), None)
+    if not name_col or 'offense_pct' not in df.columns:
+        print(f"  Snap counts: expected columns not found (have: {list(df.columns)[:8]}...) — skipping.")
+        return {}
+    grouped = df.groupby(name_col)['offense_pct'].mean()
+    out = {}
+    for raw_name, pct in grouped.items():
+        try:
+            val = float(pct)
+        except (TypeError, ValueError):
+            continue
+        if math.isnan(val):
+            continue
+        out[norm_name(raw_name)] = round(val, 3)
+    print(f"  Snap counts: {len(out)} players found in {season} data")
+    return out
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# v3.63 NEW — JOINT RECENCY_DECAY_RATE / SEASON_BLEND_K OPTIMIZER
+# ══════════════════════════════════════════════════════════════════════════
+#
+# Ground truth: BASELINE_SEASON's own real weekly data. At each of several
+# "as-of" checkpoints (game 3, 6, 9 of that season), compute what the blend
+# WOULD have projected using only games up to that checkpoint plus real
+# BASELINE_SEASON-1/-2 season averages — then compare against BASELINE_SEASON's
+# actual, now-known final full-season per-game average. No lookahead: the
+# checkpoint's partial data is real, in-order, played-so-far data, never
+# information from later in that same season. This uses only data the
+# pipeline already fetches (fetch_current_season_partial_stats works for
+# any season's weekly file, not just the current one; fetch_prior2_season_players
+# for the two prior tiers) — no external CSV or extra network source needed.
+#
+# Metric: mean absolute error (MAE) between projected and real final
+# per-game average, across all eligible players/stats — same standard used
+# throughout this pipeline and the HTML model's own backtest tooling this
+# session. Also reports % of projections within 20% of the real value, for
+# a second, more interpretable view of the same result.
+
+def _blend_at_checkpoint(partial_avg, prior1_pg, prior2_pg, games_so_far, k, decay_rate):
+    w_current = min(1.0, games_so_far / float(k)) if games_so_far > 0 else 0.0
+    remaining = 1 - w_current
+    if prior2_pg is not None:
+        w_prior1 = remaining / (1 + decay_rate)
+        w_prior2 = remaining * decay_rate / (1 + decay_rate)
+        return w_current * partial_avg + w_prior1 * prior1_pg + w_prior2 * prior2_pg
+    return w_current * partial_avg + remaining * prior1_pg
+
+
+# v3.86 NEW — translates this pipeline's internal per-game-average field
+# names to the JS model's own propType strings, needed so the exported
+# optimizer cases (below) can be joined there against real historical
+# prop lines by player+propType+week.
+PG_FIELD_TO_PROPTYPE = {
+    'passYdsPG': 'pass_yds', 'rushYdsPG': 'rush_yds',
+    'recYdsPG': 'rec_yds', 'recsPG': 'recs',
+}
+
+
+def optimize_blend_params(baseline_weekly_df, prior1_data, prior2_data, season, checkpoints=(3, 6, 9),
+                           decay_grid=(0.0, 0.25, 0.5, 0.75, 1.0), k_grid=(3, 5, 6, 8, 10, 12)):
+    """v3.63 NEW — grid-searches (RECENCY_DECAY_RATE, SEASON_BLEND_K) jointly,
+    scored by real held-out accuracy on BASELINE_SEASON's own weekly data
+    (see module docstring above for the full method). Returns
+    {best: {decay_rate, k, mae, pct_within_20}, grid: [...all results...]}
+    so the choice is auditable, not a black box. Safe no-op (returns None)
+    if baseline_weekly_df is empty — same "no data yet" convention as the
+    rest of this pipeline's optional enhancements."""
+    from datetime import datetime, timezone  # local import matches this file's existing pattern
+    if baseline_weekly_df is None or baseline_weekly_df.empty:
+        print("  Blend optimizer: no baseline weekly data available — skipping.")
+        return None
+
+    name_col = next((c for c in ['player_display_name', 'player_name', 'full_name', 'display_name']
+                      if c in baseline_weekly_df.columns), None)
+    if not name_col or 'week' not in baseline_weekly_df.columns:
+        print("  Blend optimizer: couldn't find name/week columns — skipping.")
+        return None
+
+    stat_cols = {'passing_yards': 'passYdsPG', 'rushing_yards': 'rushYdsPG',
+                 'receiving_yards': 'recYdsPG', 'receptions': 'recsPG'}
+    present = {raw: pg for raw, pg in stat_cols.items() if raw in baseline_weekly_df.columns}
+    if not present:
+        print("  Blend optimizer: no usable stat columns found — skipping.")
+        return None
+
+    df = baseline_weekly_df.copy()
+    df['_key'] = df[name_col].map(norm_name)
+    max_week = int(df['week'].max())
+    eligible_checkpoints = [c for c in checkpoints if c < max_week]
+    if not eligible_checkpoints:
+        print(f"  Blend optimizer: season only has {max_week} weeks — no checkpoint leaves room "
+              f"for a held-out comparison. Skipping.")
+        return None
+
+    # Real, final full-season per-game average per player/stat (the answer
+    # each checkpoint's blend is trying to predict).
+    final_avg = df.groupby('_key')[list(present.keys())].mean()
+    games_played = df.groupby('_key')['week'].nunique()
+
+    # Build one evaluation case per (player, stat, checkpoint) with enough
+    # real prior-season data to blend and enough real final-season games to
+    # trust as ground truth (>=3, matching this pipeline's existing
+    # small-sample guards elsewhere).
+    cases = []
+    for key, g_final in games_played.items():
+        if g_final < 3:
+            continue
+        p1 = prior1_data.get(key)
+        if not p1:
+            continue
+        p2 = prior2_data.get(key) if prior2_data else None
+        for raw, pg_field in present.items():
+            prior1_val = p1.get(pg_field)
+            if prior1_val is None:
+                continue
+            prior2_val = p2.get(pg_field) if p2 else None
+            true_final = final_avg.loc[key, raw]
+            if pd.isna(true_final):
+                continue
+            for cp in eligible_checkpoints:
+                partial = df[(df['_key'] == key) & (df['week'] <= cp)]
+                g_partial = partial['week'].nunique()
+                if g_partial < 1:
+                    continue
+                partial_avg = partial[raw].mean()
+                if pd.isna(partial_avg):
+                    continue
+                cases.append({
+                    'key': key, 'propType': PG_FIELD_TO_PROPTYPE.get(pg_field, pg_field),
+                    'checkpoint': cp, 'season': season,
+                    'partial_avg': partial_avg, 'games_partial': g_partial,
+                    'prior1': prior1_val, 'prior2': prior2_val, 'true_final': true_final,
+                })
+
+    if not cases:
+        print("  Blend optimizer: no eligible player/stat/checkpoint cases found — skipping.")
+        return None
+
+    grid_results = []
+    for decay_rate in decay_grid:
+        for k in k_grid:
+            errors, within20 = [], 0
+            for c in cases:
+                proj = _blend_at_checkpoint(c['partial_avg'], c['prior1'], c['prior2'],
+                                             c['games_partial'], k, decay_rate)
+                err = abs(proj - c['true_final'])
+                errors.append(err)
+                if c['true_final'] > 0 and err / c['true_final'] <= 0.20:
+                    within20 += 1
+            mae = sum(errors) / len(errors)
+            pct20 = round(within20 / len(errors) * 100, 1)
+            grid_results.append({'decay_rate': decay_rate, 'k': k, 'mae': round(mae, 3),
+                                  'pct_within_20': pct20, 'n_cases': len(errors)})
+
+    grid_results.sort(key=lambda r: r['mae'])
+    best = grid_results[0]
+    print(f"  Blend optimizer: tested {len(grid_results)} (decay_rate, k) combinations "
+          f"across {len(cases)} real held-out player/stat/checkpoint cases")
+    print(f"  Best: decay_rate={best['decay_rate']}, k={best['k']} "
+          f"(MAE={best['mae']}, {best['pct_within_20']}% within 20% of real final average)")
+    # v3.71 NEW — this is what caught the games-count bug above: a jump
+    # here across decay_rate values means the extra data source (2024)
+    # is behaving badly, not just failing to help. Shows the best k's MAE
+    # at each decay_rate so that's visible directly in the console instead
+    # of needing to open blend_params.json to see the full grid.
+    by_decay = {}
+    for r in grid_results:
+        dr = r['decay_rate']
+        if dr not in by_decay or r['mae'] < by_decay[dr]['mae']:
+            by_decay[dr] = r
+    print(f"  Decay-rate summary (best k at each decay_rate — a big jump here means the "
+          f"2024 data is hurting, not just failing to help):")
+    for dr in sorted(by_decay.keys()):
+        r = by_decay[dr]
+        print(f"    decay_rate={dr}: best MAE={r['mae']} (k={r['k']}, {r['pct_within_20']}% within 20%)")
+    return {'best': best, 'grid': grid_results, 'n_cases': len(cases), 'cases': cases,
+            'evaluated_at': datetime.now(timezone.utc).isoformat()}
+
+
+def load_or_optimize_blend_params(script_dir, season, baseline_weekly_df=None, prior1_data=None, prior2_data=None,
+                                   force=False):
+    """v3.63 NEW — originally the persisted-params half of the optimizer,
+    reading blend_params.json if present to avoid recomputing every run.
+    v3.70 FIX — removed the cache-read per explicit request: the grid
+    search itself is cheap (well under a second over a few thousand
+    already-in-memory rows), so there was no real performance reason to
+    cache it — and the caching was the direct cause of several rounds of
+    'stale results' confusion while debugging the 2024-data fetch above
+    (this kept loading an old decay_rate/k computed before that fix
+    landed, making it look like nothing had changed). Now always
+    recomputes fresh from whatever real data is available this run. The
+    `force` parameter and blend_params.json write are both kept — the
+    file still gets saved each run as a human-readable record of the
+    latest decision, it's just never read back as a cache. Falls back to
+    the original hardcoded RECENCY_DECAY_RATE/SEASON_BLEND_K defaults
+    only if no baseline data was passed in to compute one at all."""
+    params_path = os.path.join(script_dir, 'blend_params.json')
+
+    if baseline_weekly_df is None:
+        print(f"  Blend params: no baseline data to compute one — "
+              f"using defaults (decay_rate={RECENCY_DECAY_RATE}, k={SEASON_BLEND_K}).")
+        return RECENCY_DECAY_RATE, SEASON_BLEND_K, None
+
+    result = optimize_blend_params(baseline_weekly_df, prior1_data or {}, prior2_data or {}, season)
+    if result is None:
+        return RECENCY_DECAY_RATE, SEASON_BLEND_K, None
+
+    try:
+        with open(params_path, 'w', encoding='utf-8') as f:
+            json.dump(result, f, indent=2, default=str)
+        print(f"  Blend params: saved to {params_path}")
+    except Exception as e:
+        print(f"  Blend params: couldn't save {params_path} ({e}) — using this run's result anyway.")
+
+    return result['best']['decay_rate'], result['best']['k'], result
+
+
+def export_blend_optimizer_cases(output_dir, season, opt_result):
+    """v3.86 NEW — writes the raw per-player/stat/checkpoint cases the
+    decay-rate optimizer above already builds internally to their own
+    JSON file, separate from nfl_model_data.json (this is analysis input
+    for a specific tool, not live model data). Each case already carries
+    everything needed to join it against a real historical prop line on
+    the JS side: player key, propType (translated to the JS model's own
+    naming via PG_FIELD_TO_PROPTYPE), the checkpoint week, and the season.
+    Safe no-op if there are no cases (e.g. optimizer skipped this run for
+    lack of data) — writes nothing rather than an empty/misleading file."""
+    cases = opt_result.get('cases') if opt_result else None
+    if not cases:
+        print(f"  Blend optimizer cases: nothing to export for {season} (optimizer had no cases this run).")
+        return
+    out_path = os.path.join(output_dir, f'nfl_blend_optimizer_cases_{season}.json')
+    payload = {'season': season, 'n_cases': len(cases), 'cases': cases,
+               'evaluated_at': opt_result.get('evaluated_at')}
+    try:
+        with open(out_path, 'w', encoding='utf-8') as f:
+            json.dump(payload, f, indent=2, default=str)
+        print(f"  Blend optimizer cases: exported {len(cases)} cases to {out_path}")
+    except Exception as e:
+        print(f"  Blend optimizer cases: couldn't save {out_path} ({e}).")
+
+
+def fetch_current_season_partial_stats(current_season):
+    """v3.39 NEW — attempts to fetch CURRENT_SEASON's in-progress weekly
+    player stats from nflverse. Before Week 1 (or before nflverse has
+    published anything for this season) this file genuinely doesn't exist
+    yet — fetch_csv already returns an empty DataFrame on a failed
+    request, and that empty result is treated as a safe, confirmed no-op
+    by apply_season_transition_blend() below, not an error.
+    v3.66 FIX — this only ever tried a network fetch, even though the
+    primary weekly-stats loader earlier in main() already checks for a
+    local copy on disk first and prefers it. Real runs showed the exact
+    same file (stats_player_week_2025.csv) loading fine locally for that
+    primary loader while this function's separate network fetch of that
+    same data failed on two consecutive runs — the network path isn't as
+    reliable as just reading the file that's already sitting there. Now
+    checks the same local paths first, same names, same folder, before
+    falling back to the network."""
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    local_names = [
+        'nfl_player_stats_weekly.csv',
+        f'stats_player_week_{current_season}.csv',
+    ]
+    for name in local_names:
+        path = os.path.join(script_dir, name)
+        if os.path.exists(path):
+            try:
+                df = pd.read_csv(path, low_memory=False)
+                if not df.empty:
+                    print(f"  Current-season weekly stats: loaded locally from {name} ({len(df):,} rows)")
+                    return df
+            except Exception as e:
+                print(f"  Local weekly stats file {name} failed to load ({e}) — trying network fetch.")
+    url = f"{NFLVERSE_BASE}/player_stats/stats_player_week_{current_season}.csv"
+    return fetch_csv(url, f"current-season weekly stats ({current_season})", silent_404=True)
+
+
+def apply_season_transition_blend(players, current_season, k=None, prior2_data=None, decay_rate=None):
+    """v3.39 original 2-season blend, v3.55 EXTENDED to a real multi-year
+    blend. Still blends each player's BASELINE_SEASON stat with real
+    CURRENT_SEASON production as it becomes available (w_current =
+    get_season_blend_weight(games) — unchanged from v3.39, already
+    correctly distrusts a tiny early-season sample). NEW: whatever weight
+    current-season doesn't use (1-w_current) now splits across
+    BASELINE_SEASON and BASELINE_SEASON-1 (when prior2_data has that
+    player) using RECENCY_DECAY_RATE — BASELINE_SEASON gets
+    remaining/(1+decay), BASELINE_SEASON-1 gets
+    remaining*decay/(1+decay). A player with no prior2 data (e.g. a
+    2nd-year player with no BASELINE_SEASON-1 in the league) gets the
+    full remaining weight on BASELINE_SEASON alone — same normalization
+    principle the existing rookie college/NFL blend already uses, not a
+    new special case. `prior2_data` is the dict fetch_prior2_season_players()
+    returns; pass None to skip this tier entirely and fall back to the
+    exact original v3.39 2-season behavior (e.g. if that fetch failed).
+    Sets `<stat>_seasonBlended` exactly as before — no JS-side changes
+    needed, that field is already preferred when present. A player with 0
+    CURRENT_SEASON games gets no blended fields at all (pure no-op, the
+    existing baseline is already the right answer)."""
+    k = k or SEASON_BLEND_K
+    decay_rate = RECENCY_DECAY_RATE if decay_rate is None else decay_rate
+    df = fetch_current_season_partial_stats(current_season)
+    if df is None or df.empty:
+        print(f"  Season-transition blend: no {current_season} data published yet — "
+              f"no-op (expected pre-Week-1; every player keeps their {current_season-1} baseline).")
+        return 0
+
+    name_col = next((c for c in ['player_display_name', 'player_name',
+                                  'full_name', 'display_name'] if c in df.columns), None)
+    if not name_col:
+        print(f"  Season-transition blend: couldn't find a name column on the "
+              f"{current_season} weekly file (columns: {list(df.columns)[:10]}...) — skipping.")
+        return 0
+
+    stat_cols = {
+        'passing_yards':   'passYdsPG',
+        'rushing_yards':   'rushYdsPG',
+        'receiving_yards': 'recYdsPG',
+        'receptions':      'recsPG',
+    }
+    present_stats = {raw: pg for raw, pg in stat_cols.items() if raw in df.columns}
+    if not present_stats:
+        print(f"  Season-transition blend: none of {list(stat_cols.keys())} found on "
+              f"the {current_season} weekly file — skipping.")
+        return 0
+
+    agg = {raw: 'sum' for raw in present_stats}
+    grouped = df.groupby(name_col).agg(agg)
+    games_played = df.groupby(name_col)['week'].nunique() if 'week' in df.columns \
+        else df.groupby(name_col).size()
+
+    prior2_data = prior2_data or {}
+    blended_count = 0
+    multiyear_count = 0
+    for raw_name, row in grouped.iterrows():
+        key = norm_name(raw_name)
+        p = players.get(key)
+        if not p:
+            continue
+        g = int(games_played.get(raw_name, 0))
+        if g <= 0:
+            continue
+        w_current = get_season_blend_weight(g, k)
+        remaining = 1 - w_current
+        p2 = prior2_data.get(key)
+        has_prior2 = p2 is not None
+        if has_prior2:
+            w_prior1 = remaining / (1 + decay_rate)
+            w_prior2 = remaining * decay_rate / (1 + decay_rate)
+        else:
+            w_prior1 = remaining
+            w_prior2 = 0.0
+        weights = {
+            'current': round(w_current, 3), 'prior1': round(w_prior1, 3),
+            'prior2': round(w_prior2, 3), 'games': g, 'hasPrior2Data': has_prior2,
+        }
+        did_blend = False
+        for raw, pg_field in present_stats.items():
+            prior1_val = p.get(pg_field)
+            if prior1_val is None:
+                continue
+            current_pg = row[raw] / g
+            prior2_val = p2.get(pg_field) if (has_prior2 and pg_field in p2) else None
+            if prior2_val is None:
+                # No real prior2 value for this specific stat even though
+                # the player has SOME prior2 data (e.g. a pure rusher with
+                # no receiving stats that year) — fold that share back
+                # onto prior1 rather than silently dropping it to 0.
+                blended = round(w_current * current_pg + (w_prior1 + w_prior2) * prior1_val, 1)
+            else:
+                blended = round(w_current * current_pg + w_prior1 * prior1_val + w_prior2 * prior2_val, 1)
+            p[f'{pg_field}_seasonBlended'] = blended
+            did_blend = True
+        if did_blend:
+            p['seasonBlendWeights'] = weights
+            p['seasonBlendNote'] = (
+                f"{current_season}: {g}g played — "
+                f"{int(round(weights['current']*100))}% {current_season} + "
+                f"{int(round(weights['prior1']*100))}% {current_season-1}" +
+                (f" + {int(round(weights['prior2']*100))}% {current_season-2}" if has_prior2 else "")
+            )
+            blended_count += 1
+            if has_prior2:
+                multiyear_count += 1
+
+    print(f"  Season-transition blend: {blended_count} players blended with real "
+          f"{current_season} data (k={k} games to full weight), "
+          f"{multiyear_count} of those using a real {current_season-2} 3rd tier too")
+    return blended_count
+
+
 def get_blend(nfl_games, position):
     threshold = QB_THRESHOLD if position == 'QB' else SKILL_THRESHOLD
     if nfl_games == 0:           return (1.00, 0.00)
@@ -200,16 +894,8 @@ def safe_int(val, default=0):
     except: return default
 
 def norm_name(s):
-    """Normalise player names for matching.
-    v2.29: also strips generational suffixes (Jr, Sr, II, III, IV, V) —
-    different nflverse sources include/omit these inconsistently (e.g. a
-    depth chart listing "James Cook III" against player stats listing plain
-    "James Cook"), which was causing real players to be treated as two
-    different people and silently falling back to a generic positional
-    average instead of their own real stats."""
-    s = re.sub(r"[^a-z ]", "", str(s).lower().strip())
-    s = re.sub(r"\b(jr|sr|ii|iii|iv|v)\b", "", s)
-    return re.sub(r"\s+", " ", s).strip()
+    """Normalise player names for matching"""
+    return re.sub(r"[^a-z ]", "", str(s).lower().strip())
 
 
 # ─────────────────────────────────────────────
@@ -499,7 +1185,9 @@ def pull_nflverse(season):
     if not _local_found:
 
         # Try current season CSV first (silently — 404 expected pre-season)
-        _ps_try = fetch_csv(f"{BASE}/player_stats/player_stats_{season}.csv",
+        # v3.67 FIX — renamed by nflverse (see fetch_prior2_season_players
+        # docstring for the confirmed real current filename).
+        _ps_try = fetch_csv(f"{BASE}/player_stats/stats_player_reg_{season}.csv",
                             f"player_stats {season}", silent_404=True)
         if not _ps_try.empty:
             _ps_reg = _ps_try[_ps_try['season_type']=='REG'] if 'season_type' in _ps_try.columns else _ps_try
@@ -531,8 +1219,9 @@ def pull_nflverse(season):
             _ps_raw = fetch_pbp_player_stats(season, _rosters_tmp)
             if _ps_raw.empty:
                 # Final fallback: prior year CSV
+                # v3.67 FIX — same rename as above.
                 print(f"  PBP failed — falling back to {prior} player stats")
-                _ps_try2 = fetch_csv(f"{BASE}/player_stats/player_stats_{prior}.csv",
+                _ps_try2 = fetch_csv(f"{BASE}/player_stats/stats_player_reg_{prior}.csv",
                                       f"player_stats {prior}")
                 if not _ps_try2.empty:
                     _ps_reg2 = _ps_try2[_ps_try2['season_type']=='REG'] if 'season_type' in _ps_try2.columns else _ps_try2
@@ -914,145 +1603,6 @@ def build_team_profiles(dfs, season):
         except Exception as _pbp_err:
             print(f"  PBP aggregation error: {_pbp_err}")
 
-    # ── v2.28: toMargin, kickerAdj, defSacks/defQBHits/defPassDef ─────────
-    # These 5 fields existed in the output schema (save_output) but were
-    # NEVER actually computed anywhere — every team silently got the
-    # .get(field, 0/None) fallback. All the source data for these already
-    # gets fetched elsewhere in this script (team_stats, kicking, pfr_def)
-    # but was discarded unused. Wired up here instead of adding new fetches.
-    #
-    # Column names are detected flexibly (nflverse schema has varied
-    # slightly between releases) and every miss prints which columns WERE
-    # available, so a wrong guess here is visible in the console output
-    # instead of silently producing another all-zero field.
-    def _find_col(df, candidates):
-        for c in candidates:
-            if c in df.columns:
-                return c
-        return None
-
-    # Self-contained abbreviation map — does NOT rely on the outer _TNORM,
-    # which is only defined inside the `if not ts.empty:` branch above and
-    # would raise NameError here if that branch didn't run this time.
-    _ABBR_FIX = {'LA':'LAR','JAC':'JAX','KCC':'KC','SFO':'SF','NWE':'NE',
-                 'NOR':'NO','GNB':'GB','TBB':'TB','SDG':'LAC','STL':'LAR'}
-    def _norm_team_abbr(a):
-        a = str(a).upper().strip()
-        return _ABBR_FIX.get(a, a)
-
-    # -- Turnover margin: takeaways (defense forced) minus giveaways (offense lost) --
-    ts_df = dfs.get('team_stats', pd.DataFrame())
-    if not ts_df.empty:
-        team_c = _find_col(ts_df, ['team', 'team_abbr', 'recent_team'])
-        int_thrown_c   = _find_col(ts_df, ['passing_interceptions', 'interceptions'])
-        fum_lost_off_c = _find_col(ts_df, ['rushing_fumbles_lost', 'sack_fumbles_lost', 'receiving_fumbles_lost'])
-        int_forced_c   = _find_col(ts_df, ['def_interceptions', 'defense_interceptions'])
-        fum_forced_c   = _find_col(ts_df, ['def_fumbles', 'defense_fumbles', 'def_fumble_recovery_own'])
-        if team_c and (int_thrown_c or int_forced_c):
-            n_to = 0
-            for _, row in ts_df.iterrows():
-                abbr = _norm_team_abbr(row.get(team_c, ''))
-                if abbr not in teams: continue
-                giveaways = safe_float(row.get(int_thrown_c, 0)) + safe_float(row.get(fum_lost_off_c, 0))
-                takeaways = safe_float(row.get(int_forced_c, 0)) + safe_float(row.get(fum_forced_c, 0))
-                teams[abbr]['toMargin'] = round(takeaways - giveaways, 1)
-                n_to += 1
-            print(f"  Turnover margin: {n_to} teams computed (cols: giveaways={int_thrown_c}+{fum_lost_off_c}, takeaways={int_forced_c}+{fum_forced_c})")
-        else:
-            print(f"  ⚠ toMargin: no matching turnover columns in team_stats — available: {list(ts_df.columns)[:25]}")
-
-        # -- Defensive pressure stats: sacks, QB hits, pass defense --
-        sacks_c   = _find_col(ts_df, ['def_sacks', 'defense_sacks', 'sacks_suffered'])
-        qbhits_c  = _find_col(ts_df, ['def_qb_hits', 'defense_qb_hits'])
-        passdef_c = _find_col(ts_df, ['def_pass_defended', 'defense_pass_defended', 'passes_defended'])
-        if team_c and (sacks_c or qbhits_c or passdef_c):
-            n_def = 0
-            for _, row in ts_df.iterrows():
-                abbr = _norm_team_abbr(row.get(team_c, ''))
-                if abbr not in teams: continue
-                if sacks_c:   teams[abbr]['defSacks']   = safe_float(row.get(sacks_c, 0))
-                if qbhits_c:  teams[abbr]['defQBHits']  = safe_float(row.get(qbhits_c, 0))
-                if passdef_c: teams[abbr]['defPassDef'] = safe_float(row.get(passdef_c, 0))
-                n_def += 1
-            print(f"  Defensive pressure stats: {n_def} teams (cols: sacks={sacks_c}, qbHits={qbhits_c}, passDef={passdef_c})")
-        else:
-            print(f"  ⚠ defSacks/defQBHits/defPassDef: no matching columns in team_stats — trying pfr_def fallback")
-            pfr_def_df = dfs.get('pfr_def', pd.DataFrame())
-            if not pfr_def_df.empty:
-                team_c2  = _find_col(pfr_def_df, ['team', 'tm', 'team_abbr'])
-                sacks_c2 = _find_col(pfr_def_df, ['sacks', 'sk'])
-                qbh_c2   = _find_col(pfr_def_df, ['qb_hits', 'qbhits', 'hits'])
-                if team_c2 and (sacks_c2 or qbh_c2):
-                    n_def2 = 0
-                    for _, row in pfr_def_df.iterrows():
-                        abbr = _norm_team_abbr(row.get(team_c2, ''))
-                        if abbr not in teams: continue
-                        if sacks_c2: teams[abbr]['defSacks']  = safe_float(row.get(sacks_c2, 0))
-                        if qbh_c2:   teams[abbr]['defQBHits'] = safe_float(row.get(qbh_c2, 0))
-                        n_def2 += 1
-                    print(f"  Defensive pressure stats (pfr_def fallback): {n_def2} teams")
-                else:
-                    print(f"  ⚠ pfr_def fallback also missing expected columns — available: {list(pfr_def_df.columns)[:25]}")
-            else:
-                print(f"  ⚠ pfr_def is empty — defSacks/defQBHits/defPassDef will stay unset for this run")
-    else:
-        print("  ⚠ team_stats empty — toMargin/defSacks/defQBHits/defPassDef cannot be computed this run")
-
-    # -- Kicker adjustment: team FG% vs. league average, small ±0.5 pt swing --
-    # v2.29: switched from dfs['kicking'] (filtered from player_stats by
-    # position=='K') to computing directly from play-by-play — confirmed via
-    # a real run that dfs['kicking'] doesn't carry FG-specific columns at all
-    # (player_stats is built around offensive skill positions, not kicking),
-    # so that path always fell through to "no matching columns." PBP has a
-    # real field_goal_result on every FG attempt and is already fetched
-    # elsewhere in this function, so no new fetch is needed.
-    pbp_df = dfs.get('pbp', pd.DataFrame())
-    kicker_done = False
-    if not pbp_df.empty and 'field_goal_result' in pbp_df.columns:
-        team_c4 = _find_col(pbp_df, ['posteam', 'team'])
-        if team_c4:
-            fg_plays = pbp_df[pbp_df['field_goal_result'].notna()]
-            if not fg_plays.empty:
-                LEAGUE_AVG_FG_PCT = 0.85  # NFL long-run average FG%
-                n_k = 0
-                for abbr_raw, grp in fg_plays.groupby(team_c4):
-                    abbr = _norm_team_abbr(abbr_raw)
-                    if abbr not in teams: continue
-                    att = len(grp)
-                    if att < 5: continue  # too few attempts to trust a rate
-                    made = (grp['field_goal_result'] == 'made').sum()
-                    pct = made / att
-                    teams[abbr]['kickerAdj'] = round(max(-0.5, min(0.5, (pct - LEAGUE_AVG_FG_PCT) * 5)), 2)
-                    n_k += 1
-                print(f"  Kicker adjustment: {n_k} teams computed from PBP field_goal_result ({len(fg_plays)} total FG attempts)")
-                kicker_done = True
-
-    if not kicker_done:
-        # Fallback: try the old dfs['kicking'] path in case PBP is unavailable
-        kicking_df = dfs.get('kicking', pd.DataFrame())
-        if not kicking_df.empty:
-            team_c3 = _find_col(kicking_df, ['recent_team', 'team', 'posteam'])
-            fgm_c   = _find_col(kicking_df, ['fg_made', 'field_goals_made'])
-            fga_c   = _find_col(kicking_df, ['fg_att', 'field_goals_attempted', 'fg_attempts'])
-            if team_c3 and fgm_c and fga_c:
-                LEAGUE_AVG_FG_PCT = 0.85
-                n_k = 0
-                for _, row in kicking_df.iterrows():
-                    abbr = _norm_team_abbr(row.get(team_c3, ''))
-                    if abbr not in teams: continue
-                    att = safe_float(row.get(fga_c, 0))
-                    if att < 5: continue
-                    pct = safe_float(row.get(fgm_c, 0)) / att
-                    teams[abbr]['kickerAdj'] = round(max(-0.5, min(0.5, (pct - LEAGUE_AVG_FG_PCT) * 5)), 2)
-                    n_k += 1
-                print(f"  Kicker adjustment (fallback via player_stats): {n_k} teams computed")
-                kicker_done = n_k > 0
-            else:
-                print(f"  ⚠ kickerAdj: no FG columns in PBP or kicking data — kicking dataframe columns: {list(kicking_df.columns)[:25]}")
-        if not kicker_done:
-            print("  ⚠ kickerAdj: no usable field-goal data from PBP or kicking — will stay unset for this run "
-                  "(fine per G-Money: only used for team-level scoring, no kicker props tracked)")
-
     return teams
 
 # ─────────────────────────────────────────────
@@ -1105,6 +1655,32 @@ def build_player_profiles(dfs, season):
             team  = str(row.get('recent_team') or row.get('team') or row.get('posteam') or '').upper()
             games = safe_int(row.get('games', row.get('week', 1)))
             if not name or name == 'NAN' or pos not in pos_map: continue
+
+            # v4.0 REAL FIX — no minimum-activity threshold existed here at all;
+            # every player with any row in player_season/player_stats was
+            # included regardless of real playing time, meaning a single
+            # garbage-time snap got the same treatment as a real contributor.
+            # This wasn't causing under-coverage (the HTML model's separate,
+            # hand-maintained PLAYER_PROPS_2026 static block was the actual
+            # bottleneck — see findPlayerPropsData fix), but it's a real gap
+            # worth closing now that this fuller player pool is being wired
+            # into the live model: a meaningful floor keeps noisy, unreliable
+            # single-game entries out rather than letting them surface as if
+            # they were trustworthy. Floor: 2+ games AND real position-
+            # appropriate volume (targets for WR/TE, carries+targets for RB,
+            # attempts for QB) — low enough to keep real WR3/WR4/backup-TE
+            # usage, high enough to drop pure one-off garbage-time entries.
+            _targets  = safe_float(row.get('targets', 0))
+            _carries  = safe_float(row.get('carries', 0))
+            _attempts = safe_float(row.get('attempts', 0))
+            if games < 2:
+                continue
+            if pos in ('WR', 'TE') and _targets < 8:
+                continue
+            if pos == 'RB' and (_carries + _targets) < 8:
+                continue
+            if pos == 'QB' and _attempts < 10:
+                continue
 
             entry = {
                 'name': name, 'pos': pos, 'team': team, 'games': games,
@@ -1173,6 +1749,32 @@ def build_player_profiles(dfs, season):
                 ).reset_index()
                 _qb_grp['_cpoe'] = _pass4.groupby('passer_player_name')['cpoe'].mean().reindex(_qb_grp['passer_player_name']).values if 'cpoe' in _pass4.columns else 0
                 _qb_grp['_epa']  = _pass4.groupby('passer_player_name')['qb_epa'].mean().reindex(_qb_grp['passer_player_name']).values if 'qb_epa' in _pass4.columns else 0
+
+                # v3.30 REAL BUG FIXED — confirmed via the NFL Edge Model chat:
+                # this step used to build a brand-new, PASSING-ONLY record and
+                # assign it with `players[name] = entry4`, which OVERWRITES
+                # (not merges) whatever record already existed for that name —
+                # including a real, rushing-inclusive record the earlier
+                # nflverse_player_stats loop above had just built. Since every
+                # real starting QB throws enough passes to clear this step's
+                # `_gm4 < 2` filter, virtually every starter's real rushYdsPG
+                # was being silently destroyed here, every run — only
+                # low-snap backups who never cleared that filter kept their
+                # rushing data by accident. Confirmed empirically: Lamar
+                # Jackson, Josh Allen, Jalen Hurts, Caleb Williams all ended up
+                # with source='pbp_passer' and NO rushYdsPG field at all.
+                # Fixed two ways: (1) compute a real, PBP-derived rushYdsPG
+                # for every passer from the same _pbp4 dataframe (rushing
+                # plays are in the same play-by-play data, just under
+                # rusher_player_name instead of passer_player_name — no new
+                # data source needed), and (2) MERGE into any existing entry
+                # instead of replacing it outright, so no field computed
+                # elsewhere for this player is ever silently lost again.
+                _rush4 = _reg4[_reg4['rush_attempt']==1] if 'rush_attempt' in _reg4.columns else _reg4.iloc[0:0]
+                _rush4 = _rush4[_rush4['rusher_player_name'].astype(str)!='nan'] if 'rusher_player_name' in _rush4.columns else _rush4.iloc[0:0]
+                _qb_rush_yds = _rush4.groupby('rusher_player_name')['rushing_yards'].sum() if not _rush4.empty else pd.Series(dtype=float)
+                _qb_rush_games = _rush4.groupby('rusher_player_name')['game_id'].nunique() if not _rush4.empty else pd.Series(dtype=int)
+
                 _TNORM4 = {'JAC':'JAX','LA':'LAR','WSH':'WAS','LVR':'LV','NWE':'NE','NOR':'NO',
                            'GNB':'GB','TBB':'TB','KCC':'KC','SFO':'SF'}
                 def _np4(t): return _TNORM4.get(str(t).upper(), str(t).upper())
@@ -1182,19 +1784,33 @@ def build_player_profiles(dfs, season):
                     _tm4 = _np4(_r4['posteam'])
                     _gm4 = int(_r4['_gm'])
                     if _gm4 < 2 or not _nm4: continue
+                    # Real, per-QB rushing from this same PBP dataset — uses
+                    # the QB's OWN games-played-as-a-passer as the games
+                    # denominator (not the rushing-specific game count),
+                    # since a QB's rushing volume is a rate relative to their
+                    # real playing time, matching how every other position's
+                    # rushYdsPG is already computed in this file.
+                    _rush_yds_total = float(_qb_rush_yds.get(_nm4, 0.0))
                     _entry4 = {
                         'name': _nm4, 'pos': 'QB', 'team': _tm4, 'games': _gm4,
                         'passYdsPG': round(float(_r4['_py'])/max(_gm4,1), 1),
                         'cpoe':      round(float(_r4['_cpoe'] or 0), 4),
                         'passEPA':   round(float(_r4['_epa'] or 0), 4),
                         'cmpPct':    round(float(_r4['_cmp'])/max(float(_r4['_att']),1)*100, 1),
+                        'rushYdsPG': round(_rush_yds_total/max(_gm4,1), 1),
                         'isRookie': False, 'nflGames': _gm4, 'source': 'pbp_passer',
                     }
-                    players[norm_name(_nm4)] = _entry4
+                    _existing4 = players.get(norm_name(_nm4))
+                    if _existing4:
+                        _existing4.update(_entry4)
+                        players[norm_name(_nm4)] = _existing4
+                    else:
+                        players[norm_name(_nm4)] = _entry4
                     _qb_added += 1
-                print(f"  QB stats built from PBP: {_qb_added} passers (abbreviated names — resolved next step)")
+                print(f"  QB stats built from PBP: {_qb_added} passers (abbreviated names — resolved next step); rushYdsPG now computed for all, not just games<2 backups")
             except Exception as _qbe:
                 print(f"  QB PBP build error: {_qbe}")
+
         # ── Resolve abbreviated PBP names to full names via 2026 roster ─
         try:
             import urllib.request as _ur3, io as _io3, csv as _csv3
@@ -1354,46 +1970,136 @@ def detect_rookies(dfs, players, season):
     print('='*50)
     rookies = set()
 
-    rosters = dfs.get('rosters', pd.DataFrame())
+    # v3.33 REAL BUG FIXED — confirmed via a real run showing "Marked 0
+    # players as rookie" despite a full incoming draft class. Root cause:
+    # dfs['rosters'] is populated elsewhere in this file purely as a
+    # name-resolution fallback during PBP processing, using whatever
+    # `season` is currently being iterated (2025, in preseason baseline
+    # mode) — NOT the current CURRENT_SEASON being projected (2026). A
+    # player who entered the league in 2026 cannot possibly appear on a
+    # roster snapshot dated 2025, so filtering dfs['rosters'] for
+    # entry_year==2026 was structurally guaranteed to return zero matches
+    # every time, regardless of how many real rookies exist. A completely
+    # separate, independent fetch elsewhere in this file already pulls a
+    # real roster_2026.csv successfully (confirmed working — it's what
+    # powers PBP name resolution), but that flow hardcodes isRookie=False
+    # on every entry and never populates this `rookies` set. Fixed by
+    # giving detect_rookies() its own direct fetch of the CURRENT_SEASON
+    # roster file, independent of whatever dfs['rosters'] happens to hold.
+    rook_season = str(CURRENT_SEASON) if 'CURRENT_SEASON' in globals() else str(int(season) + 1)
+    rosters = fetch_csv(f"{NFLVERSE_BASE}/rosters/roster_{rook_season}.csv", f"rosters {rook_season} (rookie detection)")
+
     if not rosters.empty:
         entry_col = next((c for c in rosters.columns if 'entry_year' in c.lower() or 'rookie_year' in c.lower()), None)
         name_col  = next((c for c in rosters.columns if 'display_name' in c.lower() or 'full_name' in c.lower()), None)
         if entry_col and name_col:
-            # Detect rookies for the CURRENT season being projected
-            # CURRENT_SEASON is module-level global — must use globals(), not dir()
-            # dir() only shows local vars; bug caused 2025 draftees flagged as 2026 rookies
-            rook_season = str(CURRENT_SEASON) if 'CURRENT_SEASON' in globals() else str(int(season) + 1)
             rook_df = rosters[rosters[entry_col].astype(str) == rook_season]
             for _, row in rook_df.iterrows():
                 rookies.add(norm_name(row.get(name_col, '')))
             print(f"  Detected {len(rookies)} rookies from rosters (entry_year={rook_season})")
+        else:
+            print(f"  ! Could not find entry_year/name columns on roster_{rook_season}.csv — 0 rookies detected this run")
+    else:
+        print(f"  ! roster_{rook_season}.csv came back empty — 0 rookies detected this run")
 
     # Mark rookies in player profiles
+    # v3.39 REAL BUG FIXED — confirmed via direct inspection of a real
+    # nfl_model_data.json export: established veterans (Justin Jefferson,
+    # DeVonta Smith, 216 players total) came back isRookie=True. The
+    # matched entry_year/rookie_year column on roster_{season}.csv can't
+    # be schema-verified without a live key, so it's now trusted only
+    # when it doesn't contradict production this player already has on
+    # record — a genuine incoming rookie cannot already have a real,
+    # non-skeleton season of games. This is a safety net, not a fix to
+    # the underlying column match itself; if `overridden` below is large
+    # on a live run, the actual entry_col being matched needs a direct
+    # look (print the column name/values for a few known veterans).
     marked = 0
+    overridden = 0
     for key, p in players.items():
         if key in rookies:
+            has_real_prod = (
+                p.get('source') not in (None, 'roster_2026_skeleton')
+                and (p.get('games', 0) or 0) >= 3
+            )
+            if has_real_prod:
+                overridden += 1
+                continue
             p['isRookie'] = True
             marked += 1
     print(f"  Marked {marked} players as rookie in profiles")
+    if overridden:
+        print(f"  ⚠ {overridden} players matched the rookie roster filter but already "
+              f"have real, non-skeleton season production — treated as a roster "
+              f"entry_year/rookie_year mismatch, not a real rookie, and left alone.")
     return rookies
 
 # ─────────────────────────────────────────────
 # 5. LOAD PROSPECT ANALYZER (College Fallback)
 # ─────────────────────────────────────────────
-def _load_prospect_json(filepath):
-    """Load prospect data from JSON export (NFL_Prospect_Analyzer_Model_v1.json format)."""
+def _load_prospect_json(filepath_or_dict):
+    """Load prospect data from JSON export. Handles two real, confirmed
+    shapes seen in the wild: a flat list of records, OR nfl_prospects_2026.json's
+    real shape — {"prospects": {"QB": [...], "RB": [...], "WR": [...], "TE": [...]}}
+    (a dict KEYED BY POSITION, not a flat list).
+
+    v3.31 REAL BUG FIXED — confirmed via a real run's error log
+    ("'str' object has no attribute 'get'") and by directly downloading and
+    inspecting the real nfl_prospects_2026.json file: the old code did
+    `records = records.get('prospects', ...)` then `for p in records:` —
+    but since the extracted `prospects` value is ITSELF a dict keyed by
+    position, iterating it with a plain for-loop yields the STRING KEYS
+    ("QB", "RB", "WR", "TE"), not the actual prospect records. Calling
+    `p.get('name', '')` on the string "QB" is exactly what threw the
+    AttributeError. Fixed to flatten the position-keyed dict into one list
+    first, tagging each record with its position from the dict key (in
+    case a record's own `pos` field is missing).
+
+    Also fixed field mapping to match what this real file actually
+    contains — confirmed by inspection there is NO passYdsPG/rushYdsPG/
+    recYdsPG/recsPG/tdsPG anywhere in it (this file is a draft-grade/
+    landing-spot export, not a per-game-production export). Those stay at
+    0 here and are meant to be filled in by fetch_cfbd_prospect_stats()
+    (real per-game college production from CFBD) — this function now only
+    captures the real DRAFT-CONTEXT fields this file actually has:
+    draftPick (string form, e.g. "1.01"), pick (numeric), tier,
+    finalRanking, landingMult, nflTeam.
+    """
     import json as _json
     college = {}
-    with open(filepath, encoding='utf-8') as f:
-        records = _json.load(f)
-    if not isinstance(records, list):
-        records = records.get('prospects', records.get('players', []))
-    for p in records:
+    if isinstance(filepath_or_dict, dict):
+        records_raw = filepath_or_dict
+    else:
+        with open(filepath_or_dict, encoding='utf-8') as f:
+            records_raw = _json.load(f)
+
+    flat_records = []
+    if isinstance(records_raw, list):
+        flat_records = records_raw
+    else:
+        prospects_val = records_raw.get('prospects', records_raw.get('players', []))
+        if isinstance(prospects_val, list):
+            flat_records = prospects_val
+        elif isinstance(prospects_val, dict):
+            # Real shape: {"QB": [...], "RB": [...], "WR": [...], "TE": [...]}
+            for pos_key, pos_records in prospects_val.items():
+                if not isinstance(pos_records, list):
+                    continue
+                for rec in pos_records:
+                    if isinstance(rec, dict) and not rec.get('pos'):
+                        rec = {**rec, 'pos': pos_key}
+                    flat_records.append(rec)
+
+    for p in flat_records:
+        if not isinstance(p, dict):
+            continue  # defensive — never crash on an unexpected shape again
         name = str(p.get('name', '')).strip()
         if not name or name.lower() in ('nan', 'player', 'name'): continue
         pos  = str(p.get('pos', p.get('position', ''))).upper().strip()
         conf = str(p.get('conf', p.get('conference', ''))).lower().strip()
         conf_adj = CONF_ADJ.get(conf, CONF_ADJ.get(conf.split()[0] if conf else '', 0.70))
+        # draftPick in this real file is a STRING like "1.01" or "UDFA" —
+        # `pick` (numeric overall pick) is the separate, real numeric field.
         entry = {
             'name':       name,
             'pos':        pos,
@@ -1402,21 +2108,24 @@ def _load_prospect_json(filepath):
             'confAdj':    conf_adj,
             'nflTrans':   NFL_TRANS_FACTOR,
             'source':     'ProspectAnalyzer_JSON',
-            # Core stats (already per-game from the JSON)
+            # Core stats — genuinely not present in this file's real schema;
+            # left at 0 here on purpose. fetch_cfbd_prospect_stats() is the
+            # real source for these, called separately in apply_rookie_blending().
             'passYdsPG':  float(p.get('passYdsPG', 0) or 0),
             'rushYdsPG':  float(p.get('rushYdsPG', 0) or 0),
             'recYdsPG':   float(p.get('recYdsPG',  0) or 0),
             'recsPG':     float(p.get('recsPG',    0) or 0),
             'tdsPG':      float(p.get('tdsPG',     0) or 0),
-            # Adjusted stats (conference × NFL translation factor)
             'passYdsPG_adj': round(float(p.get('passYdsPG', 0) or 0) * conf_adj * NFL_TRANS_FACTOR, 1),
             'rushYdsPG_adj': round(float(p.get('rushYdsPG', 0) or 0) * conf_adj * NFL_TRANS_FACTOR, 1),
             'recYdsPG_adj':  round(float(p.get('recYdsPG',  0) or 0) * conf_adj * NFL_TRANS_FACTOR, 1),
-            # Bonus fields from NFL Prospect Analyzer
-            'draftPick':     int(p.get('pick', 0)   or 0),
-            'prospectScore': float(p.get('score', 0) or 0),
+            # Real draft-context fields this file actually has
+            'draftPickStr':  str(p.get('draftPick', '') or ''),
+            'draftPick':     int(p.get('pick', 0) or 0),
+            'prospectScore': float(p.get('finalRanking', p.get('score', 0)) or 0),
             'prospectTier':  str(p.get('tier', '')  or ''),
-            'nflTeam':       str(p.get('team', '')  or '').upper(),
+            'landingMult':   float(p.get('landingMult', 1.0) or 1.0),
+            'nflTeam':       str(p.get('nflTeam', p.get('team', '')) or '').upper(),
         }
         college[norm_name(name)] = entry
     print(f"  ✅ Loaded {len(college)} prospects from JSON "
@@ -1427,6 +2136,29 @@ def _load_prospect_json(filepath):
     return college
 
 
+def _fetch_prospect_json_from_github():
+    """v3.31 NEW — real GitHub fallback for the prospect JSON, per G-Money's
+    explicit question ("why isn't it pulling from GitHub, wouldn't that make
+    more sense?"). Confirmed via a direct GitHub API check that
+    nfl_prospects_2026.json genuinely exists in the Gatorz1989/
+    NFL-Daily-Data-Pull repo, but this script previously had ZERO code to
+    fetch anything from it for the prospect step — it only ever checked
+    local Windows folders, which is also why this step would silently find
+    nothing at all if this script were ever run via the repo's own GitHub
+    Actions automation (no local Windows paths exist on that runner).
+    Only used when no local file is found — local files still take
+    priority so nothing changes for a normal local run.
+    """
+    url = "https://raw.githubusercontent.com/Gatorz1989/NFL-Daily-Data-Pull/main/nfl_prospects_2026.json"
+    try:
+        r = requests.get(url, timeout=15)
+        r.raise_for_status()
+        return r.json()
+    except Exception as e:
+        print(f"  ⚠ GitHub prospect JSON fetch failed: {e}")
+        return None
+
+
 def load_prospect_analyzer():
     print(f"\n{'='*50}")
     print("LOADING PROSPECT ANALYZER")
@@ -1434,8 +2166,17 @@ def load_prospect_analyzer():
     college = {}
 
     if not PROSPECT_FILE.exists():
-        print(f"  ⚠ File not found: {PROSPECT_FILE}")
-        print(f"  Skipping Prospect Analyzer — will use CFB Reference only")
+        print(f"  ⚠ Local file not found: {PROSPECT_FILE}")
+        print(f"  Trying GitHub fallback (Gatorz1989/NFL-Daily-Data-Pull)...")
+        gh_data = _fetch_prospect_json_from_github()
+        if gh_data is not None:
+            try:
+                college = _load_prospect_json(gh_data)
+                print(f"  ✅ Loaded from GitHub fallback")
+                return college
+            except Exception as e:
+                print(f"  ❌ GitHub JSON parse failed: {e}")
+        print(f"  Skipping Prospect Analyzer — will use CFBD/CFB Reference only")
         return college
 
     # ── JSON path (preferred — no engine dependencies) ──────────────────────
@@ -1546,7 +2287,105 @@ def load_prospect_analyzer():
     return college
 
 # ─────────────────────────────────────────────
-# 6. CFB REFERENCE FALLBACK
+# 6b. CFBD PROSPECT STATS — real per-game college production + real
+#     games-played, per G-Money's explicit request
+# ─────────────────────────────────────────────
+def fetch_cfbd_prospect_stats(name, pos, college_school='', year=2025):
+    """Real per-player college production from CFBD, used as the PRIMARY
+    rookie-blending data source (tried before the CFB Reference scrape
+    fallback below) — a real, structured API beats scraping HTML.
+
+    v3.34 REAL BUG FIXED — confirmed via a real Anaconda Prompt log showing
+    "400 Client Error: Bad Request" on every single /player/search call,
+    for every rookie, with a real CFBD_API_KEY now correctly set (ruling
+    out an auth/key problem — 400 means the request itself was malformed,
+    not rejected credentials, which would be 401/403). Confirmed root
+    cause by inspecting the exact raw HTTP query-parameter names the
+    official cfbd Python SDK actually builds (not just its Python
+    attribute names): the SDK's own internal attribute is `search_term`
+    (Python snake_case convention), but the REAL, raw HTTP query parameter
+    it sends is `searchTerm` (camelCase) — confirmed directly from the
+    SDK's request-building source code. This script makes raw REST calls
+    (no SDK dependency), and used `search_term` directly as the literal
+    query key, which the real API never recognized, hence Bad Request on
+    every call. Fixed to send `searchTerm`.
+
+    v3.31 NEW. Two real CFBD calls per prospect (confirmed via direct
+    inspection of the official cfbd Python SDK's generated models — this
+    script makes raw REST calls, not via the SDK itself, since the SDK
+    isn't a project dependency, but the endpoints/schemas below are
+    confirmed real from it):
+      1. GET /player/search?searchTerm=...&team=...&year=...
+         -> resolves name+school to a real numeric player id
+      2. GET /player/season/overview?year=...&player_id=...
+         -> returns {"games": <int>, "boxScoreStats": {"categories": [...]}}
+         confirmed to include a genuine games-played count, which the
+         bulk /stats/player/season endpoint this script already uses
+         elsewhere for team-level CFB stats does NOT have.
+
+    Honest limitation flagged to G-Money: the exact stat-name strings
+    inside each category (e.g. whether passing yards is labeled "YDS" or
+    something else) could not be confirmed without a live API key —
+    matching below is deliberately fuzzy (substring, case-insensitive) to
+    be resilient to this, but should be spot-checked against a real
+    response on first use.
+    """
+    if not CFBD_API_KEY:
+        return {}
+    try:
+        search_params = {'searchTerm': name, 'year': year}
+        if college_school:
+            search_params['team'] = college_school
+        results = cfbd_get('/player/search', search_params)
+        if not results:
+            return {}
+        # Prefer an exact name match if multiple results come back
+        match = next((r for r in results if r.get('name', '').lower() == name.lower()), results[0])
+        player_id = match.get('id')
+        if not player_id:
+            return {}
+
+        overview = cfbd_get('/player/season/overview', {'year': year, 'playerId': player_id})
+        if not overview:
+            return {}
+        games = int(overview.get('games', 0) or 0)
+        if games <= 0:
+            return {}
+
+        cat_map = {'QB': 'passing', 'RB': 'rushing', 'WR': 'receiving', 'TE': 'receiving'}
+        target_cat = cat_map.get(pos, 'receiving')
+        categories = (overview.get('boxScoreStats') or {}).get('categories') or []
+        cat = next((c for c in categories if target_cat in str(c.get('name', '')).lower()), None)
+
+        def _find_stat(stats_list, *name_fragments):
+            for s in (stats_list or []):
+                sname = str(s.get('name', '')).lower()
+                if any(frag in sname for frag in name_fragments):
+                    try:
+                        return float(s.get('value', 0) or 0)
+                    except (ValueError, TypeError):
+                        return 0.0
+            return 0.0
+
+        yds_total = _find_stat(cat.get('stats') if cat else None, 'yd')
+        conf_raw = str(match.get('conference', '') or overview.get('conference', '') or '').lower().strip()
+        conf_adj = CONF_ADJ.get(conf_raw, CONF_ADJ.get(conf_raw.split()[0] if conf_raw else '', 0.70))
+
+        stat_key = {'QB': 'passYdsPG', 'RB': 'rushYdsPG', 'WR': 'recYdsPG', 'TE': 'recYdsPG'}.get(pos, 'recYdsPG')
+        per_game = round(yds_total / games, 1)
+
+        return {
+            'conf': conf_raw, 'confAdj': conf_adj, 'nflTrans': NFL_TRANS_FACTOR,
+            'source': 'CFBD', 'games': games,
+            stat_key: per_game,
+            f'{stat_key}_adj': round(per_game * conf_adj * NFL_TRANS_FACTOR, 1),
+        }
+    except Exception as e:
+        print(f"    CFBD prospect stats error for {name}: {e}")
+        return {}
+
+# ─────────────────────────────────────────────
+# 7. CFB REFERENCE FALLBACK — secondary fallback if CFBD has no key/fails
 # ─────────────────────────────────────────────
 def fetch_cfb_ref_stats(name, pos, year=2024):
     """Scrape CFB Reference for a single player's college stats"""
@@ -1620,15 +2459,36 @@ def apply_rookie_blending(players, college_data, rookies):
         pos       = p.get('pos', 'WR')
         cw, nw    = get_blend(nfl_games, pos)
 
-        # Find college data
+        # Find college data (draft context: school/tier/nflTeam from the
+        # Prospect Analyzer JSON, if a real prospect record exists there)
         col = college_data.get(key, {})
 
-        # Try CFB Reference if not in Prospect Analyzer
-        if not col and nfl_games == 0:
-            print(f"  Fetching CFB Ref for rookie: {p['name']}...")
-            col = fetch_cfb_ref_stats(p['name'], pos)
-            if col:
-                college_data[key] = col  # cache it
+        # v3.31 REWORKED — real per-game production fallback chain, per
+        # G-Money's explicit request: the Prospect Analyzer JSON has real
+        # draft context (school, tier, nflTeam) but genuinely NO per-game
+        # production stats (confirmed by inspecting the real file) — so
+        # `col` can exist with real context but all-zero stats. Checking
+        # only `if not col` (the old condition) would skip the real fix
+        # entirely whenever a prospect record existed with empty stats,
+        # which is every single prospect in that file. Now checks whether
+        # the position-relevant stat is actually present, tries CFBD
+        # first (real, structured API), and MERGES the result into any
+        # existing `col` so draft-context fields are never lost — rather
+        # than replacing `col` outright.
+        pos_stat_key = {'QB': 'passYdsPG', 'RB': 'rushYdsPG', 'WR': 'recYdsPG', 'TE': 'recYdsPG'}.get(pos, 'recYdsPG')
+        has_real_stats = bool(col.get(pos_stat_key))
+        if not has_real_stats and nfl_games == 0:
+            print(f"  Fetching real college stats for rookie: {p['name']} ({pos})...")
+            cfbd_stats = fetch_cfbd_prospect_stats(p['name'], pos, col.get('school', ''))
+            if cfbd_stats.get(pos_stat_key):
+                col = {**col, **cfbd_stats}
+                print(f"    ✅ CFBD: {cfbd_stats[pos_stat_key]} {pos_stat_key} over {cfbd_stats.get('games','?')} games")
+            else:
+                print(f"    CFBD had nothing (no key, or no match) — trying CFB Reference scrape...")
+                ref_stats = fetch_cfb_ref_stats(p['name'], pos)
+                if ref_stats.get(pos_stat_key):
+                    col = {**col, **ref_stats}
+            college_data[key] = col  # cache whatever we ended up with
 
         if not col:
             p['rookieNote'] = f'Rookie — no college data found. Using league avg baseline.'
@@ -1728,6 +2588,38 @@ def extract_starters(dfs):
         if pos_map[pos] not in starters[team]:
             starters[team][pos_map[pos]] = name
 
+    # v3.39 REAL BUG FIXED — confirmed via direct inspection of a real
+    # nfl_model_data.json export: wr3 was None for every team. Root cause:
+    # most teams' raw depth charts only carry 2 distinct pos_rank==1 WR
+    # formation slots (e.g. X/Z), not 3 — so the "multiple rank=1 rows per
+    # team" trick above genuinely can't surface a 3rd starter for most
+    # teams; it only ever worked for the handful of teams whose depth
+    # chart happens to list 3 separate rank-1 WR formation rows. The real
+    # WR3 (primary slot receiver in 3-WR sets) is usually listed at
+    # pos_rank==2 in the raw data instead of its own rank==1 row. Fixed by
+    # falling back to rank-2 WR rows, in depth order, for any team still
+    # short of 3 unique names — this only fills a gap, it never overwrites
+    # a real rank-1 name already captured above.
+    rank2_df = dc[dep_numeric == 2]
+    wr2_per_team = {}
+    for _, row in rank2_df.iterrows():
+        team = str(row.get(team_c, '')).upper().strip()
+        team = _DEPTH_ABBR.get(team, team)
+        pos  = str(row.get(pos_c, '')).upper().strip()
+        name = str(row.get(name_c, '')).strip()
+        if pos == 'WR' and team and name and name.lower() != 'nan':
+            wr2_per_team.setdefault(team, [])
+            if name not in wr2_per_team[team]:
+                wr2_per_team[team].append(name)
+
+    for team, names in wr2_per_team.items():
+        existing = wr_per_team.setdefault(team, [])
+        for name in names:
+            if len(existing) >= 3:
+                break
+            if name not in existing:
+                existing.append(name)
+
     for team, wr_names in wr_per_team.items():
         if team not in starters: starters[team] = {}
         if wr_names:               starters[team]['wr1'] = wr_names[0]
@@ -1735,8 +2627,189 @@ def extract_starters(dfs):
         if len(wr_names) > 2:      starters[team]['wr3'] = wr_names[2]
 
     n = sum(1 for v in starters.values() if v)
-    print(f"  Extracted starters for {n} teams from depth charts")
+    n_wr3 = sum(1 for v in starters.values() if v.get('wr3'))
+    print(f"  Extracted starters for {n} teams from depth charts (wr3 found for {n_wr3} teams)")
     return starters
+
+def receiver_key(name):
+    """
+    Normalize a player name to 'firstinitial_lastname' for matching between
+    nflverse PBP's abbreviated format ('T.McBride') and full roster names
+    ('Trey McBride Jr.'). Strips suffixes and hyphens for consistent matching
+    on both sides. Discovered necessary via a live PBP pull test — the
+    original norm_name()-based matching produced zero role matches against
+    real nflverse data because PBP receiver names are abbreviated.
+    """
+    name = str(name).strip()
+    if not name:
+        return ''
+    if '.' in name.split(' ')[0]:
+        # PBP format: "T.McBride" or "J.Smith-Schuster"
+        parts = name.split('.', 1)
+        initial = parts[0][:1].lower()
+        last = parts[1] if len(parts) > 1 else ''
+    else:
+        # Full name format: "Trey McBride" / "JuJu Smith-Schuster" / "Michael Pittman Jr."
+        tokens = name.split()
+        tokens = [t for t in tokens if t.lower().rstrip('.') not in
+                  ('jr', 'sr', 'ii', 'iii', 'iv', 'v')]
+        if not tokens:
+            return ''
+        initial = tokens[0][:1].lower()
+        last = tokens[-1]
+    last = re.sub(r'[^a-zA-Z]', '', last).lower()
+    return f"{initial}_{last}"
+
+
+def build_coverage_proxy(pbp, starters):
+    """
+    NFLVERSE PBP-DERIVED PASS-DEFENSE-BY-ROLE PROXY.
+
+    Free, TOS-clean alternative to PFF coverage grades (PFF's terms prohibit
+    automated or manual extraction of their data — see project notes).
+
+    For each team's current WR1/WR2/TE (from depth-chart starters), finds every
+    pass play where that player was targeted, groups by the OPPOSING defense
+    (defteam), and computes EPA/target allowed against that specific role.
+    Converts to a 0-100 grade via percentile rank across all 32 defenses so it
+    displays on the same scale as the existing static cb1Grade/cb2Grade fields
+    (higher = tougher defense).
+
+    LIMITATION: this is a role-level proxy, not a true charted man-coverage
+    grade. It answers "how tough is this defense against a team's WR1-role
+    receiver", not "how good is this specific cornerback" — nflverse's public
+    play-by-play has no defender-assignment charting. Updates weekly whenever
+    fresh PBP data is pulled.
+    """
+    print("  Building nflverse coverage-by-role proxy (WR1/WR2/TE)...")
+    if pbp is None or pbp.empty or not starters:
+        print("    ⚠ No PBP data or starters — skipping coverage proxy")
+        return {}
+
+    reg = pbp[pbp["season_type"] == "REG"].copy() if "season_type" in pbp.columns else pbp.copy()
+    needed = ["defteam", "posteam", "receiver_player_name", "complete_pass", "epa", "pass_attempt"]
+    missing = [c for c in needed if c not in reg.columns]
+    if missing:
+        print(f"    ⚠ PBP missing columns {missing} — skipping coverage proxy")
+        return {}
+
+    pass_plays = reg[(reg["pass_attempt"] == 1) & reg["receiver_player_name"].notna()].copy()
+    if pass_plays.empty:
+        print("    ⚠ No pass plays found — skipping coverage proxy")
+        return {}
+    pass_plays["_rname_norm"] = pass_plays["receiver_player_name"].apply(receiver_key)
+
+    # Build (offense team, receiver_key) -> role lookup
+    role_lookup = {}
+    for team, roles in starters.items():
+        for role in ("wr1", "wr2", "te"):
+            nm = roles.get(role)
+            if nm:
+                role_lookup[(team, receiver_key(nm))] = role
+
+    def _lookup_role(row):
+        return role_lookup.get((str(row["posteam"]).upper(), row["_rname_norm"]))
+
+    pass_plays["_role"] = pass_plays.apply(_lookup_role, axis=1)
+    role_plays = pass_plays[pass_plays["_role"].notna()].copy()
+
+    if role_plays.empty:
+        print("    ⚠ No role-matched targets found — skipping coverage proxy")
+        return {}
+
+    grp = role_plays.groupby(["defteam", "_role"]).agg(
+        targets=("pass_attempt", "sum"),
+        completions=("complete_pass", "sum"),
+        epa_allowed=("epa", "mean"),
+    ).reset_index()
+
+    out = {}
+    MIN_SAMPLE = 8  # minimum targets before trusting the number (early-season noise guard)
+    for role in ("wr1", "wr2", "te"):
+        sub = grp[grp["_role"] == role].copy()
+        sub = sub[sub["targets"] >= MIN_SAMPLE]
+        if sub.empty:
+            continue
+        # Percentile rank on EPA allowed, inverted so low EPA allowed = high grade
+        sub["_pct"] = sub["epa_allowed"].rank(pct=True, ascending=False)
+        sub["_grade"] = (40 + sub["_pct"] * 55).round(1)  # scale ~40-95, matches cbGrade spread
+        for _, row in sub.iterrows():
+            team = row["defteam"]
+            out.setdefault(team, {})
+            out[team][f"covGradeVs{role.upper()}"] = float(row["_grade"])
+            out[team][f"covSampleVs{role.upper()}"] = int(row["targets"])
+
+    print(f"    ✅ Coverage proxy computed for {len(out)} defenses")
+    return out
+
+
+def build_redzone_defense_proxy(pbp):
+    """
+    NFLVERSE PBP-DERIVED RED-ZONE DEFENSE PROXY.
+
+    Same methodology/rationale as build_coverage_proxy() — a free, TOS-clean,
+    weekly-refreshing alternative to a static red-zone-defense rating (the
+    existing static `rzDef` field in the model is hardcoded and never
+    refreshes). Powers "VS OPP RZ DEF" on the Receiving TDs slide.
+
+    For each unique red-zone possession (any drive that had at least one play
+    inside the opponent's 20-yard line — deduped by game_id + drive), records
+    whether that drive ended in a touchdown (via nflverse's fixed_drive_result
+    column) and which team was on defense. Aggregates a TD-rate-allowed per
+    defense, then converts to a 0-100 grade via percentile rank across all 32
+    teams (lower TD rate allowed = tougher defense = higher grade), matching
+    the direction and rough scale of covGradeVs* from build_coverage_proxy.
+    """
+    print("  Building nflverse red-zone-defense proxy...")
+    if pbp is None or pbp.empty:
+        print("    ⚠ No PBP data — skipping red-zone-defense proxy")
+        return {}
+
+    reg = pbp[pbp["season_type"] == "REG"].copy() if "season_type" in pbp.columns else pbp.copy()
+    needed = ["yardline_100", "drive", "game_id", "defteam", "fixed_drive_result"]
+    missing = [c for c in needed if c not in reg.columns]
+    if missing:
+        print(f"    ⚠ PBP missing columns {missing} — skipping red-zone-defense proxy")
+        return {}
+
+    rz = reg[reg["yardline_100"] <= 20].dropna(subset=["drive", "game_id", "defteam"]).copy()
+    if rz.empty:
+        print("    ⚠ No red-zone plays found — skipping red-zone-defense proxy")
+        return {}
+
+    # One row per unique red-zone possession (a drive counts once even if it
+    # had multiple plays inside the 20)
+    possessions = rz.drop_duplicates(subset=["game_id", "drive"])[
+        ["game_id", "drive", "defteam", "fixed_drive_result"]
+    ].copy()
+    possessions["is_td"] = (possessions["fixed_drive_result"] == "Touchdown").astype(int)
+
+    grp = possessions.groupby("defteam").agg(
+        rz_possessions=("is_td", "count"),
+        rz_tds_allowed=("is_td", "sum"),
+    ).reset_index()
+    grp["rz_td_rate"] = grp["rz_tds_allowed"] / grp["rz_possessions"]
+
+    MIN_SAMPLE = 15  # minimum red-zone possessions faced before trusting the number
+    grp = grp[grp["rz_possessions"] >= MIN_SAMPLE].copy()
+    if grp.empty:
+        print("    ⚠ No defense met the minimum red-zone sample size — skipping")
+        return {}
+
+    grp["_pct"] = grp["rz_td_rate"].rank(pct=True, ascending=False)  # low TD rate -> high grade
+    grp["_grade"] = (40 + grp["_pct"] * 55).round(1)
+
+    out = {}
+    for _, row in grp.iterrows():
+        out[row["defteam"]] = {
+            "rzDefGrade": float(row["_grade"]),
+            "rzDefSample": int(row["rz_possessions"]),
+            "rzDefTdRate": round(float(row["rz_td_rate"]), 3),
+        }
+
+    print(f"    ✅ Red-zone-defense proxy computed for {len(out)} defenses")
+    return out
+
 
 def build_injury_status(dfs, season):
     print(f"\n{'='*50}")
@@ -2045,7 +3118,7 @@ def build_healthy_roster_shares(dfs, teams):
 # ─────────────────────────────────────────────
 # 10. SAVE JSON
 # ─────────────────────────────────────────────
-def save_output(teams, players, injury_map, games, college_data, season, roster_changes=None, starters=None, coaching_context=None, dfs=None, healthy_roster_shares=None):
+def save_output(teams, players, injury_map, games, college_data, season, roster_changes=None, starters=None, coaching_context=None, dfs=None, healthy_roster_shares=None, coverage_proxy=None, redzone_defense_proxy=None):
     print(f"\n{'='*50}")
     print("SAVING OUTPUT JSON")
     print('='*50)
@@ -2067,6 +3140,34 @@ def save_output(teams, players, injury_map, games, college_data, season, roster_
         if isinstance(_tc9, dict) and (_tc9.get('passYdsPG') or 0) > 345:
             _tc9['passYdsPG'] = 345.0
 
+    # v3.39 NEW — dynamic defensive rank computation. Previously
+    # passDefRank/runDefRank/wr1vsRank/teVsRank/rbVsRank were hardcoded
+    # static values baked directly into the HTML's TEAMS object, frozen
+    # at whatever they were when the model was first built — confirmed
+    # via direct inspection that a real JSON export carried none of these
+    # fields for any of the 32 teams, while real, current
+    # defPassEPA/defRushEPA were already being computed here every run.
+    # Fixed by ranking all 32 teams on their real, current EPA allowed
+    # (lower/more negative EPA allowed = better defense = rank 1) and
+    # shipping the result so the model can use live ranks instead of
+    # stale hardcoded ones.
+    # wr1vsRank/teVsRank reuse passDefRank as a team-level pass-defense
+    # proxy — real position-specific vs-WR/vs-TE charting data isn't
+    # available here (coverage_proxy already covers WR/TE matchup grades
+    # separately and takes priority over these rank fields in the model);
+    # rbVsRank reuses runDefRank. Coarser than true position-specific
+    # matchup data, but real and current instead of frozen.
+    def _rank_teams_by(stat_key, teams_dict):
+        valid = [(abbr, t.get(stat_key)) for abbr, t in teams_dict.items()
+                 if isinstance(t, dict) and isinstance(t.get(stat_key), (int, float))]
+        valid.sort(key=lambda x: x[1])
+        return {abbr: i + 1 for i, (abbr, _) in enumerate(valid)}
+
+    _pass_def_ranks = _rank_teams_by('defPassEPA', teams)
+    _run_def_ranks  = _rank_teams_by('defRushEPA', teams)
+    print(f"  Computed live defensive ranks: {len(_pass_def_ranks)}/32 teams (pass), "
+          f"{len(_run_def_ranks)}/32 teams (run)")
+
     output = {
         'generated':      datetime.now().isoformat(),
         'season':         season,
@@ -2076,6 +3177,14 @@ def save_output(teams, players, injury_map, games, college_data, season, roster_
         'source':         'nflverse + PFR advstats + NGS + ProspectAnalyzer',
         'teams':      teams,
         'healthy_roster_shares': healthy_roster_shares or {},
+        # nflverse PBP-derived pass-defense-by-role proxy (WR1/WR2/TE vs each
+        # defense). Free, TOS-clean stand-in for PFF coverage grades — see
+        # build_coverage_proxy() docstring for methodology and limitations.
+        'coverage_proxy': coverage_proxy or {},
+        # nflverse PBP-derived red-zone-defense proxy (TD rate allowed per
+        # team, converted to a 0-100 grade). Powers "VS OPP RZ DEF" on the
+        # Receiving TDs slide — see build_redzone_defense_proxy() docstring.
+        'redzone_defense_proxy': redzone_defense_proxy or {},
         'players':    players_out,
         'injuries':   {players.get(k, {}).get('name', k): v
                        for k, v in injury_map.items()},
@@ -2086,10 +3195,6 @@ def save_output(teams, players, injury_map, games, college_data, season, roster_
                         'rookieNote': p.get('rookieNote','')}
                        for p in players.values() if p.get('isRookie')},
         'coaching_context': coaching_context or {},
-        # Player movement (FA/trade) impact per team, computed by build_roster_changes()
-        # v2.26: this was computed and printed to console every run but never actually
-        # written to the output JSON — the whole calculation was being discarded.
-        'roster_changes': roster_changes or {},
         # Team stats derived from 2025 PBP — used by model for GI card scores
         'team_stats_2025': {
             abbr: {
@@ -2102,6 +3207,11 @@ def save_output(teams, players, injury_map, games, college_data, season, roster_
                 'defSacks':     t.get('defSacks'),
                 'defQBHits':    t.get('defQBHits'),
                 'defPassDef':   t.get('defPassDef'),
+                'passDefRank':  _pass_def_ranks.get(abbr),
+                'runDefRank':   _run_def_ranks.get(abbr),
+                'wr1vsRank':    _pass_def_ranks.get(abbr),
+                'teVsRank':     _pass_def_ranks.get(abbr),
+                'rbVsRank':     _run_def_ranks.get(abbr),
             }
             for abbr, t in teams.items() if isinstance(t, dict)
         },
@@ -2149,160 +3259,7 @@ def fetch_roster_current(season):
     return pd.DataFrame()
 
 
-def build_prod_dict(player_stats_df):
-    """
-    Convert a player_season-style DataFrame into {norm_name: {pos, team,
-    raw_name, <stat fields>, games}}.
-
-    v2.26: extracted from build_roster_changes() so the exact same logic can
-    build a production dict for ANY season's stats — 2025 (baseline) or 2024
-    (fallback) — instead of duplicating this ~50 lines twice.
-    """
-    prod = {}
-    if player_stats_df is None or player_stats_df.empty:
-        return prod
-
-    def get_pos_col(df):
-        for c in ['position', 'pos', 'depth_chart_position']:
-            if c in df.columns: return c
-        return None
-
-    def get_name_col(df):
-        for c in ['full_name', 'player_display_name', 'player_name', 'name']:
-            if c in df.columns: return c
-        return None
-
-    def get_team_col(df):
-        for c in ['team', 'recent_team', 'team_abbr', 'club_code']:
-            if c in df.columns: return c
-        return None
-
-    def norm_name(n):
-        # v2.29: also strip generational suffixes (Jr/Sr/II/III/IV/V) —
-        # see the module-level norm_name() for why this matters.
-        s = re.sub(r'[^a-z ]', '', str(n).lower().strip()) if n else ''
-        s = re.sub(r'\b(jr|sr|ii|iii|iv|v)\b', '', s)
-        return re.sub(r'\s+', ' ', s).strip()
-
-    ABBR_MAP = {
-        'JAC':'JAX','KCC':'KC','LVR':'LV','SFO':'SF','NWE':'NE','NOR':'NO',
-        'GNB':'GB','TBB':'TB','SDG':'LAC','STL':'LAR','LA':'LAR','LAR':'LAR',
-    }
-    def norm_abbr(a):
-        a = str(a).upper().strip()
-        return ABBR_MAP.get(a, a)
-
-    SKILL = {'QB', 'RB', 'WR', 'TE'}
-    name_c = get_name_col(player_stats_df)
-    team_c = get_team_col(player_stats_df)
-    pos_c  = get_pos_col(player_stats_df)
-    if not all([name_c, team_c, pos_c]):
-        return prod
-
-    for _, row in player_stats_df.iterrows():
-        name = norm_name(row.get(name_c, ''))
-        pos  = str(row.get(pos_c, '')).upper().strip()
-        if not name or pos not in SKILL: continue
-        games = max(safe_int(row.get('games', 1)), 1)
-
-        def pg(col, div=None):
-            v = safe_float(row.get(col, 0))
-            return round(v / (div or games), 2)
-
-        if pos == 'QB':
-            att = max(safe_int(row.get('attempts', 0)), 1)
-            prod[name] = {
-                'pos': 'QB', 'team': norm_abbr(row.get(team_c, '')),
-                'raw_name': str(row.get(name_c, '')).strip(),
-                'passYdsPG':  pg('passing_yards'),
-                'passTDsPG':  pg('passing_tds'),
-                'epaPerDB':   round(safe_float(row.get('passing_epa', 0)) / att, 4),
-                'cpoe':       safe_float(row.get('cpoe', 0)),
-                'games':      games,
-            }
-        elif pos == 'RB':
-            carries = max(safe_int(row.get('carries', 0)), 1)
-            prod[name] = {
-                'pos': 'RB', 'team': norm_abbr(row.get(team_c, '')),
-                'raw_name': str(row.get(name_c, '')).strip(),
-                'rushYdsPG': pg('rushing_yards'),
-                'recYdsPG':  pg('receiving_yards'),
-                'recsPG':    pg('receptions'),
-                'rushEPA':   round(safe_float(row.get('rushing_epa', 0)) / carries, 4),
-                'games':     games,
-            }
-        elif pos in ('WR', 'TE'):
-            tgt = max(safe_int(row.get('targets', 0)), 1)
-            prod[name] = {
-                'pos': pos, 'team': norm_abbr(row.get(team_c, '')),
-                'raw_name': str(row.get(name_c, '')).strip(),
-                'recYdsPG':  pg('receiving_yards'),
-                'recsPG':    pg('receptions'),
-                'targetsPG': pg('targets'),
-                'recEPA':    round(safe_float(row.get('receiving_epa', 0)) / tgt, 4),
-                'games':     games,
-            }
-    return prod
-
-
-def fetch_player_season_stats_for_year(year):
-    """
-    Fetch and aggregate ONE specific year's player_stats CSV to season
-    totals, independent of BASELINE_SEASON/CURRENT_SEASON.
-
-    v2.26: added for the 2024 fallback in build_roster_changes() — when a
-    2026 confirmed starter didn't play enough 2025 games to trust (e.g. a
-    season-ending injury), this gives their most recent trustworthy season
-    instead of silently falling all the way to a generic positional average.
-
-    Reuses the exact fetch URL pattern already used elsewhere in this script
-    (see the BASELINE_SEASON fetch above) — same source, just parameterized
-    by year so it can be called for any season on demand.
-    """
-    df = fetch_csv(f"{NFLVERSE_BASE}/player_stats/player_stats_{year}.csv",
-                    f"player_stats {year} (fallback)", silent_404=True)
-    if df.empty:
-        return pd.DataFrame()
-    df_reg = df[df['season_type'] == 'REG'] if 'season_type' in df.columns else df
-    if df_reg.empty:
-        return pd.DataFrame()
-    if 'dakota' in df_reg.columns and 'cpoe' not in df_reg.columns:
-        df_reg = df_reg.rename(columns={'dakota': 'cpoe'})
-    elif 'passing_cpoe' in df_reg.columns:
-        df_reg = df_reg.rename(columns={'passing_cpoe': 'cpoe'})
-
-    SUM = [c for c in ['passing_yards','passing_tds','interceptions','passing_epa',
-                        'rushing_yards','carries','rushing_tds','rushing_epa',
-                        'receiving_yards','receptions','targets','receiving_tds',
-                        'receiving_epa','completions','attempts']
-           if c in df_reg.columns]
-    MEAN = [c for c in ['cpoe'] if c in df_reg.columns]
-    AGG = {c: 'sum' for c in SUM}
-    AGG.update({c: 'mean' for c in MEAN})
-
-    name_c = next((c for c in ['player_display_name','player_name','full_name','display_name']
-                   if c in df_reg.columns), None)
-    pos_c  = next((c for c in ['position','position_group','pos'] if c in df_reg.columns), None)
-    team_c = next((c for c in ['recent_team','team','posteam'] if c in df_reg.columns), None)
-    if not all([name_c, pos_c, team_c]):
-        return pd.DataFrame()
-
-    GRP = [name_c, pos_c, team_c]
-    if name_c != 'player_display_name':
-        df_reg = df_reg.rename(columns={name_c: 'player_display_name'})
-        GRP = ['player_display_name' if c == name_c else c for c in GRP]
-
-    if 'week' in df_reg.columns:
-        AGG['week'] = 'nunique'
-        seas = df_reg.groupby(GRP).agg(AGG).rename(columns={'week': 'games'}).reset_index()
-    else:
-        seas = df_reg.copy()
-        if 'games' not in seas.columns:
-            seas['games'] = 17
-    return seas
-
-
-def build_roster_changes(dfs, players, season, starters_2026=None):
+def build_roster_changes(dfs, players, season):
     """
     Compare BASELINE_SEASON rosters vs CURRENT_SEASON rosters.
     Identify key player movements (FA signings, trades, cuts).
@@ -2318,20 +3275,13 @@ def build_roster_changes(dfs, players, season, starters_2026=None):
     roster_curr = dfs.get('roster_curr', pd.DataFrame()) # CURRENT_SEASON
     player_stats = dfs.get('player_season', pd.DataFrame())
 
-    # v2.27 fix: these used to be hard-exit guards that returned {} if either
-    # roster snapshot was empty. That was correct for the OLD design, where
-    # comparing roster_base vs roster_curr WAS the core mechanism. It's no
-    # longer accurate — the core logic below runs on the depth chart
-    # (extract_starters) plus player production data, neither of which
-    # needs these two dataframes. Left as hard exits, this was silently
-    # discarding the entire roster_changes computation whenever either
-    # roster fetch happened to fail, even though everything the real logic
-    # needs was still available. Now: missing rosters only disables the
-    # supplementary "movers" list, not the core starter-vs-starter analysis.
-    can_detect_movers = not roster_base.empty and not roster_curr.empty
-    if not can_detect_movers:
-        print("  ⚠ Roster snapshot(s) missing — skipping the movers list, "
-              "but starter-vs-starter comparison will still run from depth charts")
+    if roster_base.empty:
+        print("  ⚠ No baseline rosters — skipping roster change analysis")
+        return {}
+
+    if roster_curr.empty:
+        print("  ⚠ No current rosters — skipping roster change analysis")
+        return {}
 
     # ── Normalize team abbreviations ──────────────────────────────────
     ABBR_MAP = {
@@ -2347,11 +3297,7 @@ def build_roster_changes(dfs, players, season, starters_2026=None):
 
     # ── Name normalizer ───────────────────────────────────────────────
     def norm_name(n):
-        # v2.29: also strip generational suffixes (Jr/Sr/II/III/IV/V) —
-        # see the module-level norm_name() for why this matters.
-        s = re.sub(r'[^a-z ]', '', str(n).lower().strip()) if n else ''
-        s = re.sub(r'\b(jr|sr|ii|iii|iv|v)\b', '', s)
-        return re.sub(r'\s+', ' ', s).strip()
+        return str(n).lower().strip() if n else ''
 
     # ── Build position column (handle multiple column names) ──────────
     def get_pos_col(df):
@@ -2395,20 +3341,63 @@ def build_roster_changes(dfs, players, season, starters_2026=None):
     base_players = extract_skill(roster_base, f"Baseline ({BASELINE_SEASON})")
     curr_players = extract_skill(roster_curr, f"Current ({CURRENT_SEASON})")
 
-    # ── Build player production dicts: 2025 (baseline) + 2024 (fallback) ──
-    # v2.26: refactored into build_prod_dict() so both seasons use identical
-    # logic; 2024 is fetched fresh here since nothing else in this script
-    # pulls that specific year (verified no other fetch touches player_stats
-    # for CURRENT_SEASON - 2, so this can't collide/conflict with anything).
-    prod = build_prod_dict(player_stats)
-    print(f"  Production data (2025): {len(prod)} skill players")
+    # ── Build player production from 2025 season stats ────────────────
+    # Key metrics per position for scoring impact
+    prod = {}  # norm_name → stats dict
+    if not player_stats.empty:
+        name_c = get_name_col(player_stats)
+        team_c = get_team_col(player_stats)
+        pos_c  = get_pos_col(player_stats)
+        if name_c and team_c and pos_c:
+            for _, row in player_stats.iterrows():
+                name = norm_name(row.get(name_c, ''))
+                pos  = str(row.get(pos_c, '')).upper().strip()
+                if not name or pos not in SKILL: continue
+                games = max(safe_int(row.get('games', 1)), 1)
 
-    prod_2024_raw = fetch_player_season_stats_for_year(CURRENT_SEASON - 2)
-    prod_2024 = build_prod_dict(prod_2024_raw)
-    print(f"  Production data (2024 fallback): {len(prod_2024)} skill players")
+                def pg(col, div=None):
+                    v = safe_float(row.get(col, 0))
+                    return round(v / (div or games), 2)
 
-    # ── Identify movers: players whose team changed (context/display only —
-    # the offAdj calculation below no longer keys off this list directly) ──
+                if pos == 'QB':
+                    att = max(safe_int(row.get('attempts', 0)), 1)
+                    prod[name] = {
+                        'pos': 'QB',
+                        'team': norm_abbr(row.get(team_c, '')),
+                        'raw_name': str(row.get(name_c, '')).strip(),
+                        'passYdsPG':  pg('passing_yards'),
+                        'passTDsPG':  pg('passing_tds'),
+                        'epaPerDB':   round(safe_float(row.get('passing_epa', 0)) / att, 4),
+                        'cpoe':       safe_float(row.get('cpoe', 0)),
+                        'games':      games,
+                    }
+                elif pos == 'RB':
+                    carries = max(safe_int(row.get('carries', 0)), 1)
+                    prod[name] = {
+                        'pos': 'RB',
+                        'team': norm_abbr(row.get(team_c, '')),
+                        'raw_name': str(row.get(name_c, '')).strip(),
+                        'rushYdsPG': pg('rushing_yards'),
+                        'recYdsPG':  pg('receiving_yards'),
+                        'recsPG':    pg('receptions'),
+                        'rushEPA':   round(safe_float(row.get('rushing_epa', 0)) / carries, 4),
+                        'games':     games,
+                    }
+                elif pos in ('WR', 'TE'):
+                    tgt = max(safe_int(row.get('targets', 0)), 1)
+                    prod[name] = {
+                        'pos': pos,
+                        'team': norm_abbr(row.get(team_c, '')),
+                        'raw_name': str(row.get(name_c, '')).strip(),
+                        'recYdsPG':  pg('receiving_yards'),
+                        'recsPG':    pg('receptions'),
+                        'targetsPG': pg('targets'),
+                        'recEPA':    round(safe_float(row.get('receiving_epa', 0)) / tgt, 4),
+                        'games':     games,
+                    }
+        print(f"  Production data: {len(prod)} skill players")
+
+    # ── Identify movers: players whose team changed ───────────────────
     movers = []
     for norm, curr_info in curr_players.items():
         if norm in base_players:
@@ -2424,14 +3413,9 @@ def build_roster_changes(dfs, players, season, starters_2026=None):
                 })
     print(f"  Roster movers detected: {len(movers)}")
 
-    # ── 2025 "actual" baseline per team/position, RANKED ────────────────
-    # What each position actually produced for that team in 2025. Ranked
-    # (not just single-highest) so WR1 and WR2 each compare against their
-    # own 2025 counterpart by rank — comparing both 2026 WR slots against
-    # the SAME single top-2025-producer was a real bug caught in testing:
-    # it made a healthy WR2 signing look like a big loss just because the
-    # team's 2025 WR1 happened to be excellent.
-    starters_2025_ranked = {}  # team → pos → [entries sorted desc by metric]
+    # ── Build 2025 starters per team per position ─────────────────────
+    # "Starter" = highest production player at each position per team
+    starters_2025 = {}  # team → pos → {norm_name, prod}
     pos_metric = {'QB':'passYdsPG', 'RB':'rushYdsPG', 'WR':'recYdsPG', 'TE':'recYdsPG'}
     for norm, p in prod.items():
         team = p.get('team', '')
@@ -2439,43 +3423,10 @@ def build_roster_changes(dfs, players, season, starters_2026=None):
         if not team or pos not in SKILL: continue
         metric = pos_metric.get(pos, 'recYdsPG')
         val    = p.get(metric, 0)
-        starters_2025_ranked.setdefault(team, {}).setdefault(pos, []).append(
-            {'norm_name': norm, 'val': val, 'prod': p})
-    for team in starters_2025_ranked:
-        for pos in starters_2025_ranked[team]:
-            starters_2025_ranked[team][pos].sort(key=lambda e: e['val'], reverse=True)
-
-    def old_baseline_for_slot(team, pos, rank_idx):
-        """rank_idx: 0 for the primary slot (qb/rbTop/wr1/te), 1 for wr2, etc."""
-        entries = starters_2025_ranked.get(team, {}).get(pos, [])
-        return entries[rank_idx]['prod'] if rank_idx < len(entries) else None
-
-    # ── 2026 confirmed starters, from the REAL depth chart ─────────────
-    # v2.26: this is the core fix — previously "who replaced a departed
-    # player" was guessed at via a positional average. Now we look up the
-    # actual 2026 depth-chart starter for each slot and use THEIR OWN
-    # trusted history, never blending in a different player's stats (e.g.
-    # an injury fill-in who isn't part of the 2026 plan).
-    # v2.26: accept the already-computed starters_map from main() instead of
-    # recomputing it — main() already calls extract_starters(dfs) once,
-    # calling it again here produced an identical result but wasted a pass
-    # over the depth chart data. Still falls back to computing it directly
-    # if this function is ever called standalone without that parameter.
-    starters_2026 = starters_2026 or extract_starters(dfs)  # {team: {qb, rbTop, wr1, wr2, wr3, te}}
-
-    MIN_GAMES_TRUST = 3  # own-2025-games threshold before falling back to 2024
-
-    def resolve_2026_starter_prod(player_name):
-        """Own 2025 stats if trusted (>= MIN_GAMES_TRUST games) -> own 2024 stats -> None.
-        Deliberately never substitutes a DIFFERENT player's stats."""
-        norm = norm_name(player_name)
-        p25 = prod.get(norm)
-        if p25 and p25.get('games', 0) >= MIN_GAMES_TRUST:
-            return p25, '2025'
-        p24 = prod_2024.get(norm)
-        if p24:
-            return p24, '2024'
-        return None, 'estimate'
+        if team not in starters_2025:
+            starters_2025[team] = {}
+        if pos not in starters_2025[team] or val > starters_2025[team][pos]['val']:
+            starters_2025[team][pos] = {'norm_name': norm, 'val': val, 'prod': p}
 
     # ── Scoring impact coefficients (pts per unit) ────────────────────
     # Calibrated from NFL analytics research
@@ -2507,7 +3458,7 @@ def build_roster_changes(dfs, players, season, starters_2026=None):
     }
 
     def player_pts(p, pos):
-        """Convert a player's stats dict to approximate pts/game contribution."""
+        """Convert player's 2025 stats to approximate pts/game contribution."""
         if not p or not pos: return 0
         imp = IMPACT.get(pos, {})
         pts = 0
@@ -2521,53 +3472,67 @@ def build_roster_changes(dfs, players, season, starters_2026=None):
             pts += p.get('recYdsPG', 0) * imp.get('recYdsPG', 0)
         return round(pts, 2)
 
-    avg_pos_pts = {'QB': 4.2, 'RB': 2.1, 'WR': 1.8, 'TE': 1.2}
+    # ── Compute team-level roster adjustments ─────────────────────────
+    team_adj = {}  # team → {offAdj, changes}
 
-    # ── Compute team-level roster adjustments: 2026 confirmed starter's
-    # own trusted rate vs. what the position actually produced in 2025 ────
-    SLOT_POS = {'qb': 'QB', 'rbTop': 'RB', 'wr1': 'WR', 'wr2': 'WR', 'te': 'TE'}
-    SLOT_RANK = {'qb': 0, 'rbTop': 0, 'wr1': 0, 'wr2': 1, 'te': 0}
-    team_adj = {}
+    for mover in movers:
+        from_team = mover['from_team']
+        to_team   = mover['to_team']
+        pos       = mover['pos']
+        name      = mover['raw_name']
+        p_prod    = mover['prod']
 
-    for team, slots in starters_2026.items():
-        for slot_key, pos in SLOT_POS.items():
-            new_starter_name = slots.get(slot_key)
-            if not new_starter_name:
-                continue
+        # Skip if no production data (camp bodies, practice squad)
+        games_played = p_prod.get('games', 0) if p_prod else 0
+        if games_played < 3 and pos != 'QB':
+            continue  # too small a sample for non-QBs
 
-            new_prod, new_source = resolve_2026_starter_prod(new_starter_name)
-            new_pts = player_pts(new_prod, pos) if new_prod else avg_pos_pts.get(pos, 2.0)
+        mover_pts = player_pts(p_prod, pos) if p_prod else 0
 
-            old_prod  = old_baseline_for_slot(team, pos, SLOT_RANK[slot_key])
-            old_pts   = player_pts(old_prod, pos) if old_prod else avg_pos_pts.get(pos, 2.0)
-            old_name  = old_prod.get('raw_name') if old_prod else '(no 2025 data)'
+        # Who was the starter at this pos for each team?
+        old_starter = starters_2025.get(from_team, {}).get(pos, {})
+        new_starter = starters_2025.get(to_team, {}).get(pos, {})
 
-            delta = round(new_pts - old_pts, 2)
+        old_pts  = player_pts(old_starter.get('prod', {}), pos)
+        new_pts  = player_pts(new_starter.get('prod', {}), pos)
 
+        # Impact on the LOSING team (from_team): lost mover, who replaces?
+        # Lost pts = mover_pts - replacement_pts
+        # If we don't know who replaces, use positional average
+        avg_pos_pts = {'QB': 4.2, 'RB': 2.1, 'WR': 1.8, 'TE': 1.2}
+        replacement_pts = max(old_pts - mover_pts, 0) if old_pts > 0 else avg_pos_pts.get(pos, 2.0)
+
+        loss_impact = round(replacement_pts - mover_pts, 2)  # negative = loss
+
+        # Impact on GAINING team (to_team): added mover vs what they had
+        # Gained pts = mover_pts - what_they_had
+        they_had_pts = new_pts if new_starter else avg_pos_pts.get(pos, 2.0)
+        gain_impact  = round(mover_pts - they_had_pts, 2)    # positive = gain
+
+        # Record changes
+        for team, impact, direction in [
+            (from_team, loss_impact, 'OUT'),
+            (to_team,   gain_impact, 'IN'),
+        ]:
+            if not team or team == 'FA': continue
             if team not in team_adj:
                 team_adj[team] = {'offAdj': 0.0, 'changes': []}
-            team_adj[team]['offAdj'] = round(team_adj[team]['offAdj'] + delta, 2)
-
-            # Only log a change entry when the starter is actually different,
-            # or the position's expected output shifted meaningfully even
-            # with the same player (e.g. falling back to 2024 data).
-            same_player = old_prod and norm_name(old_prod.get('raw_name', '')) == norm_name(new_starter_name)
-            if not same_player or abs(delta) >= 0.5:
-                team_adj[team]['changes'].append({
-                    'slot':           slot_key,
-                    'pos':            pos,
-                    'old_starter':    old_name,
-                    'new_starter':    new_starter_name,
-                    'new_data_source': new_source,   # '2025' | '2024' | 'estimate'
-                    'impact_pts':     delta,
-                })
+            team_adj[team]['offAdj'] = round(team_adj[team]['offAdj'] + impact, 2)
+            team_adj[team]['changes'].append({
+                'player':     name,
+                'pos':        pos,
+                'direction':  direction,
+                'from_team':  from_team,
+                'to_team':    to_team,
+                'impact_pts': impact if direction == 'IN' else -abs(loss_impact),
+                'stats_2025': {
+                    k: v for k, v in p_prod.items()
+                    if k not in ('pos','team','raw_name','games')
+                } if p_prod else {},
+                'games_2025': games_played,
+            })
 
     # ── Cap adjustments at ±8 pts (prevent extreme outliers) ──────────
-    # This is a proportionality guard, not a real ceiling on how much roster
-    # turnover COULD matter — every other team-scoring factor in this model
-    # (QB efficiency, kicker quality, red zone, turnovers, special teams,
-    # 3rd down) tops out well under this, so an uncapped sum across 5
-    # position slots could otherwise dominate the whole scoring formula.
     for team, data in team_adj.items():
         data['offAdj'] = round(max(-8.0, min(8.0, data['offAdj'])), 2)
 
@@ -2577,7 +3542,7 @@ def build_roster_changes(dfs, players, season, starters_2026=None):
     for team, data in sorted(significant.items(), key=lambda x: abs(x[1]['offAdj']), reverse=True):
         sign = '+' if data['offAdj'] > 0 else ''
         changes_str = ', '.join(
-            f"{c['slot']} {c['new_starter'].split()[-1]} ({c['new_data_source']})"
+            f"{c['direction']} {c['pos']} {c['player'].split()[-1]}"
             for c in data['changes'][:3])
         print(f"    {team:<4} {sign}{data['offAdj']:.1f} pts | "
               f"{len(data['changes'])} changes: {changes_str}")
@@ -2674,8 +3639,9 @@ def update_inseason_ngs(season=None, output_file=None):
     import gzip as _gzip_upd
 
     def _nfl_fetch_ps(yr):
-        """Fetch player stats for a season via direct nflverse URL."""
-        url = f"{NFLVERSE_BASE}/player_stats/player_stats_{yr}.csv"
+        """Fetch player stats for a season via direct nflverse URL.
+        v3.67 FIX — same rename as fetch_prior2_season_players above."""
+        url = f"{NFLVERSE_BASE}/player_stats/stats_player_reg_{yr}.csv"
         try:
             r = SESSION.get(url, timeout=30, allow_redirects=True)
             r.raise_for_status()
@@ -3051,6 +4017,70 @@ def main():
     # Apply rookie blending (college → NFL transition)
     apply_rookie_blending(players, college_data, rookies)
 
+    # v3.39 NEW — Bayesian season-transition blend. Previously the only
+    # way to move from BASELINE_SEASON's full-season stats to real
+    # CURRENT_SEASON data was flipping BASELINE_SEASON=CURRENT_SEASON by
+    # hand and re-running — meaning Week 1 alone would instantly become
+    # a player's entire baseline the moment it's played, which is
+    # extremely noisy on 1 game of data. This blends BASELINE_SEASON
+    # (the real, completed prior season) with whatever real CURRENT_SEASON
+    # games exist so far, weighted toward CURRENT_SEASON as more of it is
+    # played. Safe to leave on every run: pre-Week-1 the current-season
+    # file is empty/unpublished and this is a confirmed no-op (see
+    # fetch_current_season_partial_stats docstring).
+    # v3.55: fetches the real BASELINE_SEASON-1 data for the new 3rd
+    # blend tier. Safe to leave on every run — fetch_prior2_season_players
+    # returns {} (not an error) if that season's file isn't available,
+    # and apply_season_transition_blend() falls back to the original
+    # 2-season behavior exactly when prior2_data is empty for a player.
+    # v3.63 NEW — joint (RECENCY_DECAY_RATE, SEASON_BLEND_K) optimizer.
+    # Uses BASELINE_SEASON's OWN real weekly data as ground truth (see the
+    # optimizer's module docstring above for the full no-lookahead method)
+    # — no external file needed.
+    # v3.70 FIX — every run recomputes fresh now (the grid search is fast
+    # enough that caching wasn't buying anything real, and it was the
+    # direct cause of the "stale result" confusion this got debugged
+    # through). blend_params.json is still written each run as a
+    # human-readable record of the latest decision — just never read back.
+    _script_dir = os.path.dirname(os.path.abspath(__file__))
+    _baseline_weekly = fetch_current_season_partial_stats(BASELINE_SEASON)
+    prior2_players = fetch_prior2_season_players(BASELINE_SEASON - 1)
+    _decay_rate, _k, _opt_result = load_or_optimize_blend_params(
+        _script_dir, BASELINE_SEASON, _baseline_weekly, prior1_data=players, prior2_data=prior2_players)
+    apply_season_transition_blend(players, CURRENT_SEASON, k=_k, decay_rate=_decay_rate,
+                                   prior2_data=prior2_players)
+    # v3.86 NEW — exports the same raw per-player/stat/checkpoint cases the
+    # optimizer above already builds internally, so the JS model can cross-
+    # reference them against real historical prop lines for the hit-rate
+    # half of the decay-rate optimizer (this Python side only ever measures
+    # projection error against the real final season average — it has no
+    # access to real betting lines at all, that lives entirely in the JS
+    # model's Odds API integration). Safe no-op if the optimizer didn't run
+    # (e.g. no baseline data yet) — same convention as its other outputs.
+    if _opt_result is not None:
+        export_blend_optimizer_cases(OUTPUT_DIR, BASELINE_SEASON, _opt_result)
+
+    # v3.63 NEW — real per-player opportunity shares (carryShare,
+    # breakawayRate, rzCarryShare, rzTargetShare), computed from PBP the
+    # pipeline already fetches. These previously didn't exist anywhere in
+    # this pipeline — the live model's PLAYER_PROPS_2026 object had them as
+    # hand-typed, never-refreshed static values instead. Wiring them into
+    # the JSON here doesn't by itself make the live model use them — that
+    # object needs its own follow-up change to read from this JSON instead
+    # of its static values.
+    _opp_shares = compute_opportunity_shares_from_pbp(dfs.get('pbp', pd.DataFrame()))
+    for _key, _vals in _opp_shares.items():
+        if _key in players:
+            players[_key].update(_vals)
+
+    # v3.63 NEW — real snapShare from nflverse's snap_counts dataset
+    # (previously not pulled at all; weekly_rosters has roster/depth
+    # status but not snap percentage).
+    _snap_shares = fetch_snap_counts(BASELINE_SEASON)
+    for _key, _pct in _snap_shares.items():
+        if _key in players:
+            players[_key]['snapShare'] = _pct
+
     # Extract starters from depth charts (must come before injury / roster calls)
     starters_map = extract_starters(dfs)
 
@@ -3062,6 +4092,12 @@ def main():
                 teams[_abbr].update(_sd)
             else:
                 teams[_abbr] = _sd
+
+    # Build nflverse-derived coverage-by-role proxy (WR1/WR2/TE vs each defense)
+    coverage_proxy = build_coverage_proxy(dfs.get('pbp'), starters_map)
+
+    # Build nflverse-derived red-zone-defense proxy (TD rate allowed per team)
+    redzone_defense_proxy = build_redzone_defense_proxy(dfs.get('pbp'))
 
     # Fetch current-season roster for roster-change comparison
     dfs['roster_curr'] = fetch_roster_current(CURRENT_SEASON)
@@ -3076,7 +4112,7 @@ def main():
     # Build healthy roster shares (co-game target distributions)
     healthy_roster_shares = build_healthy_roster_shares(dfs, teams)
 
-    roster_changes = build_roster_changes(dfs, players, SEASON, starters_2026=starters_map)
+    roster_changes = build_roster_changes(dfs, players, SEASON)
 
     # Build coaching context (mid-season overrides + scheme flags)
     coaching_context = build_coaching_context(dfs)
@@ -3084,7 +4120,9 @@ def main():
     # Save everything to JSON
     save_output(teams, players, injury_map, games, college_data, SEASON,
                 roster_changes, starters_map, coaching_context, dfs=dfs,
-                healthy_roster_shares=healthy_roster_shares)
+                healthy_roster_shares=healthy_roster_shares,
+                coverage_proxy=coverage_proxy,
+                redzone_defense_proxy=redzone_defense_proxy)
 
     print("\n" + "="*50)
     print("✅ COMPLETE — Load nfl_model_data.json into NFL_Edge_Model.html")
@@ -3110,6 +4148,172 @@ def main():
         print(f"   After Week 1:  Set BASELINE_SEASON = {CURRENT_SEASON} and re-run for live data.")
     else:
         print(f"\n📊 LIVE MODE: Pulling {BASELINE_SEASON} current-season data")
+# ══════════════════════════════════════════════════════════════════════
+# v3.88 NEW — ONE-TIME HISTORICAL BACKFILL: real red-zone-defense grades
+# for BT_BASELINE_2023 / BT_BASELINE_2024 (2026-09-25)
+# ══════════════════════════════════════════════════════════════════════
+# Why this exists: BT_BASELINE_2023 and BT_BASELINE_2024 (the historical
+# snapshots the HTML's real Game Backtest evaluates 2024/2025 games
+# against) currently have every single team hardcoded at rzDef=57.0 —
+# confirmed by direct inspection, no exceptions, either season. That
+# means getTeamOffScore()'s opponent-red-zone-defense term (rzAdj, fixed
+# in v3.88) evaluates to exactly zero for every historical backtest game,
+# so a red-zone-defense formula variant can't be meaningfully tested
+# against real 2024/2025 outcomes yet — there's no real per-team
+# variation in the data those two baselines actually use.
+#
+# This does NOT touch the main daily pipeline. It's a standalone, opt-in
+# backfill: fetches PBP for each requested past season directly from
+# nflverse (same public source, same URL pattern as fetch_pbp_player_stats
+# above) and runs it through the EXISTING, already-verified
+# build_redzone_defense_proxy() — not a reimplementation, the literal same
+# function used for the current season's live "VS OPP RZ DEF" prop stat.
+#
+# Output: nfl_historical_rzdef_proxy.json, shaped as
+#   { "2023": { "ARI": {rzDefGrade, rzDefSample, rzDefTdRate}, ... },
+#     "2024": { ... } }
+# Run once: python nfl_edge_data_pull.py --backfill-rzdef
+# Then hand the JSON back so it can be merged into BT_BASELINE_2023/2024.
+# ══════════════════════════════════════════════════════════════════════
+def backfill_historical_rzdef_proxy(seasons):
+    import gzip as _gz, io as _io, json as _json
+
+    out = {}
+    for season in seasons:
+        print(f"\n{'='*50}")
+        print(f"BACKFILL: red-zone-defense proxy for {season}")
+        print('='*50)
+        url = f"{NFLVERSE_BASE}/pbp/play_by_play_{season}.csv.gz"
+        print(f"  Downloading PBP {season} ({url.split('/')[-1]}) ...", end="", flush=True)
+        try:
+            r = SESSION.get(url, timeout=180, allow_redirects=True)
+            r.raise_for_status()
+            size_mb = len(r.content) / 1024 / 1024
+            print(f" {size_mb:.1f}MB", end="", flush=True)
+            with _gz.open(_io.BytesIO(r.content)) as gz:
+                pbp = pd.read_csv(gz, low_memory=False)
+            print(f" — {len(pbp):,} plays")
+        except Exception as e:
+            print(f" ❌ {e} — skipping {season}")
+            continue
+
+        proxy = build_redzone_defense_proxy(pbp)
+        if not proxy:
+            print(f"  ⚠ No red-zone-defense proxy computed for {season} — skipping")
+            continue
+        out[str(season)] = proxy
+        print(f"  ✅ {season}: {len(proxy)} teams graded")
+
+    if not out:
+        print("\n❌ Backfill produced no data for any requested season — nothing written.")
+        return
+
+    out_path = os.path.join(OUTPUT_DIR, 'nfl_historical_rzdef_proxy.json')
+    with open(out_path, 'w') as f:
+        _json.dump(out, f, indent=2)
+    print(f"\n✅ Wrote {out_path}")
+    print("   Next: push this to the GitHub repo (or hand it back) so it can be merged")
+    print("   into BT_BASELINE_2023/BT_BASELINE_2024 in the HTML — no formula change yet,")
+    print("   this only supplies the real historical data those two years were missing.")
+
+
+# ══════════════════════════════════════════════════════════════════════
+# BACKFILL: pace/efficiency proxy (ptsPerDrive, successRate,
+# pressureRatePerGame) for past seasons — same one-time pattern as
+# backfill_historical_rzdef_proxy() above. Supplies the three real fields
+# the validated market-residual O/U total formula (2026-09-26) needs but
+# that BT_BASELINE_2023/2024 don't currently have.
+#
+# Run once: python nfl_edge_data_pull.py --backfill-pace-efficiency
+# Then hand the JSON back so it can be merged into BT_BASELINE_2023/2024.
+# ══════════════════════════════════════════════════════════════════════
+def build_pace_efficiency_proxy(pbp, pfr_def):
+    reg = pbp[pbp['season_type'] == 'REG'].copy()
+    out = {}
+
+    # ptsPerDrive (offense): real per-drive scoring via score change across
+    # each drive's plays — posteam_score_post minus posteam_score summed
+    # per (game, team, drive), divided by real drive count.
+    reg['drive_pts'] = reg['posteam_score_post'] - reg['posteam_score']
+    drive_scoring = reg.groupby(['game_id', 'posteam', 'drive'])['drive_pts'].sum().reset_index()
+    drive_scoring = drive_scoring[drive_scoring['posteam'].notna()]
+    totals = drive_scoring.groupby('posteam').agg(
+        total_pts=('drive_pts', 'sum'), total_drives=('drive_pts', 'count'))
+
+    # successRate (offense): real series_success column, nflverse's own
+    # down/distance success definition.
+    succ = reg[reg['series_success'].notna() & reg['posteam'].notna()]
+    succ_by_team = succ.groupby('posteam')['series_success'].mean()
+
+    for team in totals.index:
+        out[team] = {
+            'ptsPerDrive': round(float(totals.loc[team, 'total_pts'] / totals.loc[team, 'total_drives']), 3),
+            'successRate': round(float(succ_by_team.get(team, float('nan'))), 4) if team in succ_by_team.index else None,
+        }
+
+    # pressureRatePerGame (defense): real PFR def_pressures, summed per
+    # team+week then averaged across weeks played — a real per-game rate.
+    if 'team' in pfr_def.columns and 'def_pressures' in pfr_def.columns:
+        team_week = pfr_def.groupby(['team', 'week'])['def_pressures'].sum().reset_index()
+        pressure_pg = team_week.groupby('team')['def_pressures'].mean()
+        for team, val in pressure_pg.items():
+            out.setdefault(team, {})['pressureRatePerGame'] = round(float(val), 2)
+
+    return out
+
+
+def backfill_pace_efficiency_proxy(seasons):
+    import gzip as _gz, io as _io, json as _json
+
+    out = {}
+    for season in seasons:
+        print(f"\n{'='*50}")
+        print(f"BACKFILL: pace/efficiency proxy for {season}")
+        print('='*50)
+        pbp_url = f"{NFLVERSE_BASE}/pbp/play_by_play_{season}.csv.gz"
+        print(f"  Downloading PBP {season} ({pbp_url.split('/')[-1]}) ...", end="", flush=True)
+        try:
+            r = SESSION.get(pbp_url, timeout=180, allow_redirects=True)
+            r.raise_for_status()
+            size_mb = len(r.content) / 1024 / 1024
+            print(f" {size_mb:.1f}MB", end="", flush=True)
+            with _gz.open(_io.BytesIO(r.content)) as gz:
+                pbp = pd.read_csv(gz, low_memory=False)
+            print(f" — {len(pbp):,} plays")
+        except Exception as e:
+            print(f" ❌ {e} — skipping {season}")
+            continue
+
+        pfr_url = f"{NFLVERSE_BASE}/pfr_advstats/advstats_week_def_{season}.csv"
+        print(f"  Downloading PFR defensive advstats {season} ...", end="", flush=True)
+        try:
+            r2 = SESSION.get(pfr_url, timeout=120, allow_redirects=True)
+            r2.raise_for_status()
+            pfr_def = pd.read_csv(_io.BytesIO(r2.content), low_memory=False)
+            print(f" — {len(pfr_def):,} player-weeks")
+        except Exception as e:
+            print(f" ❌ {e} — proceeding without pressure data for {season}")
+            pfr_def = pd.DataFrame(columns=['team', 'week', 'def_pressures'])
+
+        proxy = build_pace_efficiency_proxy(pbp, pfr_def)
+        if not proxy:
+            print(f"  ⚠ No pace/efficiency proxy computed for {season} — skipping")
+            continue
+        out[str(season)] = proxy
+        print(f"  ✅ {season}: {len(proxy)} teams computed")
+
+    if not out:
+        print("\n❌ Backfill produced no data for any requested season — nothing written.")
+        return
+
+    out_path = os.path.join(OUTPUT_DIR, 'nfl_historical_pace_efficiency_proxy.json')
+    with open(out_path, 'w') as f:
+        _json.dump(out, f, indent=2)
+    print(f"\n✅ Wrote {out_path}")
+    print("   Next: hand this back so it can be merged into BT_BASELINE_2023/BT_BASELINE_2024")
+    print("   in the HTML — supplies ptsPerDrive/successRate/pressureRatePerGame, the three")
+    print("   fields the validated market-residual O/U total formula needs but doesn't have yet.")
+
 
 if __name__ == '__main__':
     import argparse
@@ -3120,9 +4324,27 @@ if __name__ == '__main__':
                         help='Recency window in weeks for --update (default: 4)')
     parser.add_argument('--season',  type=int, default=None,
                         help='Override season for --update (default: CURRENT_SEASON)')
+    parser.add_argument('--backfill-rzdef', action='store_true',
+                        help='One-time historical backfill: compute real per-team red-zone-'
+                             'defense grades (rzDefGrade) for past seasons and export a JSON '
+                             'ready to merge into BT_BASELINE_2023/BT_BASELINE_2024 in the HTML.')
+    parser.add_argument('--backfill-seasons', type=str, default='2023,2024',
+                        help='Comma-separated seasons for --backfill-rzdef/--backfill-pace-efficiency '
+                             '(default: 2023,2024, matching BT_BASELINE_2023/BT_BASELINE_2024)')
+    parser.add_argument('--backfill-pace-efficiency', action='store_true',
+                        help='One-time historical backfill: compute real per-team ptsPerDrive, '
+                             'successRate, and pressureRatePerGame for past seasons and export a '
+                             'JSON ready to merge into BT_BASELINE_2023/BT_BASELINE_2024 in the '
+                             'HTML — supplies the fields the market-residual O/U total formula needs.')
     args = parser.parse_args()
 
-    if args.update:
+    if args.backfill_rzdef:
+        seasons = [int(s.strip()) for s in args.backfill_seasons.split(',') if s.strip()]
+        backfill_historical_rzdef_proxy(seasons)
+    elif args.backfill_pace_efficiency:
+        seasons = [int(s.strip()) for s in args.backfill_seasons.split(',') if s.strip()]
+        backfill_pace_efficiency_proxy(seasons)
+    elif args.update:
         update_inseason_ngs(
             target_season=args.season or CURRENT_SEASON,
             weeks_back=args.weeks,
