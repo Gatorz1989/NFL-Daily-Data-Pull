@@ -41,7 +41,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          git add nflmodeldata.json nflblendoptimizercases2025.json blendparams.json
+          git add -A
 
           if git diff --staged --quiet; then
             echo "No data changes to commit."
