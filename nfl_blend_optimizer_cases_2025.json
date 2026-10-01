@@ -867,7 +867,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 1,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 6.2,
       "true_final": 1.0909090909090908
     },
@@ -878,7 +878,7 @@
       "season": 2025,
       "partial_avg": 3.0,
       "games_partial": 3,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 6.2,
       "true_final": 1.0909090909090908
     },
@@ -889,7 +889,7 @@
       "season": 2025,
       "partial_avg": 1.8,
       "games_partial": 5,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 6.2,
       "true_final": 1.0909090909090908
     },
@@ -900,7 +900,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 1,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 0.6,
       "true_final": 0.18181818181818182
     },
@@ -911,7 +911,7 @@
       "season": 2025,
       "partial_avg": 0.3333333333333333,
       "games_partial": 3,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 0.6,
       "true_final": 0.18181818181818182
     },
@@ -922,7 +922,7 @@
       "season": 2025,
       "partial_avg": 0.2,
       "games_partial": 5,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 0.6,
       "true_final": 0.18181818181818182
     },
@@ -1527,7 +1527,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 3,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 2.9,
       "true_final": 0.5454545454545454
     },
@@ -1538,7 +1538,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 6,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 2.9,
       "true_final": 0.5454545454545454
     },
@@ -1549,7 +1549,7 @@
       "season": 2025,
       "partial_avg": 0.375,
       "games_partial": 8,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 2.9,
       "true_final": 0.5454545454545454
     },
@@ -1560,7 +1560,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 3,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 0.1,
       "true_final": 0.18181818181818182
     },
@@ -1571,7 +1571,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 6,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 0.1,
       "true_final": 0.18181818181818182
     },
@@ -1582,7 +1582,7 @@
       "season": 2025,
       "partial_avg": 0.125,
       "games_partial": 8,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 0.1,
       "true_final": 0.18181818181818182
     },
@@ -2176,7 +2176,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 1,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": null,
       "true_final": 6.25
     },
@@ -2187,7 +2187,7 @@
       "season": 2025,
       "partial_avg": 3.5,
       "games_partial": 2,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": null,
       "true_final": 6.25
     },
@@ -2198,7 +2198,7 @@
       "season": 2025,
       "partial_avg": 6.25,
       "games_partial": 4,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": null,
       "true_final": 6.25
     },
@@ -2209,7 +2209,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 1,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": null,
       "true_final": 0.5
     },
@@ -2220,7 +2220,7 @@
       "season": 2025,
       "partial_avg": 0.5,
       "games_partial": 2,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": null,
       "true_final": 0.5
     },
@@ -2231,7 +2231,7 @@
       "season": 2025,
       "partial_avg": 0.5,
       "games_partial": 4,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": null,
       "true_final": 0.5
     },
@@ -2308,7 +2308,7 @@
       "season": 2025,
       "partial_avg": 7.333333333333333,
       "games_partial": 3,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 7.7,
       "true_final": 4.3125
     },
@@ -2319,7 +2319,7 @@
       "season": 2025,
       "partial_avg": 4.4,
       "games_partial": 5,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 7.7,
       "true_final": 4.3125
     },
@@ -2330,7 +2330,7 @@
       "season": 2025,
       "partial_avg": 4.375,
       "games_partial": 8,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 7.7,
       "true_final": 4.3125
     },
@@ -2341,7 +2341,7 @@
       "season": 2025,
       "partial_avg": 0.3333333333333333,
       "games_partial": 3,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 0.6,
       "true_final": 0.25
     },
@@ -2352,7 +2352,7 @@
       "season": 2025,
       "partial_avg": 0.2,
       "games_partial": 5,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 0.6,
       "true_final": 0.25
     },
@@ -2363,7 +2363,7 @@
       "season": 2025,
       "partial_avg": 0.25,
       "games_partial": 8,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 0.6,
       "true_final": 0.25
     },
@@ -5069,7 +5069,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 3,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 0.7,
       "true_final": 0.0
     },
@@ -5080,7 +5080,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 6,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 0.7,
       "true_final": 0.0
     },
@@ -5091,7 +5091,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 9,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 0.7,
       "true_final": 0.0
     },
@@ -5102,7 +5102,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 3,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 0.1,
       "true_final": 0.0
     },
@@ -5113,7 +5113,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 6,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 0.1,
       "true_final": 0.0
     },
@@ -5124,7 +5124,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 9,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 0.1,
       "true_final": 0.0
     },
@@ -6290,7 +6290,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 1,
-      "prior1": 31.9271,
+      "prior1": 31.6667,
       "prior2": 22.0,
       "true_final": 11.25
     },
@@ -6301,7 +6301,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 1,
-      "prior1": 31.9271,
+      "prior1": 31.6667,
       "prior2": 22.0,
       "true_final": 11.25
     },
@@ -6312,7 +6312,7 @@
       "season": 2025,
       "partial_avg": 30.0,
       "games_partial": 2,
-      "prior1": 31.9271,
+      "prior1": 31.6667,
       "prior2": 22.0,
       "true_final": 11.25
     },
@@ -6323,7 +6323,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 1,
-      "prior1": 2.4736,
+      "prior1": 2.3846,
       "prior2": 1.0,
       "true_final": 0.375
     },
@@ -6334,7 +6334,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 1,
-      "prior1": 2.4736,
+      "prior1": 2.3846,
       "prior2": 1.0,
       "true_final": 0.375
     },
@@ -6345,7 +6345,7 @@
       "season": 2025,
       "partial_avg": 0.5,
       "games_partial": 2,
-      "prior1": 2.4736,
+      "prior1": 2.3846,
       "prior2": 1.0,
       "true_final": 0.375
     },
@@ -7753,7 +7753,7 @@
       "season": 2025,
       "partial_avg": 6.0,
       "games_partial": 2,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 0.0,
       "true_final": 6.0
     },
@@ -7764,7 +7764,7 @@
       "season": 2025,
       "partial_avg": 9.6,
       "games_partial": 5,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 0.0,
       "true_final": 6.0
     },
@@ -7775,7 +7775,7 @@
       "season": 2025,
       "partial_avg": 8.0,
       "games_partial": 6,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 0.0,
       "true_final": 6.0
     },
@@ -7786,7 +7786,7 @@
       "season": 2025,
       "partial_avg": 0.5,
       "games_partial": 2,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 0.0,
       "true_final": 0.25
     },
@@ -7797,7 +7797,7 @@
       "season": 2025,
       "partial_avg": 0.4,
       "games_partial": 5,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 0.0,
       "true_final": 0.25
     },
@@ -7808,7 +7808,7 @@
       "season": 2025,
       "partial_avg": 0.3333333333333333,
       "games_partial": 6,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 0.0,
       "true_final": 0.25
     },
@@ -8259,7 +8259,7 @@
       "season": 2025,
       "partial_avg": 2.5,
       "games_partial": 2,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 23.4,
       "true_final": 1.6666666666666667
     },
@@ -8270,7 +8270,7 @@
       "season": 2025,
       "partial_avg": 1.6666666666666667,
       "games_partial": 3,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 23.4,
       "true_final": 1.6666666666666667
     },
@@ -8281,7 +8281,7 @@
       "season": 2025,
       "partial_avg": 1.6666666666666667,
       "games_partial": 3,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 23.4,
       "true_final": 1.6666666666666667
     },
@@ -8292,7 +8292,7 @@
       "season": 2025,
       "partial_avg": 0.5,
       "games_partial": 2,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 2.1,
       "true_final": 0.3333333333333333
     },
@@ -8303,7 +8303,7 @@
       "season": 2025,
       "partial_avg": 0.3333333333333333,
       "games_partial": 3,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 2.1,
       "true_final": 0.3333333333333333
     },
@@ -8314,7 +8314,7 @@
       "season": 2025,
       "partial_avg": 0.3333333333333333,
       "games_partial": 3,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 2.1,
       "true_final": 0.3333333333333333
     },
@@ -8941,7 +8941,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 3,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 7.5,
       "true_final": 0.9090909090909091
     },
@@ -8952,7 +8952,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 3,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 7.5,
       "true_final": 0.9090909090909091
     },
@@ -8963,7 +8963,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 6,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 7.5,
       "true_final": 0.9090909090909091
     },
@@ -8974,7 +8974,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 3,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 0.9,
       "true_final": 0.18181818181818182
     },
@@ -8985,7 +8985,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 3,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 0.9,
       "true_final": 0.18181818181818182
     },
@@ -8996,7 +8996,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 6,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 0.9,
       "true_final": 0.18181818181818182
     },
@@ -9205,7 +9205,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 1,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 4.0,
       "true_final": 3.857142857142857
     },
@@ -9216,7 +9216,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 1,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 4.0,
       "true_final": 3.857142857142857
     },
@@ -9227,7 +9227,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 1,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 0.8,
       "true_final": 0.42857142857142855
     },
@@ -9238,7 +9238,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 1,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 0.8,
       "true_final": 0.42857142857142855
     },
@@ -9293,7 +9293,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 3,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 6.1,
       "true_final": 1.5294117647058822
     },
@@ -9304,7 +9304,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 5,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 6.1,
       "true_final": 1.5294117647058822
     },
@@ -9315,7 +9315,7 @@
       "season": 2025,
       "partial_avg": 0.25,
       "games_partial": 8,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 6.1,
       "true_final": 1.5294117647058822
     },
@@ -9326,7 +9326,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 3,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 0.8,
       "true_final": 0.11764705882352941
     },
@@ -9337,7 +9337,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 5,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 0.8,
       "true_final": 0.11764705882352941
     },
@@ -9348,7 +9348,7 @@
       "season": 2025,
       "partial_avg": 0.125,
       "games_partial": 8,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 0.8,
       "true_final": 0.11764705882352941
     },
@@ -10701,7 +10701,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 1,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": null,
       "true_final": 9.375
     },
@@ -10712,7 +10712,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 3,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": null,
       "true_final": 9.375
     },
@@ -10723,7 +10723,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 1,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": null,
       "true_final": 0.375
     },
@@ -10734,7 +10734,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 3,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": null,
       "true_final": 0.375
     },
@@ -14012,7 +14012,7 @@
       "season": 2025,
       "partial_avg": 8.5,
       "games_partial": 2,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 8.9,
       "true_final": 4.0
     },
@@ -14023,7 +14023,7 @@
       "season": 2025,
       "partial_avg": 6.666666666666667,
       "games_partial": 3,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 8.9,
       "true_final": 4.0
     },
@@ -14034,7 +14034,7 @@
       "season": 2025,
       "partial_avg": 0.5,
       "games_partial": 2,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 1.1,
       "true_final": 0.4
     },
@@ -14045,7 +14045,7 @@
       "season": 2025,
       "partial_avg": 0.6666666666666666,
       "games_partial": 3,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 1.1,
       "true_final": 0.4
     },
@@ -14386,7 +14386,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 1,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 14.8,
       "true_final": 10.2
     },
@@ -14397,7 +14397,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 1,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 14.8,
       "true_final": 10.2
     },
@@ -14408,7 +14408,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 1,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 1.0,
       "true_final": 0.6
     },
@@ -14419,7 +14419,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 1,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 1.0,
       "true_final": 0.6
     },
@@ -15189,7 +15189,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 1,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": null,
       "true_final": 0.0
     },
@@ -15200,7 +15200,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 3,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": null,
       "true_final": 0.0
     },
@@ -15211,7 +15211,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 3,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": null,
       "true_final": 0.0
     },
@@ -15222,7 +15222,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 1,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": null,
       "true_final": 0.0
     },
@@ -15233,7 +15233,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 3,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": null,
       "true_final": 0.0
     },
@@ -15244,7 +15244,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 3,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": null,
       "true_final": 0.0
     },
@@ -18698,7 +18698,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 1,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 0.0,
       "true_final": 0.0
     },
@@ -18709,7 +18709,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 3,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 0.0,
       "true_final": 0.0
     },
@@ -18720,7 +18720,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 3,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 0.0,
       "true_final": 0.0
     },
@@ -18731,7 +18731,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 1,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 0.0,
       "true_final": 0.0
     },
@@ -18742,7 +18742,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 3,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 0.0,
       "true_final": 0.0
     },
@@ -18753,7 +18753,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 3,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 0.0,
       "true_final": 0.0
     },
@@ -18995,7 +18995,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 3,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 0.0,
       "true_final": 3.764705882352941
     },
@@ -19006,7 +19006,7 @@
       "season": 2025,
       "partial_avg": 10.666666666666666,
       "games_partial": 6,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 0.0,
       "true_final": 3.764705882352941
     },
@@ -19017,7 +19017,7 @@
       "season": 2025,
       "partial_avg": 8.0,
       "games_partial": 8,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 0.0,
       "true_final": 3.764705882352941
     },
@@ -19028,7 +19028,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 3,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 0.0,
       "true_final": 0.23529411764705882
     },
@@ -19039,7 +19039,7 @@
       "season": 2025,
       "partial_avg": 0.6666666666666666,
       "games_partial": 6,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 0.0,
       "true_final": 0.23529411764705882
     },
@@ -19050,7 +19050,7 @@
       "season": 2025,
       "partial_avg": 0.5,
       "games_partial": 8,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 0.0,
       "true_final": 0.23529411764705882
     },
@@ -20040,7 +20040,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 1,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": null,
       "true_final": 0.45454545454545453
     },
@@ -20051,7 +20051,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 4,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": null,
       "true_final": 0.45454545454545453
     },
@@ -20062,7 +20062,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 1,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": null,
       "true_final": 0.09090909090909091
     },
@@ -20073,7 +20073,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 4,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": null,
       "true_final": 0.09090909090909091
     },
@@ -21151,7 +21151,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 3,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": null,
       "true_final": 0.0
     },
@@ -21162,7 +21162,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 5,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": null,
       "true_final": 0.0
     },
@@ -21173,7 +21173,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 6,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": null,
       "true_final": 0.0
     },
@@ -21184,7 +21184,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 3,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": null,
       "true_final": 0.0
     },
@@ -21195,7 +21195,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 5,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": null,
       "true_final": 0.0
     },
@@ -21206,7 +21206,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 6,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": null,
       "true_final": 0.0
     },
@@ -21283,7 +21283,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 1,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": null,
       "true_final": 0.0
     },
@@ -21294,7 +21294,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 1,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": null,
       "true_final": 0.0
     },
@@ -22889,7 +22889,7 @@
       "season": 2025,
       "partial_avg": 16.0,
       "games_partial": 1,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": null,
       "true_final": 12.5
     },
@@ -22900,7 +22900,7 @@
       "season": 2025,
       "partial_avg": 1.0,
       "games_partial": 1,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": null,
       "true_final": 1.0
     },
@@ -23736,7 +23736,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 3,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": null,
       "true_final": 0.0
     },
@@ -23747,7 +23747,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 5,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": null,
       "true_final": 0.0
     },
@@ -23758,7 +23758,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 8,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": null,
       "true_final": 0.0
     },
@@ -23769,7 +23769,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 3,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": null,
       "true_final": 0.0
     },
@@ -23780,7 +23780,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 5,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": null,
       "true_final": 0.0
     },
@@ -23791,7 +23791,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 8,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": null,
       "true_final": 0.0
     },
@@ -24176,7 +24176,7 @@
       "season": 2025,
       "partial_avg": 7.0,
       "games_partial": 3,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 9.6,
       "true_final": 1.5
     },
@@ -24187,7 +24187,7 @@
       "season": 2025,
       "partial_avg": 3.5,
       "games_partial": 6,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 9.6,
       "true_final": 1.5
     },
@@ -24198,7 +24198,7 @@
       "season": 2025,
       "partial_avg": 2.3333333333333335,
       "games_partial": 9,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 9.6,
       "true_final": 1.5
     },
@@ -24209,7 +24209,7 @@
       "season": 2025,
       "partial_avg": 0.3333333333333333,
       "games_partial": 3,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 0.4,
       "true_final": 0.07142857142857142
     },
@@ -24220,7 +24220,7 @@
       "season": 2025,
       "partial_avg": 0.16666666666666666,
       "games_partial": 6,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 0.4,
       "true_final": 0.07142857142857142
     },
@@ -24231,7 +24231,7 @@
       "season": 2025,
       "partial_avg": 0.1111111111111111,
       "games_partial": 9,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 0.4,
       "true_final": 0.07142857142857142
     },
@@ -26937,7 +26937,7 @@
       "season": 2025,
       "partial_avg": 6.666666666666667,
       "games_partial": 3,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 14.2,
       "true_final": 3.7777777777777777
     },
@@ -26948,7 +26948,7 @@
       "season": 2025,
       "partial_avg": 5.0,
       "games_partial": 4,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 14.2,
       "true_final": 3.7777777777777777
     },
@@ -26959,7 +26959,7 @@
       "season": 2025,
       "partial_avg": 6.8,
       "games_partial": 5,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 14.2,
       "true_final": 3.7777777777777777
     },
@@ -26970,7 +26970,7 @@
       "season": 2025,
       "partial_avg": 0.3333333333333333,
       "games_partial": 3,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 1.3,
       "true_final": 0.2222222222222222
     },
@@ -26981,7 +26981,7 @@
       "season": 2025,
       "partial_avg": 0.25,
       "games_partial": 4,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 1.3,
       "true_final": 0.2222222222222222
     },
@@ -26992,7 +26992,7 @@
       "season": 2025,
       "partial_avg": 0.4,
       "games_partial": 5,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 1.3,
       "true_final": 0.2222222222222222
     },
@@ -27542,7 +27542,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 1,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 17.7,
       "true_final": 0.0
     },
@@ -27553,7 +27553,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 4,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 17.7,
       "true_final": 0.0
     },
@@ -27564,7 +27564,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 6,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 17.7,
       "true_final": 0.0
     },
@@ -27575,7 +27575,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 1,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 1.0,
       "true_final": 0.0
     },
@@ -27586,7 +27586,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 4,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 1.0,
       "true_final": 0.0
     },
@@ -27597,7 +27597,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 6,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 1.0,
       "true_final": 0.0
     },
@@ -27707,7 +27707,7 @@
       "season": 2025,
       "partial_avg": 3.3333333333333335,
       "games_partial": 3,
-      "prior1": 16.9167,
+      "prior1": 31.6667,
       "prior2": 0.0,
       "true_final": 5.117647058823529
     },
@@ -27718,7 +27718,7 @@
       "season": 2025,
       "partial_avg": 1.6666666666666667,
       "games_partial": 6,
-      "prior1": 16.9167,
+      "prior1": 31.6667,
       "prior2": 0.0,
       "true_final": 5.117647058823529
     },
@@ -27729,7 +27729,7 @@
       "season": 2025,
       "partial_avg": 5.111111111111111,
       "games_partial": 9,
-      "prior1": 16.9167,
+      "prior1": 31.6667,
       "prior2": 0.0,
       "true_final": 5.117647058823529
     },
@@ -27740,7 +27740,7 @@
       "season": 2025,
       "partial_avg": 0.3333333333333333,
       "games_partial": 3,
-      "prior1": 1.4,
+      "prior1": 2.3846,
       "prior2": 0.0,
       "true_final": 0.29411764705882354
     },
@@ -27751,7 +27751,7 @@
       "season": 2025,
       "partial_avg": 0.16666666666666666,
       "games_partial": 6,
-      "prior1": 1.4,
+      "prior1": 2.3846,
       "prior2": 0.0,
       "true_final": 0.29411764705882354
     },
@@ -27762,7 +27762,7 @@
       "season": 2025,
       "partial_avg": 0.3333333333333333,
       "games_partial": 9,
-      "prior1": 1.4,
+      "prior1": 2.3846,
       "prior2": 0.0,
       "true_final": 0.29411764705882354
     },
@@ -28114,7 +28114,7 @@
       "season": 2025,
       "partial_avg": 4.5,
       "games_partial": 2,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": null,
       "true_final": 2.0833333333333335
     },
@@ -28125,7 +28125,7 @@
       "season": 2025,
       "partial_avg": 2.25,
       "games_partial": 4,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": null,
       "true_final": 2.0833333333333335
     },
@@ -28136,7 +28136,7 @@
       "season": 2025,
       "partial_avg": 1.5,
       "games_partial": 6,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": null,
       "true_final": 2.0833333333333335
     },
@@ -28147,7 +28147,7 @@
       "season": 2025,
       "partial_avg": 0.5,
       "games_partial": 2,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": null,
       "true_final": 0.25
     },
@@ -28158,7 +28158,7 @@
       "season": 2025,
       "partial_avg": 0.25,
       "games_partial": 4,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": null,
       "true_final": 0.25
     },
@@ -28169,7 +28169,7 @@
       "season": 2025,
       "partial_avg": 0.16666666666666666,
       "games_partial": 6,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": null,
       "true_final": 0.25
     },
@@ -29709,7 +29709,7 @@
       "season": 2025,
       "partial_avg": 3.0,
       "games_partial": 2,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 6.4,
       "true_final": 5.25
     },
@@ -29720,7 +29720,7 @@
       "season": 2025,
       "partial_avg": 7.0,
       "games_partial": 3,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 6.4,
       "true_final": 5.25
     },
@@ -29731,7 +29731,7 @@
       "season": 2025,
       "partial_avg": 7.0,
       "games_partial": 3,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 6.4,
       "true_final": 5.25
     },
@@ -29742,7 +29742,7 @@
       "season": 2025,
       "partial_avg": 1.0,
       "games_partial": 2,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 0.6,
       "true_final": 0.75
     },
@@ -29753,7 +29753,7 @@
       "season": 2025,
       "partial_avg": 1.0,
       "games_partial": 3,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 0.6,
       "true_final": 0.75
     },
@@ -29764,7 +29764,7 @@
       "season": 2025,
       "partial_avg": 1.0,
       "games_partial": 3,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 0.6,
       "true_final": 0.75
     },
@@ -32525,7 +32525,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 1,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 2.3,
       "true_final": 1.0
     },
@@ -32536,7 +32536,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 1,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 2.3,
       "true_final": 1.0
     },
@@ -32547,7 +32547,7 @@
       "season": 2025,
       "partial_avg": 1.0,
       "games_partial": 3,
-      "prior1": 16.9167,
+      "prior1": 17.0172,
       "prior2": 2.3,
       "true_final": 1.0
     },
@@ -32558,7 +32558,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 1,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 0.4,
       "true_final": 0.3333333333333333
     },
@@ -32569,7 +32569,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 1,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 0.4,
       "true_final": 0.3333333333333333
     },
@@ -32580,7 +32580,7 @@
       "season": 2025,
       "partial_avg": 0.3333333333333333,
       "games_partial": 3,
-      "prior1": 1.4,
+      "prior1": 1.4143,
       "prior2": 0.4,
       "true_final": 0.3333333333333333
     },
@@ -33520,5 +33520,5 @@
       "true_final": 2.0
     }
   ],
-  "evaluated_at": "2026-09-30T10:07:37.421518+00:00"
+  "evaluated_at": "2026-10-01T10:08:33.776366+00:00"
 }
