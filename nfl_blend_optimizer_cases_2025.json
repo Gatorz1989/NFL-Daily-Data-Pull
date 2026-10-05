@@ -10690,7 +10690,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 2,
-      "prior1": 25.4667,
+      "prior1": 26.2308,
       "prior2": 3.1,
       "true_final": 4.2
     },
@@ -10701,7 +10701,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 2,
-      "prior1": 25.4667,
+      "prior1": 26.2308,
       "prior2": 3.1,
       "true_final": 4.2
     },
@@ -34098,7 +34098,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 1,
-      "prior1": 25.4667,
+      "prior1": 26.2308,
       "prior2": 1.6,
       "true_final": 0.5
     },
@@ -34109,7 +34109,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 1,
-      "prior1": 25.4667,
+      "prior1": 26.2308,
       "prior2": 1.6,
       "true_final": 0.5
     },
@@ -34120,7 +34120,7 @@
       "season": 2025,
       "partial_avg": 0.0,
       "games_partial": 2,
-      "prior1": 25.4667,
+      "prior1": 26.2308,
       "prior2": 1.6,
       "true_final": 0.5
     },
@@ -41440,5 +41440,5 @@
       "true_final": 2.0
     }
   ],
-  "evaluated_at": "2026-10-04T16:06:12.056092+00:00"
+  "evaluated_at": "2026-10-05T10:09:30.967951+00:00"
 }
