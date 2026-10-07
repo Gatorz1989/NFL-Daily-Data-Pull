@@ -353,28 +353,34 @@ def fetch_prior2_season_players(season):
     since that's exactly the kind of failure a retry resolves — a single
     dropped connection shouldn't cost this entire tier of the blend for
     the whole run."""
-    url = f"{NFLVERSE_BASE}/player_stats/stats_player_reg_{season}.csv"
+    # v4.5 FIX — nflverse publishes the newest seasons under the `stats_player` release tag; the older `player_stats` tag
+    # does not have 2025 at all, so this silently returned {} for the season just completed. Try the new tag first, then the old one.
+    _urls = [f"{NFLVERSE_BASE}/stats_player/stats_player_reg_{season}.csv",
+             f"{NFLVERSE_BASE}/player_stats/stats_player_reg_{season}.csv"]
     df = pd.DataFrame()
-    max_retries = 3
-    for attempt in range(max_retries + 1):
-        try:
-            r = SESSION.get(url, timeout=30, allow_redirects=True)
-            print(f"  Prior2-season fetch ({season}): HTTP {r.status_code}, "
-                  f"{len(r.content):,} bytes, content-type={r.headers.get('content-type')}")
-            r.raise_for_status()
-            from io import StringIO
-            df = pd.read_csv(StringIO(r.text), low_memory=False)
+    for url in _urls:
+        max_retries = 3
+        for attempt in range(max_retries + 1):
+            try:
+                r = SESSION.get(url, timeout=30, allow_redirects=True)
+                print(f"  Prior2-season fetch ({season}): HTTP {r.status_code}, "
+                      f"{len(r.content):,} bytes, content-type={r.headers.get('content-type')}")
+                r.raise_for_status()
+                from io import StringIO
+                df = pd.read_csv(StringIO(r.text), low_memory=False)
+                break
+            except Exception as e:
+                if attempt < max_retries:
+                    wait = 2.0 * (attempt + 1)
+                    print(f"  Prior2-season fetch ({season}) attempt {attempt + 1}/{max_retries + 1} "
+                          f"failed ({type(e).__name__}: {e}) — retrying in {wait:.0f}s...")
+                    time.sleep(wait)
+                    continue
+                print(f"  Prior2-season fetch ({season}) FAILED after {max_retries + 1} attempts: "
+                      f"{type(e).__name__}: {e}")
+                df = pd.DataFrame()
+        if df is not None and not df.empty:
             break
-        except Exception as e:
-            if attempt < max_retries:
-                wait = 2.0 * (attempt + 1)
-                print(f"  Prior2-season fetch ({season}) attempt {attempt + 1}/{max_retries + 1} "
-                      f"failed ({type(e).__name__}: {e}) — retrying in {wait:.0f}s...")
-                time.sleep(wait)
-                continue
-            print(f"  Prior2-season fetch ({season}) FAILED after {max_retries + 1} attempts: "
-                  f"{type(e).__name__}: {e}")
-            df = pd.DataFrame()
     if df is None or df.empty:
         print(f"  Prior2-season blend: no {season} data found — this tier of the blend will be skipped (players fall back to the existing 2-season blend, unchanged from today's behavior).")
         return {}
@@ -647,7 +653,7 @@ PG_FIELD_TO_PROPTYPE = {
 
 
 def optimize_blend_params(baseline_weekly_df, prior1_data, prior2_data, season, checkpoints=(3, 6, 9),
-                           decay_grid=(0.0, 0.25, 0.5, 0.75, 1.0), k_grid=(3, 5, 6, 8, 10, 12)):
+                           decay_grid=(0.0, 0.25, 0.5, 0.75, 1.0), k_grid=(3, 4, 5, 6, 8, 10, 12, 14, 16)):   # v4.5: finer, and wide enough to show the curve turning back up
     """v3.63 NEW — grid-searches (RECENCY_DECAY_RATE, SEASON_BLEND_K) jointly,
     scored by real held-out accuracy on BASELINE_SEASON's own weekly data
     (see module docstring above for the full method). Returns
@@ -682,19 +688,13 @@ def optimize_blend_params(baseline_weekly_df, prior1_data, prior2_data, season, 
               f"for a held-out comparison. Skipping.")
         return None
 
-    # Real, final full-season per-game average per player/stat (the answer
-    # each checkpoint's blend is trying to predict).
-    final_avg = df.groupby('_key')[list(present.keys())].mean()
-    games_played = df.groupby('_key')['week'].nunique()
-
-    # Build one evaluation case per (player, stat, checkpoint) with enough
-    # real prior-season data to blend and enough real final-season games to
-    # trust as ground truth (>=3, matching this pipeline's existing
-    # small-sample guards elsewhere).
+    # v4.5 FIX — each checkpoint's blend is now scored against the player's per-game average over the games AFTER that
+    # checkpoint: truly held out. It used to be scored against the full-season average, which contains the checkpoint games
+    # themselves, so it flattered trusting the partial sample. A case still needs >= 3 held-out games (the same small-sample
+    # guard as before). The field keeps its old name, `true_final`, so the HTML model reads the file exactly as before.
+    by_key = {key: g.sort_values('week') for key, g in df.groupby('_key')}
     cases = []
-    for key, g_final in games_played.items():
-        if g_final < 3:
-            continue
+    for key, g_all in by_key.items():
         p1 = prior1_data.get(key)
         if not p1:
             continue
@@ -704,22 +704,21 @@ def optimize_blend_params(baseline_weekly_df, prior1_data, prior2_data, season, 
             if prior1_val is None:
                 continue
             prior2_val = p2.get(pg_field) if p2 else None
-            true_final = final_avg.loc[key, raw]
-            if pd.isna(true_final):
-                continue
             for cp in eligible_checkpoints:
-                partial = df[(df['_key'] == key) & (df['week'] <= cp)]
+                partial = g_all[g_all['week'] <= cp]
+                later = g_all[g_all['week'] > cp]
                 g_partial = partial['week'].nunique()
-                if g_partial < 1:
+                if g_partial < 1 or later['week'].nunique() < 3:
                     continue
                 partial_avg = partial[raw].mean()
-                if pd.isna(partial_avg):
+                true_later = later[raw].mean()
+                if pd.isna(partial_avg) or pd.isna(true_later):
                     continue
                 cases.append({
                     'key': key, 'propType': PG_FIELD_TO_PROPTYPE.get(pg_field, pg_field),
                     'checkpoint': cp, 'season': season,
                     'partial_avg': partial_avg, 'games_partial': g_partial,
-                    'prior1': prior1_val, 'prior2': prior2_val, 'true_final': true_final,
+                    'prior1': prior1_val, 'prior2': prior2_val, 'true_final': true_later,
                 })
 
     if not cases:
@@ -797,7 +796,9 @@ def load_or_optimize_blend_params(script_dir, season, baseline_weekly_df=None, p
 
     try:
         with open(params_path, 'w', encoding='utf-8') as f:
-            json.dump(result, f, indent=2, default=str)
+            # v4.5: the per-case rows are exported to their own files (nfl_blend_optimizer_cases_<season>.json); keeping them
+            # here too made this record 2.9 MB and re-committed it every day, so it now holds only the decision and the grid.
+            json.dump({k: v for k, v in result.items() if k != 'cases'}, f, indent=2, default=str)
         print(f"  Blend params: saved to {params_path}")
     except Exception as e:
         print(f"  Blend params: couldn't save {params_path} ({e}) — using this run's result anyway.")
@@ -821,13 +822,36 @@ def export_blend_optimizer_cases(output_dir, season, opt_result):
         return
     out_path = os.path.join(output_dir, f'nfl_blend_optimizer_cases_{season}.json')
     payload = {'season': season, 'n_cases': len(cases), 'cases': cases,
-               'evaluated_at': opt_result.get('evaluated_at')}
+               'evaluated_at': opt_result.get('evaluated_at'),
+               'method': 'prior1=season-1, prior2=season-2, truth=average of the games after the checkpoint (v4.5)'}
     try:
         with open(out_path, 'w', encoding='utf-8') as f:
-            json.dump(payload, f, indent=2, default=str)
+            json.dump(payload, f, default=str, separators=(',', ':'))   # v4.5: compact (about half the size); the model reads it the same
         print(f"  Blend optimizer cases: exported {len(cases)} cases to {out_path}")
     except Exception as e:
         print(f"  Blend optimizer cases: couldn't save {out_path} ({e}).")
+
+
+def export_optimizer_cases_for_season(season, output_dir, only_if_missing=False):
+    """v4.5 NEW — builds and exports the optimizer cases for ONE completed season using the correct inputs: that season's
+    weekly stats as the thing being predicted, and the two seasons BEFORE it as the priors. The daily pull only ever wrote the
+    file for BASELINE_SEASON, so the 2024 file never existed. Also reachable on demand: --optimizer-cases 2024
+    Safe no-op (returns None) if any input is missing. only_if_missing=True skips the whole job when the file already exists
+    (a completed season never changes, so the daily run builds it once instead of re-downloading and re-committing it every day)."""
+    if only_if_missing and os.path.exists(os.path.join(output_dir, f'nfl_blend_optimizer_cases_{season}.json')):
+        print(f"  Blend optimizer cases {season}: file already exists — not rebuilding.")
+        return None
+    weekly = fetch_current_season_partial_stats(season)
+    prior1 = fetch_prior2_season_players(season - 1)
+    prior2 = fetch_prior2_season_players(season - 2)
+    if weekly is None or weekly.empty or not prior1:
+        print(f"  Blend optimizer cases {season}: missing weekly stats or the {season - 1} priors — skipping.")
+        return None
+    result = optimize_blend_params(weekly, prior1, prior2, season)
+    if result is None:
+        return None
+    export_blend_optimizer_cases(output_dir, season, result)
+    return result
 
 
 def fetch_current_season_partial_stats(current_season):
@@ -4861,8 +4885,13 @@ def main():
     _script_dir = os.path.dirname(os.path.abspath(__file__))
     _baseline_weekly = fetch_current_season_partial_stats(BASELINE_SEASON)
     prior2_players = fetch_prior2_season_players(BASELINE_SEASON - 1)
+    # v4.5 FIX — the optimizer PREDICTS BASELINE_SEASON, so its priors must be the seasons before it (BASELINE-1, BASELINE-2).
+    # It was being handed `players` (BASELINE_SEASON's own full-season profile) as the prior, i.e. the answer, which is why it
+    # kept preferring "trust the prior completely": decay_rate=0 and the largest k on the grid, at the grid's edge. The live
+    # blend below still uses `players` (BASELINE_SEASON) and `prior2_players` (BASELINE-1), which is correct for projecting CURRENT_SEASON.
+    _opt_prior2 = fetch_prior2_season_players(BASELINE_SEASON - 2)
     _decay_rate, _k, _opt_result = load_or_optimize_blend_params(
-        _script_dir, BASELINE_SEASON, _baseline_weekly, prior1_data=players, prior2_data=prior2_players)
+        _script_dir, BASELINE_SEASON, _baseline_weekly, prior1_data=prior2_players, prior2_data=_opt_prior2)
     apply_season_transition_blend(players, CURRENT_SEASON, k=_k, decay_rate=_decay_rate,
                                    prior2_data=prior2_players, resolver=resolver)
     # v3.86 NEW — exports the same raw per-player/stat/checkpoint cases the
@@ -4875,6 +4904,11 @@ def main():
     # (e.g. no baseline data yet) — same convention as its other outputs.
     if _opt_result is not None:
         export_blend_optimizer_cases(OUTPUT_DIR, BASELINE_SEASON, _opt_result)
+    # v4.5 NEW — also export the season before it (2024 while BASELINE_SEASON is 2025) so the model's optimizer panel has both
+    try:
+        export_optimizer_cases_for_season(BASELINE_SEASON - 1, OUTPUT_DIR, only_if_missing=True)
+    except Exception as _oce:
+        print(f"  Blend optimizer cases {BASELINE_SEASON - 1}: skipped ({_oce}).")
 
     # ══ v4.4: CURRENT-SEASON (2026) USAGE INGESTION ═════════════════════════════
     # Usage changes year over year (roles, new teams, injuries), so every 2026 game
@@ -5146,6 +5180,9 @@ if __name__ == '__main__':
                         help='Recency window in weeks for --update (default: 4)')
     parser.add_argument('--season',  type=int, default=None,
                         help='Override season for --update (default: CURRENT_SEASON)')
+    parser.add_argument('--optimizer-cases', type=str, default=None,
+                        help='v4.5: export only the optimizer case files for these completed seasons (comma-separated, '
+                             'e.g. 2024 or 2023,2024) and exit. Does not touch nfl_model_data.json.')
     parser.add_argument('--backfill-rzdef', action='store_true',
                         help='One-time historical backfill: compute real per-team red-zone-'
                              'defense grades (rzDefGrade) for past seasons and export a JSON '
@@ -5170,7 +5207,10 @@ if __name__ == '__main__':
                         help='Overrides GITHUB_REPO_DIR for this run only, without editing the file.')
     args = parser.parse_args()
 
-    if args.backfill_rzdef:
+    if args.optimizer_cases:
+        for _s in [int(s.strip()) for s in args.optimizer_cases.split(',') if s.strip()]:
+            export_optimizer_cases_for_season(_s, OUTPUT_DIR)
+    elif args.backfill_rzdef:
         seasons = [int(s.strip()) for s in args.backfill_seasons.split(',') if s.strip()]
         backfill_historical_rzdef_proxy(seasons)
     elif args.backfill_pace_efficiency:
