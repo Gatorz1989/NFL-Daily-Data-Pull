@@ -216,7 +216,7 @@ NFL_TRANS_FACTOR = 0.65   # college production → NFL baseline
 # used only for rookie blending until a player has enough real NFL games
 # to no longer need a college baseline. Same env-var pattern already used
 # in the companion cfb_edge_data_pull.py script, for consistency.
-#   set CFBD_API_KEY=your_key_here        (Windows)
+#   set CFBD_API_KEY=BiXJExj3K+3GH5eE90SCOmpVCGFbeaODcreujgjSdbiOz15FzV9wAJNJu4VuvDZl        (Windows)
 #   export CFBD_API_KEY=your_key_here     (Mac/Linux)
 # Get a free key at https://collegefootballdata.com/key
 #   NOTE: env var (above) always wins if set — this only matters when it's NOT set,
