@@ -8,6 +8,10 @@ Run weekly from Anaconda Prompt:
 
 Outputs: nfl_model_data.json  (load into NFL_Edge_Model.html)
 
+v7.27: also writes a "v727" block (over/under formula inputs from nflverse play-by-play).
+v7.28: also writes a "v728" block (weekly-refit game-totals / team-totals model and Rushing Yards over inputs).
+       Needs numpy (installed with pandas). First run downloads 5 seasons of play-by-play; later runs reuse the weather cache.
+
 Sources:
   - nflverse (player_stats, pfr_advstats, stats_team, rosters, injuries, depth_charts)
   - NFL Next Gen Stats (via nflverse parquet — requires pyarrow)
@@ -3888,6 +3892,830 @@ def build_healthy_roster_shares(dfs, teams, depth_ctx=None, resolver=None):
     return healthy
 
 
+
+# ─────────────────────────────────────────────
+# v7.27 FORMULA DATA BLOCK  (adds "v727" to nfl_model_data.json)
+# The model's v7.27 over/under formulas read per-game averages (this season, last season, two seasons ago, recent-game
+# weighted averages), target/carry/dropback shares, team volume and points, and opponent yards allowed by position,
+# all built from nflverse play-by-play. If this step fails the rest of the pull is unaffected and the model falls back
+# to the snapshot embedded in the HTML file.
+# ─────────────────────────────────────────────
+
+V727_STATS = ['pass_yds', 'pass_tds', 'dropbacks', 'rush_yds', 'carries', 'rec_yds', 'recs', 'targets']
+V727_DSTATS = {'pass_yds': 'a_pass_yds', 'pass_tds': 'a_pass_tds', 'rush_yds': 'a_rush_yds', 'rec_yds': 'a_rec_yds', 'recs': 'a_recs'}
+V727_TEAM_MAP = {'LA': 'LAR'}
+V727_PGRP = {'QB': 'QB', 'RB': 'RB', 'FB': 'RB', 'WR': 'WR', 'TE': 'TE'}
+V727_COLS = ['game_id', 'season', 'season_type', 'week', 'game_date', 'home_team', 'away_team', 'posteam', 'defteam',
+        'pass_attempt', 'rush_attempt', 'sack', 'qb_dropback', 'passing_yards', 'rushing_yards', 'receiving_yards',
+        'pass_touchdown', 'complete_pass', 'passer_player_id', 'rusher_player_id', 'receiver_player_id',
+        'home_score', 'away_score', 'two_point_attempt']
+
+
+def _v727_r(v, d=4):
+    try:
+        v = float(v)
+    except (TypeError, ValueError):
+        return None
+    return None if not np.isfinite(v) else round(v, d)
+
+
+def build_v727_block(pbp, players, season):
+    """pbp: play-by-play rows for season-3 .. season (any extra columns ignored).
+    players: nflverse players table with gsis_id, display_name, position. season: current season (int)."""
+    pbp = pbp[[c for c in V727_COLS if c in pbp.columns]].copy()
+    pbp = pbp[(pbp.season_type == 'REG') & (pbp.two_point_attempt.fillna(0) == 0)]
+    pbp = pbp[pbp.season.between(season - 3, season)]  # 3 prior seasons: recent-game weights look back 24 games
+    if pbp.empty:
+        return None
+    pbp['is_pass'] = (pbp.pass_attempt.fillna(0) == 1) & (pbp.sack.fillna(0) == 0)
+    pbp['is_rush'] = pbp.rush_attempt.fillna(0) == 1
+    pbp['is_db'] = pbp.qb_dropback.fillna(0) == 1
+    g = pbp.groupby('game_id').agg(season=('season', 'first'), game_date=('game_date', 'first'), home=('home_team', 'first'),
+                                   away=('away_team', 'first'), home_score=('home_score', 'max'), away_score=('away_score', 'max')).reset_index()
+    tg = pbp[pbp.posteam.notna()].groupby(['game_id', 'posteam']).agg(t_pass=('is_pass', 'sum'), t_rush=('is_rush', 'sum'),
+                                                                     t_db=('is_db', 'sum')).reset_index().rename(columns={'posteam': 'team'})
+    tg = tg.merge(g, on='game_id')
+    tg['opp'] = np.where(tg.team == tg.home, tg.away, tg.home)
+    tg['pts'] = np.where(tg.team == tg.home, tg.home_score, tg.away_score)
+    pas = pbp[pbp.is_pass & pbp.passer_player_id.notna()].groupby(['game_id', 'passer_player_id', 'posteam']).agg(
+        pass_yds=('passing_yards', 'sum'), pass_tds=('pass_touchdown', 'sum')).reset_index()
+    pas.columns = ['game_id', 'pid', 'team', 'pass_yds', 'pass_tds']
+    dbk = pbp[pbp.is_db & pbp.passer_player_id.notna()].groupby(['game_id', 'passer_player_id']).size().reset_index(name='dropbacks')
+    dbk.columns = ['game_id', 'pid', 'dropbacks']
+    ru = pbp[pbp.is_rush & pbp.rusher_player_id.notna()].groupby(['game_id', 'rusher_player_id', 'posteam']).agg(
+        rush_yds=('rushing_yards', 'sum'), carries=('is_rush', 'sum')).reset_index()
+    ru.columns = ['game_id', 'pid', 'team', 'rush_yds', 'carries']
+    rc = pbp[pbp.is_pass & pbp.receiver_player_id.notna()].groupby(['game_id', 'receiver_player_id', 'posteam']).agg(
+        rec_yds=('receiving_yards', 'sum'), recs=('complete_pass', 'sum'), targets=('is_pass', 'sum')).reset_index()
+    rc.columns = ['game_id', 'pid', 'team', 'rec_yds', 'recs', 'targets']
+    pg = pas.merge(ru, on=['game_id', 'pid', 'team'], how='outer').merge(rc, on=['game_id', 'pid', 'team'], how='outer')
+    pg = pg.merge(dbk, on=['game_id', 'pid'], how='left')
+    for c in V727_STATS:
+        pg[c] = pg[c].fillna(0)
+    pg = pg.merge(tg[['game_id', 'team', 'opp', 'season', 'game_date', 't_pass', 't_rush', 't_db']], on=['game_id', 'team'])
+    pl = players[['gsis_id', 'display_name', 'position']].dropna(subset=['gsis_id']).drop_duplicates('gsis_id')
+    pg = pg.merge(pl.rename(columns={'gsis_id': 'pid'}), on='pid', how='left')
+    pg['game_date'] = pd.to_datetime(pg.game_date)
+    pg = pg.sort_values(['pid', 'game_date']).reset_index(drop=True)
+    pg['pgrp'] = pg.position.map(V727_PGRP).fillna('OTH')
+
+    out_p = {}
+    for pid, d in pg.groupby('pid'):
+        if not (d.season >= season - 1).any():
+            continue
+        name = d.display_name.iloc[-1]
+        if not isinstance(name, str) or not name:
+            continue
+        hc, h1, h2 = d[d.season == season], d[d.season == season - 1], d[d.season == season - 2]
+        rec = {'pid': pid, 'pos': d.position.iloc[-1] if isinstance(d.position.iloc[-1], str) else None, 'team': d.team.iloc[-1],
+               'g': [len(hc), len(h1), len(h2)], 's': {}, 'sh': {}}
+        v_all = {s: d[s].values[::-1][:24] for s in V727_STATS}
+        for s in V727_STATS:
+            v = v_all[s]
+            ew = []
+            for h in (2, 4, 8):
+                w = 0.5 ** (np.arange(len(v)) / h)
+                ew.append(_v727_r((v * w).sum() / w.sum()) if len(v) else None)
+            rec['s'][s] = [_v727_r(hc[s].mean()) if len(hc) else None, _v727_r(h1[s].mean()) if len(h1) else None,
+                           _v727_r(h2[s].mean()) if len(h2) else None] + ew + [_v727_r(v[:3].mean()) if len(v) else None]
+        for nm, hh in (('cur', hc), ('p1', h1)):
+            tp, trr, tdb = hh.t_pass.sum(), hh.t_rush.sum(), hh.t_db.sum()
+            rec['sh'].setdefault('tshare', []).append(_v727_r(hh.targets.sum() / tp) if len(hh) and tp else None)
+            rec['sh'].setdefault('cshare', []).append(_v727_r(hh.carries.sum() / trr) if len(hh) and trr else None)
+            rec['sh'].setdefault('dbshare', []).append(_v727_r(hh.dropbacks.sum() / tdb) if len(hh) and tdb else None)
+        hl = d.iloc[-6:]
+        rec['sh']['tshare'].append(_v727_r(hl.targets.sum() / max(hl.t_pass.sum(), 1)))
+        rec['sh']['cshare'].append(_v727_r(hl.carries.sum() / max(hl.t_rush.sum(), 1)))
+        if name in out_p and sum(out_p[name]['g']) >= sum(rec['g']):
+            continue  # namesake: keep the player with more recent games
+        out_p[name] = rec
+
+    out_t = {}
+    for t, d in tg.groupby('team'):
+        c, p = d[d.season == season], d[d.season == season - 1]
+        out_t[t] = {'tg_cur': len(c)}
+        for col in ('t_pass', 't_rush', 't_db', 'pts'):
+            out_t[t][col] = [_v727_r(c[col].mean()) if len(c) else None, _v727_r(p[col].mean()) if len(p) else None]
+
+    dg = pg.groupby(['game_id', 'opp', 'pgrp', 'season']).agg(a_rec_yds=('rec_yds', 'sum'), a_recs=('recs', 'sum'),
+                                                               a_rush_yds=('rush_yds', 'sum'), a_pass_yds=('pass_yds', 'sum'),
+                                                               a_pass_tds=('pass_tds', 'sum')).reset_index()
+    out_d, out_l = {}, {}
+    for grp in ('QB', 'RB', 'WR', 'TE'):
+        dgg = dg[dg.pgrp == grp]
+        Lc, Lp = dgg[dgg.season == season], dgg[dgg.season == season - 1]
+        out_l[grp] = {s: [_v727_r(Lc.groupby('game_id')[col].sum().mean() / 2) if len(Lc) else None,
+                          _v727_r(Lp.groupby('game_id')[col].sum().mean() / 2) if len(Lp) else None] for s, col in V727_DSTATS.items()}
+        for t, d in dgg.groupby('opp'):
+            c, p = d[d.season == season], d[d.season == season - 1]
+            e = out_d.setdefault(t, {}).setdefault(grp, {'n': int(len(c))})
+            for s, col in V727_DSTATS.items():
+                e[s] = [_v727_r(c[col].mean()) if len(c) else None, _v727_r(p[col].mean()) if len(p) else None]
+    # the model's team keys use LAR for the Rams (nflverse uses LA)
+    fix = lambda t: V727_TEAM_MAP.get(t, t)
+    out_t = {fix(k): v for k, v in out_t.items()}
+    out_d = {fix(k): v for k, v in out_d.items()}
+    for v in out_p.values():
+        v['team'] = fix(v['team'])
+    last = pbp.game_date.max()
+    return {'version': 'v7.27', 'season': int(season), 'throughDate': str(last)[:10], 'players': out_p, 'teams': out_t,
+            'defense': out_d, 'league': out_l}
+
+
+def pull_v727_block(season):
+    import gzip as _gz, io as _io
+    from io import StringIO as _SI
+    frames = []
+    print("  v7.27/v7.28 blocks: play-by-play (downloaded once, shared by both blocks)")
+    _all = v728_pbp(range(season - 4, season + 1))      # v7.28 needs one more prior season; v7.27 reads the last four
+    if len(_all):
+        frames.append(_all[_all.season.between(season - 3, season)][[c for c in V727_COLS if c in _all.columns]])
+    if not frames:
+        return None
+    r = SESSION.get(f"{NFLVERSE_BASE}/players/players.csv", timeout=60, allow_redirects=True)
+    r.raise_for_status()
+    players = pd.read_csv(_SI(r.text), usecols=lambda c: c in ('gsis_id', 'display_name', 'position'), low_memory=False)
+    blk = build_v727_block(pd.concat(frames, ignore_index=True), players, season)
+    if blk:
+        print(f"  v7.27 block: {len(blk['players'])} players, {len(blk['teams'])} teams, games through {blk['throughDate']} ✅")
+    return blk
+
+# ─────────────────────────────────────────────────────────────────────────────
+# v7.28 GAME-TOTALS / TEAM-TOTALS MODEL + RUSHING YARDS OVER INPUTS  (adds "v728" to nfl_model_data.json)
+# Market-anchored + new info team scoring model (owner-approved baseline, October 7, 2026):
+#   schedule-adjusted ratings + QB + environment, injuries, travel, weather, coaching, referee,
+#   snap speed + play style, 4th-down aggressiveness, crew penalty rate.
+# Trained on 2023-2025 plus every game already played this season (weekly refit), predicting this week's games.
+# Every input uses only games before kickoff. The model's HTML layer prices the picks against live lines.
+# If anything here fails, the rest of the pull is unaffected and the v7.28 tracked picks are simply not shown.
+# ─────────────────────────────────────────────────────────────────────────────
+# v7.28 block (see header)
+import io as _v728_io, gzip, urllib.request
+from datetime import timezone
+import numpy as np
+
+V728_TM = {'LA': 'LAR', 'STL': 'LAR', 'SD': 'LAC', 'OAK': 'LV'}
+V728_NFLVERSE = 'https://github.com/nflverse/nflverse-data/releases/download'
+V728_GAMES_URL = 'https://github.com/nflverse/nfldata/raw/master/data/games.csv'
+V728_FIRST_TRAIN = 2023
+V728_PBP_COLS = sorted(set([
+    'game_id', 'season', 'season_type', 'week', 'game_date', 'home_team', 'away_team', 'posteam', 'defteam', 'play_type',
+    'pass', 'rush', 'qb_dropback', 'epa', 'success', 'xpass', 'pass_oe', 'cpoe', 'qb_epa', 'passer_player_id', 'passer_player_name',
+    'interception', 'fumble_lost', 'sack', 'third_down_converted', 'third_down_failed', 'yardline_100', 'fixed_drive',
+    'fixed_drive_result', 'special_teams_play', 'field_goal_result', 'kick_distance', 'no_huddle', 'qb_kneel', 'qb_spike',
+    'yards_gained', 'down', 'touchdown', 'td_team', 'posteam_score_post', 'defteam_score_post', 'home_score', 'away_score',
+    'game_seconds_remaining', 'drive_play_count', 'wp',
+    'qb_hit', 'air_yards', 'qtr', 'score_differential', 'ydstogo',
+    'pass_attempt', 'rush_attempt', 'passing_yards', 'rushing_yards', 'receiving_yards', 'pass_touchdown', 'complete_pass',
+    'rusher_player_id', 'receiver_player_id', 'two_point_attempt', 'penalty', 'penalty_team']))
+
+# ---------------------------------------------------------------- data loading
+def _get(url, timeout=180):
+    req = urllib.request.Request(url, headers={'User-Agent': 'nfl-edge-model'})
+    with urllib.request.urlopen(req, timeout=timeout) as r:
+        return r.read()
+
+_V728_PBP_CACHE = {}
+
+def v728_pbp(years, log=print):
+    """Play-by-play for the given seasons with every column the v7.27 and v7.28 blocks need (downloaded once per run)."""
+    fr = []
+    for y in years:
+        if y not in _V728_PBP_CACHE:
+            try:
+                raw = _get(f'{V728_NFLVERSE}/pbp/play_by_play_{y}.csv.gz')
+                with gzip.open(_v728_io.BytesIO(raw)) as gz:
+                    _V728_PBP_CACHE[y] = pd.read_csv(gz, usecols=lambda c: c in V728_PBP_COLS, low_memory=False)
+                log(f'  play-by-play {y}: {len(_V728_PBP_CACHE[y]):,} plays')
+            except Exception as e:
+                log(f'  play-by-play {y}: not available ({e})'); _V728_PBP_CACHE[y] = None
+        if _V728_PBP_CACHE[y] is not None:
+            fr.append(_V728_PBP_CACHE[y])
+    return pd.concat(fr, ignore_index=True) if fr else pd.DataFrame(columns=V728_PBP_COLS)
+
+def _csv(url):
+    return pd.read_csv(_v728_io.BytesIO(_get(url)), low_memory=False)
+
+def v728_load(season, data_dir=None, log=print):
+    """Returns pbp, games, injuries, snap counts for season-4 .. season. data_dir: read local copies instead (testing)."""
+    yrs = list(range(season - 4, season + 1))
+    if data_dir:
+        pbp = pd.concat([pd.read_csv(f'{data_dir}/play_by_play_{y}.csv.gz', usecols=lambda c: c in V728_PBP_COLS, low_memory=False) for y in yrs
+                         if os.path.exists(f'{data_dir}/play_by_play_{y}.csv.gz')], ignore_index=True)
+        G = pd.read_csv(f'{data_dir}/games.csv', low_memory=False)
+        inj = pd.concat([pd.read_csv(f'{data_dir}/injuries_{y}.csv') for y in yrs if os.path.exists(f'{data_dir}/injuries_{y}.csv')])
+        sn = pd.concat([pd.read_csv(f'{data_dir}/snap_counts_{y}.csv') for y in yrs if os.path.exists(f'{data_dir}/snap_counts_{y}.csv')])
+        return pbp, G, inj, sn
+    pbp = v728_pbp(yrs, log)
+    G = _csv(V728_GAMES_URL)
+    inj, sn = [], []
+    for y in yrs:
+        for kind, store in (('injuries', inj), ('snap_counts', sn)):
+            try:
+                store.append(_csv(f'{V728_NFLVERSE}/{kind}/{kind}_{y}.csv'))
+            except Exception as e:
+                log(f'  {kind} {y}: not available ({e})')
+    return pbp, G, pd.concat(inj) if inj else pd.DataFrame(), pd.concat(sn) if sn else pd.DataFrame()
+
+# ---------------------------------------------------------------- team-game table (research build_data.py)
+def _team_games(p):
+    p = p.copy()
+    p['is_play'] = ((p['pass'] == 1) | (p['rush'] == 1)) & (p.qb_kneel != 1) & (p.qb_spike != 1) & p.epa.notna()
+    sc = p[p.is_play]
+    gt = sc[(sc.wp >= .1) & (sc.wp <= .9)]
+    k = ['game_id', 'posteam']; g = sc.groupby(k)
+    out = pd.DataFrame({
+        'plays': g.size(), 'epa_play': g.epa.mean(),
+        'pass_epa': sc[sc['pass'] == 1].groupby(k).epa.mean(), 'rush_epa': sc[sc['rush'] == 1].groupby(k).epa.mean(),
+        'succ': g.success.mean(), 'dropbacks': g.qb_dropback.sum(), 'proe': sc[sc.pass_oe.notna()].groupby(k).pass_oe.mean(),
+        'explosive': sc.assign(x=((sc['pass'] == 1) & (sc.yards_gained >= 20)) | ((sc['rush'] == 1) & (sc.yards_gained >= 10))).groupby(k).x.mean(),
+        'sacks_taken': g.sack.sum(), 'nh_rate': g.no_huddle.mean(),
+        'epa_play_gt': gt.groupby(k).epa.mean(), 'succ_gt': gt.groupby(k).success.mean()})
+    allp = p[p.posteam.notna()]; ga = allp.groupby(k)
+    out['giveaways'] = ga.interception.sum() + ga.fumble_lost.sum()
+    t3 = allp[allp.down == 3]; c3 = t3.groupby(k).third_down_converted.sum()
+    out['third_conv'] = c3 / (c3 + t3.groupby(k).third_down_failed.sum())
+    dv = allp[allp.fixed_drive.notna()].groupby(k + ['fixed_drive']).agg(res=('fixed_drive_result', 'last'), minyl=('yardline_100', 'min')).reset_index()
+    dv['rz'] = dv.minyl <= 20; dv['td'] = dv.res == 'Touchdown'; dv['fg'] = dv.res == 'Field goal'
+    dd = dv.groupby(k)
+    out['drives'] = dd.size(); out['rz_trips'] = dd.rz.sum(); out['rz_td'] = dv[dv.rz].groupby(k).td.sum()
+    out['off_td_drives'] = dd.td.sum(); out['fg_drives'] = dd.fg.sum()
+    st = p[(p.special_teams_play == 1) & p.epa.notna() & p.posteam.notna()]
+    out['st_epa'] = st.groupby(k).epa.sum()
+    fg = p[p.field_goal_result.notna()]
+    out['fg_att'] = fg.groupby(k).size(); out['fg_made'] = fg[fg.field_goal_result == 'made'].groupby(k).size()
+    out = out.reset_index().rename(columns={'posteam': 'team'})
+    for c in ['rz_td', 'fg_att', 'fg_made', 'st_epa', 'giveaways']:
+        out[c] = out[c].fillna(0)
+    return out
+
+def _long_table(p, G):
+    tg = _team_games(p)
+    rows = []
+    for side, opp in [('home', 'away'), ('away', 'home')]:
+        x = G[['game_id', 'season', 'game_type', 'week', 'game_date', f'{side}_team', f'{opp}_team', f'{side}_score', f'{opp}_score',
+               f'{side}_qb_id', f'{side}_qb_name', f'{side}_rest']].copy()
+        x.columns = ['game_id', 'season', 'game_type', 'week', 'game_date', 'team', 'opp', 'pts', 'pts_allowed', 'qb_id', 'qb_name', 'rest']
+        x['is_home'] = int(side == 'home'); rows.append(x)
+    L = pd.concat(rows, ignore_index=True).merge(tg, on=['game_id', 'team'], how='left')
+    dcols = ['plays', 'epa_play', 'pass_epa', 'rush_epa', 'succ', 'proe', 'explosive', 'sacks_taken', 'epa_play_gt', 'succ_gt', 'giveaways',
+             'third_conv', 'drives', 'rz_trips', 'rz_td', 'off_td_drives']
+    dfn = tg[['game_id', 'team'] + dcols].rename(columns={'team': 'opp', **{c: 'd_' + c for c in dcols}})
+    L = L.merge(dfn, on=['game_id', 'opp'], how='left')
+    L['ppd'] = L.pts / L.drives; L['d_ppd'] = L.pts_allowed / L.d_drives; L['to_margin'] = L.d_giveaways - L.giveaways
+    qb = p[(p.qb_dropback == 1) & p.passer_player_id.notna() & p.qb_epa.notna()].groupby(['game_id', 'posteam', 'passer_player_id']).agg(
+        qb_db=('qb_epa', 'size'), qb_epa_sum=('qb_epa', 'sum'), qb_cpoe=('cpoe', 'mean')).reset_index()
+    qb = qb.rename(columns={'posteam': 'team', 'passer_player_id': 'qb_id'})
+    L = L.merge(qb, on=['game_id', 'team', 'qb_id'], how='left')
+    return L.sort_values(['game_date', 'game_id', 'team']).reset_index(drop=True)
+
+# ---------------------------------------------------------------- point-in-time features (research build_features.py)
+_OFF = ['pts', 'ppd', 'drives', 'plays', 'epa_play', 'epa_play_gt', 'pass_epa', 'rush_epa', 'succ', 'succ_gt', 'proe', 'explosive',
+        'third_conv', 'rz_rate', 'giveaways', 'st_epa', 'fg_rate', 'sacks_taken', 'nh_rate', 'to_margin']
+_DEF = ['pts_allowed', 'd_ppd', 'd_drives', 'd_plays', 'd_epa_play', 'd_epa_play_gt', 'd_pass_epa', 'd_rush_epa', 'd_succ', 'd_succ_gt',
+        'd_proe', 'd_explosive', 'd_third_conv', 'd_rz_rate', 'd_giveaways', 'd_sacks_taken']
+_STATS = _OFF + _DEF
+_HL = 4.0
+
+def _team_feats(df):
+    vals = df[_STATS].values.astype(float); seasons = df.season.values; is_p = df.pts.notna().values; n = len(df)
+    cur = np.full((n, len(_STATS)), np.nan); prv = cur.copy(); ew = cur.copy(); gcur = np.zeros(n); season_tot = {}
+    for s in np.unique(seasons):
+        m = (seasons == s) & is_p
+        season_tot[s] = np.nanmean(vals[m], axis=0) if m.any() else np.full(len(_STATS), np.nan)
+    for i in range(n):
+        past = np.where(is_p[:i])[0]; pc = past[seasons[past] == seasons[i]]; gcur[i] = len(pc)
+        if len(pc): cur[i] = np.nanmean(vals[pc], axis=0)
+        prv[i] = season_tot.get(seasons[i] - 1, np.full(len(_STATS), np.nan))
+        lastk = past[-16:][::-1]
+        if len(lastk):
+            w = 0.5 ** (np.arange(len(lastk)) / _HL); v = vals[lastk]; ok = ~np.isnan(v)
+            ew[i] = np.nansum(v * w[:, None], axis=0) / np.maximum((ok * w[:, None]).sum(axis=0), 1e-9)
+    out = {}
+    for j, s in enumerate(_STATS):
+        out[s + '_cur'] = cur[:, j]; out[s + '_p1'] = prv[:, j]; out[s + '_ew'] = ew[:, j]
+    out['g_cur'] = gcur
+    return pd.DataFrame(out, index=df.index)
+
+def _features(L):
+    import warnings; warnings.filterwarnings('ignore')
+    L = L.sort_values(['game_date', 'game_id']).reset_index(drop=True)
+    L['rz_rate'] = L.rz_td / L.rz_trips.replace(0, np.nan); L['d_rz_rate'] = L.d_rz_td / L.d_rz_trips.replace(0, np.nan)
+    L['fg_rate'] = L.fg_made / L.fg_att.replace(0, np.nan); L['qb_epa_db'] = L.qb_epa_sum / L.qb_db
+    F = pd.concat([_team_feats(d) for _, d in L.groupby('team')]).sort_index()
+    F = pd.concat([L, F], axis=1)
+    qb_hist = L[L.qb_db.notna() & (L.qb_db >= 5)][['game_date', 'season', 'qb_id', 'qb_db', 'qb_epa_sum', 'qb_cpoe']]
+    by_qb = {k: v.sort_values('game_date') for k, v in qb_hist.groupby('qb_id')}
+    qcur, qp1, qew, qdb_cur, qdb_tot, qcp = [], [], [], [], [], []
+    for r in F.itertuples():
+        h = by_qb.get(r.qb_id)
+        if h is None:
+            qcur.append(np.nan); qp1.append(np.nan); qew.append(np.nan); qdb_cur.append(0); qdb_tot.append(0); qcp.append(np.nan); continue
+        h = h[h.game_date < r.game_date]; c = h[h.season == r.season]; pp = h[h.season == r.season - 1]
+        qcur.append(c.qb_epa_sum.sum() / c.qb_db.sum() if len(c) else np.nan)
+        qp1.append(pp.qb_epa_sum.sum() / pp.qb_db.sum() if len(pp) else np.nan)
+        t = h.tail(16).iloc[::-1]
+        if len(t):
+            w = 0.5 ** (np.arange(len(t)) / _HL) * t.qb_db.values
+            qew.append((t.qb_epa_sum.values / t.qb_db.values * w).sum() / w.sum())
+            qcp.append(np.nansum(t.qb_cpoe.values * w) / np.maximum(w[~np.isnan(t.qb_cpoe.values)].sum(), 1e-9))
+        else:
+            qew.append(np.nan); qcp.append(np.nan)
+        qdb_cur.append(c.qb_db.sum()); qdb_tot.append(h.qb_db.sum())
+    F['qb_epa_cur'] = qcur; F['qb_epa_p1'] = qp1; F['qb_epa_ew'] = qew; F['qb_cpoe_ew'] = qcp; F['qb_db_cur'] = qdb_cur; F['qb_db_career'] = qdb_tot
+    F = F.sort_values(['team', 'game_date'])
+    F['prev_qb'] = F.groupby('team').qb_id.shift(1)
+    F['qb_change'] = (F.qb_id != F.prev_qb) & F.prev_qb.notna()
+    F['team_qb_ew'] = F.groupby('team').qb_epa_db.transform(lambda s: s.shift(1).ewm(halflife=_HL, min_periods=1).mean())
+    return F.sort_values(['game_date', 'game_id', 'team']).reset_index(drop=True)
+
+# ---------------------------------------------------------------- base design matrix (research phase3.py build_X, k = 4)
+_P3_OFF = ['ppd', 'epa_play_gt', 'succ_gt', 'pass_epa', 'rush_epa', 'explosive', 'rz_rate', 'third_conv', 'giveaways', 'st_epa', 'drives', 'plays', 'proe', 'fg_rate', 'sacks_taken']
+_P3_DEF = ['d_ppd', 'd_epa_play_gt', 'd_succ_gt', 'd_pass_epa', 'd_rush_epa', 'd_explosive', 'd_rz_rate', 'd_third_conv', 'd_giveaways', 'd_drives', 'd_plays', 'd_sacks_taken']
+
+def _build_X(F, G, k=4):
+    F = F[F.season >= V728_FIRST_TRAIN].copy()
+    def blend(s):
+        c, p, g = F[s + '_cur'], F[s + '_p1'], F.g_cur
+        lgm = F.groupby('season')[s + '_p1'].transform('mean'); p = p.fillna(lgm); c = c.fillna(p)
+        return (g * c + k * p) / (g + k)
+    X = pd.DataFrame({'game_id': F.game_id, 'team': F.team, 'opp': F.opp, 'season': F.season, 'week': F.week, 'pts': F.pts, 'is_home': F.is_home})
+    for s in _P3_OFF + _P3_DEF: X[s] = blend(s)
+    q = F.qb_epa_ew; n = F.qb_db_career
+    X['qb_known'] = q.notna().astype(float)
+    qs = (q.fillna(-0.15) * n + 250 * (-0.05)) / (n + 250)
+    X['qb_eff'] = qs; X['qb_delta'] = (qs - F.team_qb_ew.fillna(qs)).clip(-0.4, 0.4); X['qb_change'] = F.qb_change.astype(float)
+    D = X[['game_id', 'team'] + _P3_DEF].rename(columns={'team': 'opp', **{c: 'opp_' + c for c in _P3_DEF}})
+    O = X[['game_id', 'team'] + _P3_OFF].rename(columns={'team': 'opp', **{c: 'oppoff_' + c for c in _P3_OFF}})
+    X = X.merge(D, on=['game_id', 'opp']).merge(O[['game_id', 'opp', 'oppoff_drives', 'oppoff_plays', 'oppoff_giveaways']], on=['game_id', 'opp'])
+    g = G.set_index('game_id')
+    X['neutral'] = X.game_id.map(g.location).eq('Neutral').astype(float)
+    X['is_home'] = X.is_home * (1 - X.neutral)
+    rest_h = X.game_id.map(g.home_rest); rest_a = X.game_id.map(g.away_rest)
+    X['rest_diff'] = np.where(F.is_home.values == 1, rest_h - rest_a, rest_a - rest_h)
+    X['rest_diff'] = X.rest_diff.clip(-7, 7).fillna(0)
+    roof = X.game_id.map(g.roof)
+    X['dome'] = roof.isin(['dome', 'closed']).astype(float)
+    X['wind'] = np.where(X.dome == 1, 0, X.game_id.map(g.wind).fillna(8)).clip(0, 30)
+    X['wind_hi'] = (X.wind - 12).clip(0, None)
+    X['cold'] = np.where(X.dome == 1, 0, (40 - X.game_id.map(g.temp).fillna(60)).clip(0, None))
+    X['div'] = X.game_id.map(g.div_game).astype(float)
+    X['playoff'] = (X.game_id.map(g.game_type) != 'REG').astype(float)
+    X['early'] = (F.g_cur.values < 4).astype(float)
+    sl = X.game_id.map(g.spread_line); tl = X.game_id.map(g.total_line)
+    X['implied'] = np.where(F.is_home.values == 1, tl / 2 + sl / 2, tl / 2 - sl / 2)
+    return X, F
+
+# ---------------------------------------------------------------- opponent-adjusted ratings (research ratings.py)
+_RT_METRICS = ['epa_play_gt', 'succ_gt', 'ppd_', 'pts', 'pass_epa', 'rush_epa', 'explosive']
+
+def _ratings(L, G, hl_days, dates):
+    Lp = L[L.pts.notna()].copy(); Lp['ppd_'] = Lp.pts / Lp.drives
+    teams = sorted(Lp.team.unique()); ix = {t: i for i, t in enumerate(teams)}; nt = len(teams)
+    rows = []
+    for d in dates:
+        hist = Lp[(Lp.game_date < d) & (Lp.game_date >= d - pd.Timedelta(days=500))]
+        age = (d - hist.game_date).dt.days.values; w = 0.5 ** (age / hl_days); n = len(hist)
+        Xo = np.zeros((n, nt)); Xd = np.zeros((n, nt))
+        Xo[np.arange(n), hist.team.map(ix).values] = 1; Xd[np.arange(n), hist.opp.map(ix).values] = 1
+        Xm = np.c_[np.ones(n), hist.is_home.values, Xo, Xd]
+        rec = {'game_date': d}
+        for m in _RT_METRICS:
+            y = hist[m].values.astype(float); ok = np.isfinite(y)
+            A_, y_, w_ = Xm[ok], y[ok], w[ok]
+            R = np.diag([0, 0] + [8.0] * (2 * nt))
+            beta = np.linalg.solve(A_.T @ (A_ * w_[:, None]) + R, A_.T @ (w_ * y_))
+            for t in teams:
+                rec[('adj_' + m, t)] = beta[2 + ix[t]]; rec[('adjd_' + m, t)] = beta[2 + nt + ix[t]]
+        rows.append(rec)
+    return pd.DataFrame(rows).set_index('game_date')
+
+def _attach(F, R):
+    out = {}
+    for m in _RT_METRICS:
+        o, dd = [], []
+        for r in F[['game_date', 'team', 'opp']].itertuples(index=False):
+            rr = R.loc[r.game_date]; o.append(rr[('adj_' + m, r.team)]); dd.append(rr[('adjd_' + m, r.opp)])
+        out['adj_' + m] = np.array(o); out['adjd_' + m] = np.array(dd)
+    return pd.DataFrame(out, index=F.index)
+
+_ENV = ['qb_eff', 'qb_delta', 'qb_change', 'qb_known', 'is_home', 'neutral', 'rest_diff', 'dome', 'wind_hi', 'cold', 'div', 'playoff']
+_SETS = {
+    'adj_core': ['adj_epa_play_gt', 'adjd_epa_play_gt', 'adj_succ_gt', 'adjd_succ_gt', 'adj_ppd_', 'adjd_ppd_'],
+    'adj_full': ['adj_' + m for m in _RT_METRICS] + ['adjd_' + m for m in _RT_METRICS],
+    'adj_full+raw': ['adj_' + m for m in _RT_METRICS] + ['adjd_' + m for m in _RT_METRICS] + ['plays', 'drives', 'oppoff_plays', 'giveaways', 'opp_d_giveaways', 'st_epa', 'sacks_taken'],
+}
+
+# ---------------------------------------------------------------- injuries, travel, weather, coaching, referee (research build_extra.py)
+_ST = {
+ 'ATL97': (33.755, -84.401, -5), 'BAL00': (39.278, -76.623, -5), 'BOS00': (42.091, -71.264, -5), 'BUF00': (42.774, -78.787, -5),
+ 'CAR00': (35.226, -80.853, -5), 'CHI98': (41.862, -87.617, -6), 'CIN00': (39.095, -84.516, -5), 'CLE00': (41.506, -81.700, -5),
+ 'DAL00': (32.748, -97.093, -6), 'DEN00': (39.744, -105.020, -7), 'DET00': (42.340, -83.046, -5), 'GNB00': (44.501, -88.062, -6),
+ 'HOU00': (29.685, -95.411, -6), 'IND00': (39.760, -86.164, -5), 'JAX00': (30.324, -81.637, -5), 'KAN00': (39.049, -94.484, -6),
+ 'LAX01': (33.953, -118.339, -8), 'MIA00': (25.958, -80.239, -5), 'MIN01': (44.974, -93.258, -6), 'NAS00': (36.166, -86.771, -6),
+ 'NOR00': (29.951, -90.081, -6), 'NYC01': (40.813, -74.074, -5), 'PHI00': (39.901, -75.168, -5), 'PHO00': (33.528, -112.263, -7),
+ 'PIT00': (40.447, -80.016, -5), 'SEA00': (47.595, -122.332, -8), 'SFO01': (37.403, -121.970, -8), 'TAM00': (27.976, -82.503, -5),
+ 'VEG00': (36.091, -115.184, -8), 'WAS00': (38.908, -76.864, -5),
+ 'GER00': (50.069, 8.645, 1), 'FRA00': (50.069, 8.645, 1), 'MUN01': (48.219, 11.625, 1), 'SAO00': (-23.545, -46.474, -3),
+ 'MEX00': (19.303, -99.150, -6), 'MAD01': (40.453, -3.688, 1), 'RIO00': (-22.912, -43.230, -3), 'MEL00': (-37.820, 144.983, 10),
+ 'PAR00': (48.924, 2.360, 1), 'LON00': (51.556, -0.280, 0), 'LON02': (51.604, -0.066, 0), 'DUB00': (53.335, -6.228, 0), 'BER00': (52.515, 13.239, 1),
+}
+_HOME_ST = {'ARI': 'PHO00', 'ATL': 'ATL97', 'BAL': 'BAL00', 'BUF': 'BUF00', 'CAR': 'CAR00', 'CHI': 'CHI98', 'CIN': 'CIN00', 'CLE': 'CLE00', 'DAL': 'DAL00',
+            'DEN': 'DEN00', 'DET': 'DET00', 'GB': 'GNB00', 'HOU': 'HOU00', 'IND': 'IND00', 'JAX': 'JAX00', 'KC': 'KAN00', 'LAR': 'LAX01', 'LAC': 'LAX01',
+            'LV': 'VEG00', 'MIA': 'MIA00', 'MIN': 'MIN01', 'NE': 'BOS00', 'NO': 'NOR00', 'NYG': 'NYC01', 'NYJ': 'NYC01', 'PHI': 'PHI00', 'PIT': 'PIT00',
+            'SEA': 'SEA00', 'SF': 'SFO01', 'TB': 'TAM00', 'TEN': 'NAS00', 'WAS': 'WAS00'}
+
+def _hav(a, b):
+    la1, lo1, la2, lo2 = map(math.radians, [a[0], a[1], b[0], b[1]])
+    h = math.sin((la2 - la1) / 2) ** 2 + math.cos(la1) * math.cos(la2) * math.sin((lo2 - lo1) / 2) ** 2
+    return 2 * 3958.8 * math.asin(math.sqrt(h))
+
+def _travel(G):
+    rows = []
+    for g in G.itertuples():
+        st = _ST.get(g.stadium_id, _ST[_HOME_ST[g.home_team]])
+        for team in (g.home_team, g.away_team):
+            hs = _ST[_HOME_ST[team]]; kick_et = pd.to_datetime(g.gametime).hour
+            rows.append(dict(game_id=g.game_id, team=team, travel_miles=_hav(hs, st), tz_shift=st[2] - hs[2],
+                             west_team_early=float(hs[2] <= -7 and kick_et <= 13 and g.location != 'Neutral' and st[2] == -5)))
+    return pd.DataFrame(rows)
+
+def _coach_ref(G):
+    G = G.sort_values('kick_utc'); rows = []; prev_coach = {}
+    for s in sorted(G.season.unique()):
+        last = {}
+        for g in G[G.season == s - 1].itertuples():
+            last[g.home_team] = g.home_coach; last[g.away_team] = g.away_coach
+        prev_coach[s] = last
+    for g in G.itertuples():
+        for team, coach in ((g.home_team, g.home_coach), (g.away_team, g.away_coach)):
+            pc = prev_coach.get(g.season, {}).get(team)
+            rows.append(dict(game_id=g.game_id, team=team, new_coach=float(pc is not None and pc != coach)))
+    C = pd.DataFrame(rows)
+    Gp = G[G.home_score.notna()].copy(); Gp['ou_res'] = Gp.home_score + Gp.away_score - Gp.total_line
+    ref = {}; R = []
+    for g in Gp.sort_values('kick_utc').itertuples():
+        h = ref.get(g.referee, []); R.append(dict(game_id=g.game_id, ref_ou=(np.sum(h) / (len(h) + 20)) if h else 0.0))
+        ref.setdefault(g.referee, []).append(g.ou_res)
+    for g in G[G.home_score.isna()].itertuples():          # upcoming games: crew's earlier games (crew comes from ESPN when nflverse hasn't posted it)
+        h = ref.get(g.referee, []) if isinstance(g.referee, str) else []
+        R.append(dict(game_id=g.game_id, ref_ou=(np.sum(h) / (len(h) + 20)) if h else 0.0))
+    return C, pd.DataFrame(R)
+
+_GRP = {'T': 'ol', 'G': 'ol', 'C': 'ol', 'OT': 'ol', 'OG': 'ol', 'OL': 'ol', 'WR': 'skill', 'TE': 'skill', 'RB': 'skill', 'FB': 'skill',
+        'QB': 'qb', 'DE': 'front', 'DT': 'front', 'NT': 'front', 'DL': 'front', 'OLB': 'front', 'LB': 'lb', 'ILB': 'lb', 'MLB': 'lb',
+        'CB': 'db', 'S': 'db', 'SS': 'db', 'FS': 'db', 'DB': 'db'}
+
+def _injuries(inj, snaps):
+    cols = ['season', 'week', 'team', 'inj_db', 'inj_front', 'inj_lb', 'inj_ol', 'inj_other', 'inj_skill']
+    if inj is None or not len(inj) or snaps is None or not len(snaps):
+        return pd.DataFrame(columns=cols)
+    inj = inj.copy(); snaps = snaps.copy()
+    inj['team'] = inj.team.replace(V728_TM); snaps['team'] = snaps.team.replace(V728_TM)
+    inj = inj[inj.report_status.isin(['Out', 'Doubtful'])]
+    snaps['wk'] = snaps.season * 100 + snaps.week; inj['wk'] = inj.season * 100 + inj.week
+    inj['key'] = inj.full_name.str.lower().str.replace(r'[^a-z]', '', regex=True)
+    snaps['key'] = snaps.player.str.lower().str.replace(r'[^a-z]', '', regex=True)
+    by_key = {k: v for k, v in snaps.sort_values('wk').groupby(['team', 'key'])}
+    out = []
+    for r in inj.itertuples():
+        h = by_key.get((r.team, r.key))
+        if h is None: continue
+        h = h[(h.wk < r.wk) & (h.wk >= r.wk - 100)].tail(6)
+        if not len(h): continue
+        g = _GRP.get(r.position, 'other')
+        if g == 'qb': continue
+        out.append(dict(season=r.season, week=r.week, team=r.team, grp=g, imp=h.offense_pct.mean() if g in ('ol', 'skill') else h.defense_pct.mean()))
+    if not out:
+        return pd.DataFrame(columns=cols)
+    P = pd.DataFrame(out).pivot_table(index=['season', 'week', 'team'], columns='grp', values='imp', aggfunc='sum', fill_value=0).reset_index()
+    P.columns = ['season', 'week', 'team'] + ['inj_' + c for c in P.columns[3:]]
+    for c in cols:
+        if c not in P.columns: P[c] = 0.0
+    return P
+
+def _weather(G, cache_file, log=print):
+    """Kickoff-hour weather at outdoor stadiums. Played games: Open-Meteo's archived forecasts (cached). Upcoming games: Open-Meteo forecast."""
+    W = {}
+    if cache_file and os.path.exists(cache_file):
+        try: W = json.load(open(cache_file))
+        except Exception: W = {}
+    out = []; today = pd.Timestamp.now(tz='UTC').normalize()
+    outdoor = G[~G.roof.isin(['dome', 'closed'])]
+    for (sid, season), grp in outdoor.groupby(['stadium_id', 'season']):
+        if sid not in _ST: continue
+        lat, lon, _ = _ST[sid]
+        past = grp[grp.kick_utc < today]; fut = grp[(grp.kick_utc >= today) & (grp.kick_utc <= today + pd.Timedelta(days=15))]
+        blocks = []
+        if len(past):
+            k = f'{sid}_{season}'; h = W.get(k)
+            last_needed = past.kick_utc.max().strftime('%Y-%m-%dT%H:00')
+            if not h or last_needed not in set(h.get('time', [])):
+                s = past.kick_utc.min().strftime('%Y-%m-%d'); e = past.kick_utc.max().strftime('%Y-%m-%d')
+                url = (f'https://historical-forecast-api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&start_date={s}&end_date={e}'
+                       '&hourly=temperature_2m,precipitation,wind_speed_10m,wind_gusts_10m&wind_speed_unit=mph&temperature_unit=fahrenheit&timezone=UTC')
+                for _ in range(3):
+                    try: W[k] = json.loads(_get(url, 60))['hourly']; break
+                    except Exception: time.sleep(2)
+                time.sleep(0.2)
+            if W.get(k): blocks.append((past, W[k]))
+        if len(fut):
+            url = (f'https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&forecast_days=16'
+                   '&hourly=temperature_2m,precipitation,wind_speed_10m,wind_gusts_10m&wind_speed_unit=mph&temperature_unit=fahrenheit&timezone=UTC')
+            try: blocks.append((fut, json.loads(_get(url, 60))['hourly']))
+            except Exception as e: log(f'  weather forecast {sid}: unavailable ({e})')
+        for gg, h in blocks:
+            idx = {t: i for i, t in enumerate(h['time'])}
+            for g in gg.itertuples():
+                if pd.isna(g.kick_utc): continue
+                vals = [idx[t] for t in ((g.kick_utc + pd.Timedelta(hours=dh)).strftime('%Y-%m-%dT%H:00') for dh in range(3)) if t in idx]
+                if not vals: continue
+                f = lambda name: float(np.nanmean([h[name][i] if h[name][i] is not None else np.nan for i in vals]))
+                out.append(dict(game_id=g.game_id, wx_temp=f('temperature_2m'), wx_precip=f('precipitation'), wx_wind=f('wind_speed_10m'), wx_gust=f('wind_gusts_10m')))
+    if cache_file:
+        try: json.dump(W, open(cache_file, 'w'))
+        except Exception: pass
+    return pd.DataFrame(out, columns=['game_id', 'wx_temp', 'wx_precip', 'wx_wind', 'wx_gust']).drop_duplicates('game_id', keep='last')
+
+_EXTRA = ['inj_ol', 'inj_skill', 'opp_inj_db', 'opp_inj_front', 'opp_inj_lb', 'inj_db', 'inj_front', 'travel_k', 'tz_east', 'tz_west', 'west_team_early',
+          'wx_gust_hi', 'wx_rain', 'wx_cold', 'new_coach', 'ref_ou']
+
+def _extras_frame(X, T, Co, R, I, W):
+    X = X.merge(T, on=['game_id', 'team'], how='left').merge(Co, on=['game_id', 'team'], how='left').merge(R[['game_id', 'ref_ou']], on='game_id', how='left').merge(W, on='game_id', how='left')
+    X = X.merge(I.rename(columns={'week': 'week_i'}), left_on=['season', 'week', 'team'], right_on=['season', 'week_i', 'team'], how='left')
+    Io = I.rename(columns={'team': 'opp', 'week': 'week_i', **{c: 'opp_' + c for c in I.columns if c.startswith('inj_')}})
+    X = X.merge(Io, left_on=['season', 'week', 'opp'], right_on=['season', 'week_i', 'opp'], how='left', suffixes=('', '_o'))
+    for c in [c for c in X.columns if c.startswith('inj_') or c.startswith('opp_inj_')]: X[c] = X[c].fillna(0)
+    X['travel_k'] = X.travel_miles.fillna(0) / 1000
+    X['tz_east'] = X.tz_shift.clip(0, None).fillna(0); X['tz_west'] = (-X.tz_shift).clip(0, None).fillna(0)
+    X['wx_wind'] = np.where(X.dome == 1, 0, X.wx_wind.fillna(X.wind)); X['wx_gust_hi'] = (X.wx_gust.fillna(0) - 20).clip(0, None) * (1 - X.dome)
+    X['wx_rain'] = (X.wx_precip.fillna(0) > 0.5).astype(float) * (1 - X.dome)
+    X['wx_cold'] = np.where(X.dome == 1, 0, (40 - X.wx_temp.fillna(60)).clip(0, None))
+    for c in ['new_coach', 'west_team_early', 'ref_ou']: X[c] = X[c].fillna(0)
+    return X
+
+# ---------------------------------------------------------------- snap speed, play style, 4th-down aggressiveness, crew penalty rate
+def _ewm_pre(df, key, cols, span=8):
+    df = df.sort_values('game_date', kind='mergesort')
+    return df.groupby(key)[cols].transform(lambda s: s.shift(1).ewm(span=span, min_periods=1).mean())
+
+def _pace_style(p, upcoming):
+    """Research build_more.py: neutral-situation seconds per snap, pass rate, average depth of target (offense, recency-weighted)."""
+    p = p[((p['pass'] == 1) | (p['rush'] == 1)) & (p.qb_kneel != 1) & (p.qb_spike != 1) & p.epa.notna()].copy()
+    p = p.sort_values(['game_id', 'game_seconds_remaining'], ascending=[True, False])
+    p['dt'] = p.groupby(['game_id', 'fixed_drive']).game_seconds_remaining.diff(-1)
+    neutral = (p.qtr <= 3) & (p.score_differential.abs() <= 7)
+    k = ['game_id', 'posteam', 'defteam']
+    out = pd.DataFrame({
+        'adot': p[p['pass'] == 1].groupby(k).air_yards.mean(),
+        'sec_play_neutral': p[neutral & p.dt.between(5, 60)].groupby(k).dt.mean(),
+        'neutral_pass_rate': p[neutral].groupby(k)['pass'].mean(),
+    }).reset_index().rename(columns={'posteam': 'team', 'defteam': 'opp'})
+    out['game_date'] = pd.to_datetime(out.game_id.map(p.groupby('game_id').game_date.first()))
+    out = pd.concat([out, upcoming[['game_id', 'team', 'opp', 'game_date']]], ignore_index=True)
+    cols = ['adot', 'sec_play_neutral', 'neutral_pass_rate']
+    pre = _ewm_pre(out, 'team', cols)
+    res = out[['game_id', 'team', 'opp']].copy()
+    for c in cols: res[c + '_o'] = pre.loc[res.index, c].values
+    return res
+
+def _go4_refpen(p, G, upcoming):
+    """Research build_more2.py: 4th-and-1..4 go rate while competitive (recency-weighted) and referee's accepted penalties per game (shrunk)."""
+    p = p[p.posteam.notna()]
+    k = ['game_id', 'posteam', 'defteam']
+    f = p[(p.down == 4) & (p.ydstogo <= 4) & p.wp.between(0.1, 0.9) & (p.qtr <= 4) & p.play_type.isin(['pass', 'run', 'punt', 'field_goal'])]
+    f = f.assign(go=f.play_type.isin(['pass', 'run']).astype(float))
+    g4 = f.groupby(k).go.agg(['sum', 'count']).rename(columns={'sum': 'go4', 'count': 'n4'})
+    allk = p.groupby(k).size().rename('nplays')
+    T = pd.concat([allk, g4], axis=1).reset_index().rename(columns={'posteam': 'team', 'defteam': 'opp'})
+    T['game_date'] = pd.to_datetime(T.game_id.map(p.groupby('game_id').game_date.first()))
+    T['go4'] = T.go4.fillna(0); T['n4'] = T.n4.fillna(0)
+    T['go4_rate'] = T.go4 / T.n4.where(T.n4 > 0)
+    T = pd.concat([T, upcoming[['game_id', 'team', 'opp', 'game_date']]], ignore_index=True)
+    pre = _ewm_pre(T, 'team', ['go4_rate'])
+    out = T[['game_id', 'team', 'opp']].copy(); out['x2_go4_rate'] = pre.loc[out.index, 'go4_rate'].values
+    pen = p[p.penalty == 1].groupby('game_id').size().rename('penalties')
+    Gs = G[G.home_score.notna()].sort_values('gd').merge(pen, left_on='game_id', right_index=True, how='left')
+    lg = Gs.penalties.mean(); hist = {}; rp = {}
+    for g in Gs.itertuples():
+        h = hist.get(g.referee, []); rp[g.game_id] = (np.sum(h) + 15 * lg) / (len(h) + 15) - lg
+        if not pd.isna(g.penalties): hist.setdefault(g.referee, []).append(g.penalties)
+    for g in G[G.home_score.isna()].itertuples():
+        h = hist.get(g.referee, []) if isinstance(g.referee, str) else []
+        rp[g.game_id] = (np.sum(h) + 15 * lg) / (len(h) + 15) - lg
+    out['x2_ref_pen'] = out.game_id.map(rp)
+    return out
+
+# ---------------------------------------------------------------- ridge model (research phase3.py)
+def _ridge_fit(X, y, alpha):
+    mu = X.mean(0); sd = X.std(0) + 1e-9; Z = (X - mu) / sd
+    w = np.linalg.solve(Z.T @ Z + alpha * np.eye(Z.shape[1]), Z.T @ (y - y.mean()))
+    return dict(mu=mu, sd=sd, w=w, b0=y.mean())
+
+def _ridge_pred(m, X):
+    return m['b0'] + ((X - m['mu']) / m['sd']) @ m['w']
+
+def _choose_alpha(Xtr, ytr, seasons, grid=(1, 3, 10, 30, 100, 300, 1000, 3000)):
+    best = None
+    for a in grid:
+        err = []
+        for s in np.unique(seasons):
+            tr = seasons != s; m = _ridge_fit(Xtr[tr], ytr[tr], a)
+            err.append(np.mean(np.abs(_ridge_pred(m, Xtr[~tr]) - ytr[~tr])))
+        e = np.mean(err)
+        if best is None or e < best[1]: best = (a, e)
+    return best[0]
+
+def _cv_mae(X, y, s, a):
+    e = []
+    for k in np.unique(s):
+        tr = s != k; m = _ridge_fit(X[tr], y[tr], a); e.append(np.mean(np.abs(_ridge_pred(m, X[~tr]) - y[~tr])))
+    return np.mean(e)
+
+# Baseline inputs added to the market-anchored model: snap speed, play style, crew penalty rate.
+# 4th-down aggressiveness is OFF: once its values were matched to the right teams (October 7, 2026 fix), adding it lowered results.
+V728_USE_GO4 = False
+_NB = ['sec_play_neutral_o', 'opp_sec_play_neutral_o', 'm_pace', 'neutral_pass_rate_o', 'adot_o', 'x2_ref_pen'] + (['x2_go4_rate'] if V728_USE_GO4 else [])
+
+class _KeyDist:
+    """Research phase6.KeyDist: how often each exact number lands, relative to a smooth curve (key numbers)."""
+    def __init__(self, actual, lo, hi, sd, bw=3.0):
+        ks = np.arange(lo, hi + 1); cnt = np.array([(np.round(actual) == k).sum() for k in ks], float) + 0.5
+        kern = np.exp(-0.5 * (np.arange(-15, 16) / bw) ** 2); kern /= kern.sum()
+        self.lo = lo; self.r = cnt / np.convolve(cnt, kern, mode='same'); self.sd = float(sd)
+
+# ---------------------------------------------------------------- ESPN: referees for this week's games (nflverse posts them after the game)
+def _espn_referees(season, week, log=print):
+    out = {}
+    try:
+        sb = json.loads(_get(f'https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?seasontype=2&dates={season}&week={week}', 30))
+    except Exception as e:
+        log(f'  ESPN scoreboard: unavailable ({e})'); return out
+    fix = {'WSH': 'WAS', 'LA': 'LAR', 'JAC': 'JAX'}
+    for ev in sb.get('events', []):
+        try:
+            comp = ev['competitions'][0]; h = a = None
+            for c in comp['competitors']:
+                ab = fix.get(c['team']['abbreviation'], c['team']['abbreviation'])
+                if c['homeAway'] == 'home': h = ab
+                else: a = ab
+            sm = json.loads(_get(f"https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event={ev['id']}", 30))
+            for o in (sm.get('gameInfo', {}) or {}).get('officials', []) or []:
+                pos = ((o.get('position') or {}).get('name') or (o.get('position') or {}).get('displayName') or '').lower()
+                if pos == 'referee':
+                    out[(h, a)] = o.get('displayName') or o.get('fullName'); break
+        except Exception:
+            continue
+    return out
+
+# ---------------------------------------------------------------- Rushing Yards over inputs (research exp/ry_trim.py)
+def _rush_over_inputs(p, players, season):
+    q = p[(p.season_type == 'REG') & (p.rush_attempt == 1) & (p.two_point_attempt.fillna(0) != 1) & p.rusher_player_id.notna()].copy()
+    q['ry'] = q.rushing_yards.fillna(0); q['cap10'] = q.ry.clip(upper=10)
+    g = q.groupby(['game_id', 'rusher_player_id']).agg(carries=('ry', 'size'), yds=('ry', 'sum'), yds_cap10=('cap10', 'sum'),
+                                                         long20=('ry', lambda s: (s >= 20).sum())).reset_index()
+    g['date'] = pd.to_datetime(g.game_id.map(q.groupby('game_id').game_date.first()))
+    g = g.sort_values(['rusher_player_id', 'date'])
+    names = players.dropna(subset=['gsis_id']).drop_duplicates('gsis_id').set_index('gsis_id')
+    out = {}
+    for pid, d in g.groupby('rusher_player_id'):
+        if not (d.game_id.str[:4].astype(int) >= season - 1).any() or len(d) < 3:
+            continue
+        e = lambda s: s.ewm(span=8, min_periods=3).mean().iloc[-1]
+        car = e(d.carries)
+        if not np.isfinite(car) or car <= 0: continue
+        name = names.display_name.get(pid) if pid in names.index else None
+        if not isinstance(name, str): continue
+        out[name] = {'pid': pid, 'n': int(len(d)), 'car': round(float(car), 3), 'ypc10': round(float(e(d.yds_cap10) / car), 4),
+                     'med8': round(float(d.yds.tail(8).median()), 2), 'lr': round(float(e(d.long20) / car), 5),
+                     'pos': names.position.get(pid) if pid in names.index else None, 'last': str(d.date.iloc[-1].date())}
+    return out
+
+# ---------------------------------------------------------------- main
+def build_v728_block(season, data_dir=None, cache_dir=None, players=None, target_week=None, log=print):
+    """target_week: None = the next week with unplayed games (live). A played week can be given to re-create a past run (testing)."""
+    import warnings; warnings.filterwarnings('ignore')
+    t0 = time.time()
+    p, G, inj, sn = v728_load(season, data_dir, log)
+    for c in ('home_team', 'away_team', 'posteam', 'defteam', 'td_team', 'penalty_team'):
+        if c in p.columns: p[c] = p[c].replace(V728_TM)
+    G = G[(G.season >= season - 4) & (G.season <= season)].copy()
+    for c in ('home_team', 'away_team'): G[c] = G[c].replace(V728_TM)
+    G['game_date'] = pd.to_datetime(G.gameday); G['gd'] = G.game_date
+    G['kick_utc'] = pd.to_datetime(G.gameday + ' ' + G.gametime).dt.tz_localize('America/New_York', ambiguous='NaT', nonexistent='NaT').dt.tz_convert('UTC')
+    reg = G[(G.season == season) & (G.game_type == 'REG')]
+    if target_week is None:
+        un = reg[reg.home_score.isna()]
+        if not len(un): log('  v7.28 block: no unplayed regular-season games'); return None
+        target_week = int(un.week.min())
+    wk = G[(G.season == season) & (G.week == target_week) & (G.game_type == 'REG')]
+    live = wk.home_score.isna().any()
+    # QB for unplayed games: listed starter, or the team's most recent starter when nflverse hasn't listed one
+    for side in ('home', 'away'):
+        miss = G.home_score.isna() & G[f'{side}_qb_id'].isna()
+        for i in G[miss].index:
+            t = G.at[i, f'{side}_team']
+            prev = pd.concat([G[(G.home_team == t) & G.home_score.notna()][['game_date', 'home_qb_id', 'home_qb_name']].set_axis(['d', 'id', 'nm'], axis=1),
+                              G[(G.away_team == t) & G.home_score.notna()][['game_date', 'away_qb_id', 'away_qb_name']].set_axis(['d', 'id', 'nm'], axis=1)]).sort_values('d')
+            if len(prev): G.at[i, f'{side}_qb_id'] = prev.id.iloc[-1]; G.at[i, f'{side}_qb_name'] = prev.nm.iloc[-1]
+    # referee for unplayed games of the target week (ESPN), so the crew penalty rate and referee tendency are known
+    refs_found = 0
+    if live:
+        R_ = _espn_referees(season, target_week, log)
+        for i in wk.index:
+            if pd.isna(G.at[i, 'referee']):
+                nm = R_.get((G.at[i, 'home_team'], G.at[i, 'away_team']))
+                if nm: G.at[i, 'referee'] = nm; refs_found += 1
+    # weather: forecast for unplayed games also fills the wind/temperature columns the base model reads
+    W = _weather(G, os.path.join(cache_dir, 'nfl_v728_weather_cache.json') if cache_dir else None, log)
+    wmap = W.set_index('game_id')
+    for i in G[G.home_score.isna() & G.game_id.isin(wmap.index)].index:
+        gid = G.at[i, 'game_id']
+        if pd.isna(G.at[i, 'wind']): G.at[i, 'wind'] = wmap.at[gid, 'wx_wind']
+        if pd.isna(G.at[i, 'temp']): G.at[i, 'temp'] = wmap.at[gid, 'wx_temp']
+    Gm = G.copy()
+    L = _long_table(p, Gm)
+    F = _features(L)
+    X, Fx = _build_X(F, Gm)
+    X = X.reset_index(drop=True); Fx = Fx.reset_index(drop=True)
+    FR = {}
+    dates = sorted(Fx.game_date.unique())
+    for hl in (60, 120, 240):
+        R = _ratings(L, Gm, hl, dates)
+        FR[hl] = pd.concat([X, _attach(Fx[['game_date', 'team', 'opp']], R).reset_index(drop=True)], axis=1)
+    T = _travel(Gm); Co, Rf = _coach_ref(Gm); I = _injuries(inj, sn)
+    up = Fx[Fx.pts.isna()][['game_id', 'team', 'opp', 'game_date']]
+    PS = _pace_style(p, up); X2 = _go4_refpen(p, Gm, up)
+    XE = {}
+    for hl, Xh in FR.items():
+        Xh = _extras_frame(Xh, T, Co, Rf, I, W)
+        A = PS[['game_id', 'team', 'sec_play_neutral_o', 'neutral_pass_rate_o', 'adot_o']]
+        Dd = PS[['game_id', 'team', 'sec_play_neutral_o']].rename(columns={'team': 'opp', 'sec_play_neutral_o': 'opp_sec_play_neutral_o'})
+        Xh = Xh.merge(A, on=['game_id', 'team'], how='left').merge(Dd, on=['game_id', 'opp'], how='left')
+        Xh['m_pace'] = Xh.sec_play_neutral_o + Xh.opp_sec_play_neutral_o
+        Xh = Xh.merge(X2, on=['game_id', 'team', 'opp'], how='left')
+        for c in _NB:
+            Xh[c] = Xh[c].astype(float); Xh[c] = Xh[c].fillna(Xh.groupby('season')[c].transform('mean')).fillna(Xh[c].mean())
+        XE[hl] = Xh
+    train = list(range(V728_FIRST_TRAIN, season))
+    extra = _EXTRA + _NB
+    best = None
+    for hl, Xh in XE.items():
+        for sname, cols in _SETS.items():
+            feats = cols + _ENV + extra
+            tr = Xh.season.isin(train) & Xh.pts.notna() & Xh.implied.notna()
+            Xtr = np.c_[Xh.loc[tr, feats].values.astype(float), Xh.loc[tr, 'implied'].values]
+            y = (Xh.loc[tr, 'pts'] - Xh.loc[tr, 'implied']).values; s = Xh.loc[tr, 'season'].values
+            a = _choose_alpha(Xtr, y, s); e = _cv_mae(Xtr, y, s, a)
+            if best is None or e < best[0]: best = (e, hl, sname, a)
+    _, hl, sname, a = best
+    Xh = XE[hl]; feats = _SETS[sname] + _ENV + extra
+    tr = (Xh.season.isin(train) | ((Xh.season == season) & (Xh.week < target_week))) & Xh.pts.notna() & Xh.implied.notna()
+    te = (Xh.season == season) & (Xh.week == target_week)
+    Xtr = np.c_[Xh.loc[tr, feats].values.astype(float), Xh.loc[tr, 'implied'].values]
+    m = _ridge_fit(Xtr, (Xh.loc[tr, 'pts'] - Xh.loc[tr, 'implied']).values, a)
+    fit_tr = Xh.loc[tr, 'implied'].values + _ridge_pred(m, Xtr)
+    # key-number distributions from the training rows (research KeyDist): game totals and team points
+    trd = Xh.loc[tr, ['game_id', 'team', 'pts']].copy(); trd['fit'] = fit_tr
+    gh = trd.merge(Gm[['game_id', 'home_team']], on='game_id'); H = gh[gh.team == gh.home_team].set_index('game_id'); Aw = gh[gh.team != gh.home_team].set_index('game_id')
+    ids = H.index.intersection(Aw.index)
+    at = (H.loc[ids, 'pts'] + Aw.loc[ids, 'pts']).values; pt = (H.loc[ids, 'fit'] + Aw.loc[ids, 'fit']).values
+    KT = _KeyDist(at, 0, 110, np.std(at - pt)); KP = _KeyDist(trd.pts.values, 0, 70, np.std(trd.pts - trd.fit))
+    # per-team prediction split into the part that doesn't depend on the line and the line's own weight,
+    # so the HTML can re-anchor to the live line: adj(implied) = core + wimp * implied ;  projection = implied + adj
+    wimp = float(m['w'][-1] / m['sd'][-1])
+    Z = (Xh.loc[te, feats].values.astype(float) - m['mu'][:-1]) / m['sd'][:-1]
+    core = m['b0'] + Z @ m['w'][:-1] - wimp * m['mu'][-1]
+    rows = Xh.loc[te, ['game_id', 'team', 'opp', 'implied', 'pts']].copy(); rows['core'] = core
+    rows['proj_nfl'] = rows.implied + rows.core + wimp * rows.implied
+    gi = Gm.set_index('game_id'); games = []
+    for gid, d in rows.groupby('game_id'):
+        g = gi.loc[gid]; tm = {}
+        for r in d.itertuples():
+            tm[r.team] = {'core': round(float(r.core), 4), 'impliedNfl': None if pd.isna(r.implied) else round(float(r.implied), 2),
+                          'projNfl': None if pd.isna(r.proj_nfl) else round(float(r.proj_nfl), 2), 'pts': None if pd.isna(r.pts) else int(r.pts)}
+        games.append({'gid': gid, 'home': g.home_team, 'away': g.away_team, 'gameday': g.gameday, 'gametime': g.gametime,
+                      'nflSpread': None if pd.isna(g.spread_line) else float(g.spread_line), 'nflTotal': None if pd.isna(g.total_line) else float(g.total_line),
+                      'referee': g.referee if isinstance(g.referee, str) else None, 'teams': tm})
+    blk = {'version': 'v7.28', 'season': int(season), 'week': int(target_week), 'live': bool(live),
+           'builtAt': datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%MZ'),
+           'throughDate': str(L[L.pts.notna()].game_date.max().date()),
+           'model': {'halfLifeDays': int(hl), 'featureSet': sname, 'alpha': a, 'trainRows': int(tr.sum()), 'trainSeasons': train + [season],
+                     'wimp': round(wimp, 6), 'refereesFromESPN': refs_found},
+           'key': {'tot': {'lo': 0, 'sd': round(KT.sd, 4), 'r': [round(float(x), 4) for x in KT.r]},
+                   'pts': {'lo': 0, 'sd': round(KP.sd, 4), 'r': [round(float(x), 4) for x in KP.r]}},
+           'games': games}
+    try:
+        if players is None:
+            players = _csv(f'{V728_NFLVERSE}/players/players.csv')[['gsis_id', 'display_name', 'position']]
+        blk['ry'] = {'longCut': 0.0078, 'players': _rush_over_inputs(p, players, season)}
+    except Exception as e:
+        log(f'  v7.28 block: Rushing Yards over inputs skipped ({e})')
+    log(f"  v7.28 block: week {target_week}, {len(games)} games, model {sname} / {hl}-day ratings / alpha {a}, "
+        f"{int(tr.sum())} training rows, {len(blk.get('ry', {}).get('players', {}))} rushers, {time.time() - t0:.0f}s")
+    return blk
+
+
 def save_output(teams, players, injury_map, games, college_data, season, roster_changes=None, starters=None, coaching_context=None, dfs=None, healthy_roster_shares=None, coverage_proxy=None, redzone_defense_proxy=None, depth_priors=None):
     print(f"\n{'='*50}")
     print("SAVING OUTPUT JSON")
@@ -4000,6 +4828,23 @@ def save_output(teams, players, injury_map, games, college_data, season, roster_
             'injuryBackupCount':    len(injury_map),
         }
     }
+
+    # v7.27: over/under formula data block (never blocks the rest of the pull)
+    try:
+        _v727 = pull_v727_block(CURRENT_SEASON)
+        if _v727:
+            output['v727'] = _v727
+    except Exception as _e:
+        print(f"  v7.27 block: ⚠ skipped ({_e}) — the model will use its embedded snapshot")
+
+    # v7.28: game-totals / team-totals model and Rushing Yards over inputs (never blocks the rest of the pull)
+    try:
+        print("\n  v7.28 block: training the game model (2023-2025 plus this season's played games) ...")
+        _v728 = build_v728_block(CURRENT_SEASON, cache_dir=str(OUTPUT_DIR))
+        if _v728:
+            output['v728'] = _v728
+    except Exception as _e:
+        print(f"  v7.28 block: ⚠ skipped ({_e}) — the model's Tracked v7.28 tab will use its embedded snapshot")
 
     def _json_safe(o):
         # The browser's JSON.parse REJECTS NaN/Infinity, and numpy ints are not int
