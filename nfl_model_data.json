@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-08T05:10:47.508101",
+  "generated": "2026-10-08T17:06:47.229293",
   "season": 2025,
   "baseline_season": 2025,
   "current_season": 2026,
@@ -3661,7 +3661,7 @@
       "catchRate": 0.5428571428571428,
       "aDOT": 8.742857142857142,
       "yacPerRec": 2.3157894736842106,
-      "rzTargetShare": 0.023,
+      "rzTargetShare": 0.022,
       "snapShare": 0.389,
       "usageSource": "baseline"
     },
@@ -14931,6 +14931,9 @@
       "breakawayRate": 0.0,
       "rzCarryShare": 0.013,
       "snapShare": 0.084,
+      "depthRank": 3,
+      "depthPos": "RB",
+      "team2026": "PHI",
       "usageSource": "baseline"
     },
     "Khalil Shakir": {
@@ -18162,7 +18165,7 @@
       "rzCarryShare": 0.1998,
       "rzTargetShare": 0.016,
       "snapShare": 0.2425,
-      "depthRank": 3,
+      "depthRank": 4,
       "depthPos": "RB",
       "team2026": "PHI",
       "usageSource": "blended_2026",
@@ -26697,7 +26700,7 @@
       "yacPerRec": 3.8,
       "rzTargetShare": 0.029,
       "snapShare": 0.453,
-      "depthRank": 7,
+      "depthRank": 6,
       "depthPos": "WR",
       "team2026": "LV",
       "usageSource": "baseline"
@@ -27847,7 +27850,7 @@
       "yacPerRec": 3.3,
       "rzTargetShare": 0.0604,
       "snapShare": 0.3745,
-      "depthRank": 6,
+      "depthRank": 7,
       "depthPos": "WR",
       "team2026": "LV",
       "usageSource": "blended_2026",
@@ -28847,6 +28850,9 @@
       "aDOT": 0.0,
       "yacPerRec": 0.0,
       "snapShare": 0.076,
+      "depthRank": 4,
+      "depthPos": "TE",
+      "team2026": "BAL",
       "usageSource": "baseline"
     },
     "Tyler Boyd": {
@@ -30513,7 +30519,7 @@
       "nflGames": 0,
       "source": "roster_2026_skeleton",
       "snapShare": 0.495,
-      "depthRank": 4,
+      "depthRank": 5,
       "depthPos": "TE",
       "team2026": "BAL",
       "targShare": 0.019,
@@ -37454,7 +37460,7 @@
     "Dontae Fleming": {
       "name": "Dontae Fleming",
       "pos": "WR",
-      "team": "MIN",
+      "team": "NYG",
       "games": 0,
       "isRookie": false,
       "nflGames": 0,
@@ -45085,7 +45091,7 @@
     "Nick DeGennaro": {
       "name": "Nick DeGennaro",
       "pos": "WR",
-      "team": "NE",
+      "team": "WAS",
       "games": 0,
       "isRookie": true,
       "nflGames": 0,
@@ -48445,6 +48451,28 @@
     }
   },
   "injuries": {
+    "Jonathan Mingo": {
+      "name": "Jonathan Mingo",
+      "team": "DAL",
+      "pos": "WR",
+      "status": "Questionable",
+      "detail": "Illness",
+      "practice": "Did Not Participate In Practice",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "report"
+    },
+    "Baker Mayfield": {
+      "name": "Baker Mayfield",
+      "team": "TB",
+      "pos": "QB",
+      "status": "Out",
+      "detail": "Thumb",
+      "practice": "Did Not Participate In Practice",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "report"
+    },
     "Demarcus Robinson": {
       "name": "Demarcus Robinson",
       "team": "SF",
@@ -48461,7 +48489,7 @@
       "team": "NYJ",
       "pos": "WR",
       "status": "IR",
-      "detail": "Reserve list (R01)",
+      "detail": "Reserve list (R48)",
       "practice": "",
       "week": 5,
       "source": "nflverse",
@@ -48500,12 +48528,34 @@
       "source": "nflverse",
       "origin": "roster"
     },
+    "Braxton Berrios": {
+      "name": "Braxton Berrios",
+      "team": "NYG",
+      "pos": "WR",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
     "Christian Kirk": {
       "name": "Christian Kirk",
       "team": "SF",
       "pos": "WR",
       "status": "IR",
       "detail": "Reserve list (R48)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Durham Smythe": {
+      "name": "Durham Smythe",
+      "team": "BAL",
+      "pos": "TE",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
       "practice": "",
       "week": 5,
       "source": "nflverse",
@@ -49132,7 +49182,7 @@
       "team": "MIN",
       "pos": "TE",
       "status": "IR",
-      "detail": "Reserve list (R01)",
+      "detail": "Reserve list (R48)",
       "practice": "",
       "week": 5,
       "source": "nflverse",
@@ -49154,7 +49204,7 @@
       "team": "LV",
       "pos": "WR",
       "status": "IR",
-      "detail": "Reserve list (R01)",
+      "detail": "Reserve list (R48)",
       "practice": "",
       "week": 5,
       "source": "nflverse",
@@ -61024,11 +61074,11 @@
     "teamCount": 32,
     "playerCount": 1003,
     "rookieCount": 214,
-    "injuryCount": 91,
+    "injuryCount": 95,
     "gameCount": 50,
     "currentSeasonPlayers": 397,
     "depthPriorPlayers": 322,
-    "injuryBackupCount": 91
+    "injuryBackupCount": 95
   },
   "v727": {
     "version": "v7.27",
@@ -133352,7 +133402,7 @@
     "season": 2026,
     "week": 5,
     "live": true,
-    "builtAt": "2026-10-08T05:26Z",
+    "builtAt": "2026-10-08T17:09Z",
     "throughDate": "2026-10-05",
     "model": {
       "halfLifeDays": 60,
@@ -133571,20 +133621,20 @@
         "away": "BAL",
         "gameday": "2026-10-11",
         "gametime": "20:20",
-        "nflSpread": 3.5,
+        "nflSpread": 3.0,
         "nflTotal": 43.5,
         "referee": null,
         "teams": {
           "ATL": {
-            "core": 0.6099,
-            "impliedNfl": 23.5,
-            "projNfl": 24.6,
+            "core": 0.6057,
+            "impliedNfl": 23.25,
+            "projNfl": 24.34,
             "pts": null
           },
           "BAL": {
-            "core": 0.4249,
-            "impliedNfl": 20.0,
-            "projNfl": 20.84,
+            "core": 0.4207,
+            "impliedNfl": 20.25,
+            "projNfl": 21.09,
             "pts": null
           }
         }
@@ -133619,20 +133669,20 @@
         "away": "CHI",
         "gameday": "2026-10-11",
         "gametime": "13:00",
-        "nflSpread": -2.5,
+        "nflSpread": -1.5,
         "nflTotal": 45.5,
         "referee": null,
         "teams": {
           "CHI": {
-            "core": -0.2563,
-            "impliedNfl": 24.0,
-            "projNfl": 24.24,
+            "core": -0.2418,
+            "impliedNfl": 23.5,
+            "projNfl": 23.75,
             "pts": null
           },
           "GB": {
-            "core": 0.8412,
-            "impliedNfl": 21.5,
-            "projNfl": 22.79,
+            "core": 0.8557,
+            "impliedNfl": 22.0,
+            "projNfl": 23.31,
             "pts": null
           }
         }
@@ -133648,15 +133698,15 @@
         "referee": null,
         "teams": {
           "CIN": {
-            "core": -0.8686,
+            "core": -0.8727,
             "impliedNfl": 24.5,
             "projNfl": 24.14,
             "pts": null
           },
           "MIA": {
-            "core": 0.3823,
+            "core": 0.3782,
             "impliedNfl": 18.0,
-            "projNfl": 18.76,
+            "projNfl": 18.75,
             "pts": null
           }
         }
@@ -133720,15 +133770,15 @@
         "referee": null,
         "teams": {
           "ARI": {
-            "core": -0.1701,
+            "core": -0.6367,
             "impliedNfl": 24.5,
-            "projNfl": 24.84,
+            "projNfl": 24.37,
             "pts": null
           },
           "DET": {
-            "core": -0.6454,
+            "core": -1.1119,
             "impliedNfl": 30.0,
-            "projNfl": 29.98,
+            "projNfl": 29.51,
             "pts": null
           }
         }
@@ -133740,19 +133790,19 @@
         "gameday": "2026-10-11",
         "gametime": "13:00",
         "nflSpread": -7.5,
-        "nflTotal": 37.5,
+        "nflTotal": 38.5,
         "referee": null,
         "teams": {
           "HOU": {
             "core": -1.1833,
-            "impliedNfl": 22.5,
-            "projNfl": 21.79,
+            "impliedNfl": 23.0,
+            "projNfl": 22.3,
             "pts": null
           },
           "TEN": {
             "core": 0.3879,
-            "impliedNfl": 15.0,
-            "projNfl": 15.7,
+            "impliedNfl": 15.5,
+            "projNfl": 16.21,
             "pts": null
           }
         }
@@ -133768,15 +133818,15 @@
         "referee": null,
         "teams": {
           "IND": {
-            "core": -1.8537,
+            "core": -2.2611,
             "impliedNfl": 21.0,
-            "projNfl": 19.58,
+            "projNfl": 19.18,
             "pts": null
           },
           "PIT": {
-            "core": -1.4551,
+            "core": -1.8626,
             "impliedNfl": 23.5,
-            "projNfl": 22.53,
+            "projNfl": 22.13,
             "pts": null
           }
         }
@@ -133811,8 +133861,8 @@
         "away": "MIN",
         "gameday": "2026-10-11",
         "gametime": "13:00",
-        "nflSpread": -1.5,
-        "nflTotal": 42.5,
+        "nflSpread": -2.5,
+        "nflTotal": 41.5,
         "referee": null,
         "teams": {
           "MIN": {
@@ -133823,8 +133873,8 @@
           },
           "NO": {
             "core": -0.3509,
-            "impliedNfl": 20.5,
-            "projNfl": 20.58,
+            "impliedNfl": 19.5,
+            "projNfl": 19.56,
             "pts": null
           }
         }
@@ -133836,19 +133886,19 @@
         "gameday": "2026-10-11",
         "gametime": "13:00",
         "nflSpread": 3.5,
-        "nflTotal": 42.5,
+        "nflTotal": 41.5,
         "referee": null,
         "teams": {
           "NYG": {
-            "core": -2.4488,
-            "impliedNfl": 19.5,
-            "projNfl": 17.46,
+            "core": -2.8782,
+            "impliedNfl": 19.0,
+            "projNfl": 16.52,
             "pts": null
           },
           "WAS": {
-            "core": -2.2406,
-            "impliedNfl": 23.0,
-            "projNfl": 21.24,
+            "core": -2.67,
+            "impliedNfl": 22.5,
+            "projNfl": 20.3,
             "pts": null
           }
         }
@@ -133859,20 +133909,20 @@
         "away": "PHI",
         "gameday": "2026-10-11",
         "gametime": "09:30",
-        "nflSpread": 7.0,
-        "nflTotal": 42.5,
+        "nflSpread": 7.5,
+        "nflTotal": 41.5,
         "referee": null,
         "teams": {
           "JAX": {
             "core": 0.3766,
-            "impliedNfl": 24.75,
-            "projNfl": 25.64,
+            "impliedNfl": 24.5,
+            "projNfl": 25.39,
             "pts": null
           },
           "PHI": {
             "core": -0.3613,
-            "impliedNfl": 17.75,
-            "projNfl": 17.76,
+            "impliedNfl": 17.0,
+            "projNfl": 16.99,
             "pts": null
           }
         }
@@ -133883,20 +133933,20 @@
         "away": "SF",
         "gameday": "2026-10-11",
         "gametime": "16:25",
-        "nflSpread": 2.5,
+        "nflSpread": 3.0,
         "nflTotal": 45.5,
         "referee": null,
         "teams": {
           "SEA": {
             "core": 0.2484,
-            "impliedNfl": 24.0,
-            "projNfl": 24.75,
+            "impliedNfl": 24.25,
+            "projNfl": 25.0,
             "pts": null
           },
           "SF": {
             "core": 0.4036,
-            "impliedNfl": 21.5,
-            "projNfl": 22.35,
+            "impliedNfl": 21.25,
+            "projNfl": 22.1,
             "pts": null
           }
         }
@@ -133908,19 +133958,19 @@
         "gameday": "2026-10-08",
         "gametime": "20:15",
         "nflSpread": 8.5,
-        "nflTotal": 47.5,
+        "nflTotal": 48.5,
         "referee": null,
         "teams": {
           "DAL": {
-            "core": 0.1188,
-            "impliedNfl": 28.0,
-            "projNfl": 28.7,
+            "core": 1.0568,
+            "impliedNfl": 28.5,
+            "projNfl": 30.15,
             "pts": null
           },
           "TB": {
-            "core": -0.2619,
-            "impliedNfl": 19.5,
-            "projNfl": 19.64,
+            "core": 0.6134,
+            "impliedNfl": 20.0,
+            "projNfl": 21.03,
             "pts": null
           }
         }
