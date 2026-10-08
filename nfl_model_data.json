@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-08T17:06:47.229293",
+  "generated": "2026-10-08T23:46:08.403410",
   "season": 2025,
   "baseline_season": 2025,
   "current_season": 2026,
@@ -3661,7 +3661,7 @@
       "catchRate": 0.5428571428571428,
       "aDOT": 8.742857142857142,
       "yacPerRec": 2.3157894736842106,
-      "rzTargetShare": 0.022,
+      "rzTargetShare": 0.023,
       "snapShare": 0.389,
       "usageSource": "baseline"
     },
@@ -133402,7 +133402,7 @@
     "season": 2026,
     "week": 5,
     "live": true,
-    "builtAt": "2026-10-08T17:09Z",
+    "builtAt": "2026-10-08T23:49Z",
     "throughDate": "2026-10-05",
     "model": {
       "halfLifeDays": 60,
@@ -133416,7 +133416,7 @@
         2026
       ],
       "wimp": 0.020819,
-      "refereesFromESPN": 0
+      "refereesFromESPN": 1
     },
     "key": {
       "tot": {
@@ -133626,15 +133626,15 @@
         "referee": null,
         "teams": {
           "ATL": {
-            "core": 0.6057,
+            "core": 0.5827,
             "impliedNfl": 23.25,
-            "projNfl": 24.34,
+            "projNfl": 24.32,
             "pts": null
           },
           "BAL": {
-            "core": 0.4207,
+            "core": 0.3977,
             "impliedNfl": 20.25,
-            "projNfl": 21.09,
+            "projNfl": 21.07,
             "pts": null
           }
         }
@@ -133669,20 +133669,20 @@
         "away": "CHI",
         "gameday": "2026-10-11",
         "gametime": "13:00",
-        "nflSpread": -1.5,
+        "nflSpread": -2.5,
         "nflTotal": 45.5,
         "referee": null,
         "teams": {
           "CHI": {
             "core": -0.2418,
-            "impliedNfl": 23.5,
-            "projNfl": 23.75,
+            "impliedNfl": 24.0,
+            "projNfl": 24.26,
             "pts": null
           },
           "GB": {
             "core": 0.8557,
-            "impliedNfl": 22.0,
-            "projNfl": 23.31,
+            "impliedNfl": 21.5,
+            "projNfl": 22.8,
             "pts": null
           }
         }
@@ -133698,15 +133698,15 @@
         "referee": null,
         "teams": {
           "CIN": {
-            "core": -0.8727,
+            "core": -0.8686,
             "impliedNfl": 24.5,
             "projNfl": 24.14,
             "pts": null
           },
           "MIA": {
-            "core": 0.3782,
+            "core": 0.3823,
             "impliedNfl": 18.0,
-            "projNfl": 18.75,
+            "projNfl": 18.76,
             "pts": null
           }
         }
@@ -133717,20 +133717,20 @@
         "away": "CLE",
         "gameday": "2026-10-11",
         "gametime": "13:00",
-        "nflSpread": 1.5,
+        "nflSpread": 2.5,
         "nflTotal": 39.5,
         "referee": null,
         "teams": {
           "CLE": {
-            "core": -0.3912,
-            "impliedNfl": 19.0,
-            "projNfl": 19.0,
+            "core": -2.1192,
+            "impliedNfl": 18.5,
+            "projNfl": 16.77,
             "pts": null
           },
           "NYJ": {
-            "core": -0.1918,
-            "impliedNfl": 20.5,
-            "projNfl": 20.74,
+            "core": -1.9197,
+            "impliedNfl": 21.0,
+            "projNfl": 19.52,
             "pts": null
           }
         }
@@ -133770,15 +133770,15 @@
         "referee": null,
         "teams": {
           "ARI": {
-            "core": -0.6367,
+            "core": 0.0016,
             "impliedNfl": 24.5,
-            "projNfl": 24.37,
+            "projNfl": 25.01,
             "pts": null
           },
           "DET": {
-            "core": -1.1119,
+            "core": -0.4737,
             "impliedNfl": 30.0,
-            "projNfl": 29.51,
+            "projNfl": 30.15,
             "pts": null
           }
         }
@@ -133790,19 +133790,19 @@
         "gameday": "2026-10-11",
         "gametime": "13:00",
         "nflSpread": -7.5,
-        "nflTotal": 38.5,
+        "nflTotal": 37.5,
         "referee": null,
         "teams": {
           "HOU": {
             "core": -1.1833,
-            "impliedNfl": 23.0,
-            "projNfl": 22.3,
+            "impliedNfl": 22.5,
+            "projNfl": 21.79,
             "pts": null
           },
           "TEN": {
             "core": 0.3879,
-            "impliedNfl": 15.5,
-            "projNfl": 16.21,
+            "impliedNfl": 15.0,
+            "projNfl": 15.7,
             "pts": null
           }
         }
@@ -133818,15 +133818,15 @@
         "referee": null,
         "teams": {
           "IND": {
-            "core": -2.2611,
+            "core": -2.0752,
             "impliedNfl": 21.0,
-            "projNfl": 19.18,
+            "projNfl": 19.36,
             "pts": null
           },
           "PIT": {
-            "core": -1.8626,
+            "core": -1.6766,
             "impliedNfl": 23.5,
-            "projNfl": 22.13,
+            "projNfl": 22.31,
             "pts": null
           }
         }
@@ -133886,19 +133886,19 @@
         "gameday": "2026-10-11",
         "gametime": "13:00",
         "nflSpread": 3.5,
-        "nflTotal": 41.5,
+        "nflTotal": 42.5,
         "referee": null,
         "teams": {
           "NYG": {
-            "core": -2.8782,
-            "impliedNfl": 19.0,
-            "projNfl": 16.52,
+            "core": -1.2495,
+            "impliedNfl": 19.5,
+            "projNfl": 18.66,
             "pts": null
           },
           "WAS": {
-            "core": -2.67,
-            "impliedNfl": 22.5,
-            "projNfl": 20.3,
+            "core": -1.0413,
+            "impliedNfl": 23.0,
+            "projNfl": 22.44,
             "pts": null
           }
         }
@@ -133914,13 +133914,13 @@
         "referee": null,
         "teams": {
           "JAX": {
-            "core": 0.3766,
+            "core": 0.3745,
             "impliedNfl": 24.5,
-            "projNfl": 25.39,
+            "projNfl": 25.38,
             "pts": null
           },
           "PHI": {
-            "core": -0.3613,
+            "core": -0.3634,
             "impliedNfl": 17.0,
             "projNfl": 16.99,
             "pts": null
@@ -133959,18 +133959,18 @@
         "gametime": "20:15",
         "nflSpread": 8.5,
         "nflTotal": 48.5,
-        "referee": null,
+        "referee": "Alex Moore",
         "teams": {
           "DAL": {
-            "core": 1.0568,
+            "core": 0.6014,
             "impliedNfl": 28.5,
-            "projNfl": 30.15,
+            "projNfl": 29.69,
             "pts": null
           },
           "TB": {
-            "core": 0.6134,
+            "core": 0.158,
             "impliedNfl": 20.0,
-            "projNfl": 21.03,
+            "projNfl": 20.57,
             "pts": null
           }
         }
