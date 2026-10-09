@@ -33,6 +33,8 @@ jobs:
         run: pip install pandas requests openpyxl
 
       - name: Run the data pull script
+        env:
+          CFBD_API_KEY: ${{ secrets.CFBD_API_KEY }}
         run: python nfl_edge_data_pull.py
 
       - name: Commit and push refreshed model data
