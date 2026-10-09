@@ -3,8 +3,8 @@ name: Daily NFL Data Pull
 on:
   schedule:
     # GitHub cron uses UTC.
-    # 12:00 UTC = 8:00 AM EDT (until Nov 1) / 7:00 AM EST (after)
-    - cron: "0 12 * * *"
+    # 11:17 UTC = 7:17 AM EDT (until Nov 1) / 6:17 AM EST (after)
+    - cron: "17 11 * * *"
   workflow_dispatch:
 
 permissions:
