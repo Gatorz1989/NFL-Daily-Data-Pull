@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-09T00:18:30.266723",
+  "generated": "2026-10-09T17:34:29.187838",
   "season": 2025,
   "baseline_season": 2025,
   "current_season": 2026,
@@ -1298,34 +1298,34 @@
       "source": "co_game_weekly_2025_2026",
       "keyFormat": "norm_fullname_nosuffix",
       "shares": {
-        "brevyn spannford": 0.0261,
-        "ceedee lamb": 0.2608,
-        "george pickens": 0.2161,
-        "hunter luepke": 0.0174,
-        "jake ferguson": 0.1419,
+        "brevyn spannford": 0.028,
+        "ceedee lamb": 0.2485,
+        "george pickens": 0.2242,
+        "hunter luepke": 0.0159,
+        "jake ferguson": 0.142,
         "jalen tolbert": 0.0525,
-        "javonte williams": 0.0954,
-        "kavontae turpin": 0.0511,
+        "javonte williams": 0.0932,
+        "kavontae turpin": 0.055,
         "luke schoonmaker": 0.0247,
         "miles sanders": 0.0456,
-        "ryan flournoy": 0.1197,
-        "jonathan mingo": 0.0219
+        "ryan flournoy": 0.1175,
+        "jonathan mingo": 0.0316
       },
       "full_strength": {
-        "games": 17,
+        "games": 18,
         "shares": {
-          "brevyn spannford": 0.0261,
-          "ceedee lamb": 0.2608,
-          "george pickens": 0.2161,
-          "hunter luepke": 0.0174,
-          "jake ferguson": 0.1419,
+          "brevyn spannford": 0.028,
+          "ceedee lamb": 0.2485,
+          "george pickens": 0.2242,
+          "hunter luepke": 0.0159,
+          "jake ferguson": 0.142,
           "jalen tolbert": 0.0525,
-          "javonte williams": 0.0954,
-          "kavontae turpin": 0.0511,
+          "javonte williams": 0.0932,
+          "kavontae turpin": 0.055,
           "luke schoonmaker": 0.0247,
           "miles sanders": 0.0456,
-          "ryan flournoy": 0.1197,
-          "jonathan mingo": 0.0219
+          "ryan flournoy": 0.1175,
+          "jonathan mingo": 0.0316
         }
       },
       "wr1_out": {
@@ -2788,36 +2788,36 @@
       "source": "co_game_weekly_2025_2026",
       "keyFormat": "norm_fullname_nosuffix",
       "shares": {
-        "bucky irving": 0.1159,
-        "cade otton": 0.1598,
-        "emeka egbuka": 0.2076,
+        "bucky irving": 0.1163,
+        "cade otton": 0.1599,
+        "emeka egbuka": 0.2221,
         "mike evans": 0.2488,
-        "payne durham": 0.009,
+        "payne durham": 0.0119,
         "rachaad white": 0.0742,
-        "sean tucker": 0.0121,
+        "sean tucker": 0.0106,
         "sterling shepard": 0.1274,
-        "tez johnson": 0.0635,
-        "chris godwin": 0.1693,
+        "tez johnson": 0.0612,
+        "chris godwin": 0.1638,
         "jalen mcmillan": 0.061,
-        "kenny gainwell": 0.0945,
-        "ted hurst": 0.1311
+        "kenny gainwell": 0.1076,
+        "ted hurst": 0.1049
       },
       "full_strength": {
-        "games": 15,
+        "games": 16,
         "shares": {
-          "bucky irving": 0.1159,
-          "cade otton": 0.1598,
-          "emeka egbuka": 0.2076,
+          "bucky irving": 0.1163,
+          "cade otton": 0.1599,
+          "emeka egbuka": 0.2221,
           "mike evans": 0.2488,
-          "payne durham": 0.009,
+          "payne durham": 0.0119,
           "rachaad white": 0.0742,
-          "sean tucker": 0.0121,
+          "sean tucker": 0.0106,
           "sterling shepard": 0.1274,
-          "tez johnson": 0.0635,
-          "chris godwin": 0.1693,
+          "tez johnson": 0.0612,
+          "chris godwin": 0.1638,
           "jalen mcmillan": 0.061,
-          "kenny gainwell": 0.0945,
-          "ted hurst": 0.1311
+          "kenny gainwell": 0.1076,
+          "ted hurst": 0.1049
         }
       },
       "wr1_out": {
@@ -5042,16 +5042,16 @@
       "breakawayRate": 0.0,
       "rzCarryShare": 0.133,
       "snapShare": 0.951,
-      "passYdsPG_seasonBlended": 263.6,
-      "rushYdsPG_seasonBlended": 12.8,
+      "passYdsPG_seasonBlended": 270.5,
+      "rushYdsPG_seasonBlended": 11.7,
       "seasonBlendWeights": {
-        "current": 0.5,
-        "prior1": 0.333,
-        "prior2": 0.167,
-        "games": 4,
+        "current": 0.625,
+        "prior1": 0.25,
+        "prior2": 0.125,
+        "games": 5,
         "hasPrior2Data": true
       },
-      "seasonBlendNote": "2026: 4g played \u2014 50% 2026 + 33% 2025 + 17% 2024"
+      "seasonBlendNote": "2026: 5g played \u2014 62% 2026 + 25% 2025 + 12% 2024"
     },
     "Hunter Henry": {
       "name": "Hunter Henry",
@@ -6053,7 +6053,7 @@
       "breakawayRate": 0.0,
       "rzCarryShare": 0.021,
       "snapShare": 0.4387,
-      "depthRank": 4,
+      "depthRank": 3,
       "depthPos": "RB",
       "team2026": "WAS",
       "usageSource": "blended_2026",
@@ -6613,58 +6613,60 @@
       "recYdsPG": 40.0,
       "recsPG": 3.6666666666666665,
       "recTDsPG": 0.2222222222222222,
-      "targShare": 0.1556,
-      "airYdShare": 0.0704,
-      "wopr": 0.2827,
+      "targShare": 0.1485,
+      "airYdShare": 0.0655,
+      "wopr": 0.2686,
       "recEPA": 14.7000971803238,
       "rushYdsPG": 0.0,
       "ypr": 10.909090909090908,
-      "catchRate": 0.7483,
-      "aDOT": 5.6968,
-      "yacPerRec": 6.1722,
-      "rzTargetShare": 0.096,
-      "snapShare": 0.8075,
+      "catchRate": 0.7647,
+      "aDOT": 5.4339,
+      "yacPerRec": 6.4787,
+      "rzTargetShare": 0.0901,
+      "snapShare": 0.822,
       "depthRank": 2,
       "depthPos": "WR",
       "team2026": "TB",
       "usageSource": "blended_2026",
-      "rushYdsPG_seasonBlended": 1.9,
-      "recYdsPG_seasonBlended": 44.8,
-      "recsPG_seasonBlended": 4.4,
+      "rushYdsPG_seasonBlended": 2.3,
+      "recYdsPG_seasonBlended": 42.7,
+      "recsPG_seasonBlended": 4.2,
       "seasonBlendWeights": {
-        "current": 0.5,
-        "prior1": 0.333,
-        "prior2": 0.167,
-        "games": 4,
+        "current": 0.625,
+        "prior1": 0.25,
+        "prior2": 0.125,
+        "games": 5,
         "hasPrior2Data": true
       },
-      "seasonBlendNote": "2026: 4g played \u2014 50% 2026 + 33% 2025 + 17% 2024",
-      "games2026": 4,
+      "seasonBlendNote": "2026: 5g played \u2014 62% 2026 + 25% 2025 + 12% 2024",
+      "games2026": 5,
       "blendWeight2026": 1.0,
-      "blendWeight2026PG": 0.5,
+      "blendWeight2026PG": 0.625,
       "usage2026": {
-        "games": 4,
-        "targets": 18,
-        "receptions": 16,
-        "carries": 2,
-        "recYds": 142.0,
-        "rushYds": 15.0,
-        "targShare": 0.1556,
-        "airYdShare": 0.0704,
-        "wopr": 0.2827,
-        "carryShare": 0.0225,
-        "recYdsPG": 35.5,
-        "recsPG": 4.0,
-        "rushYdsPG": 3.75,
-        "aDOT": 3.7778,
-        "catchRate": 0.8889,
-        "yacPerRec": 6.0625,
-        "ypc": 7.5,
-        "snapShare": 0.8075,
+        "games": 5,
+        "targets": 21,
+        "receptions": 19,
+        "carries": 3,
+        "recYds": 179.0,
+        "rushYds": 18.0,
+        "targShare": 0.1485,
+        "airYdShare": 0.0655,
+        "wopr": 0.2686,
+        "carryShare": 0.0231,
+        "recYdsPG": 35.8,
+        "recsPG": 3.8,
+        "rushYdsPG": 3.6,
+        "aDOT": 3.4762,
+        "catchRate": 0.9048,
+        "yacPerRec": 6.7895,
+        "ypc": 6.0,
+        "snapShare": 0.822,
+        "rzTargetShare": 0.043,
         "rzCarryShare": 0.0,
         "breakawayRate": 0.0,
-        "pbp_carries": 2,
-        "rz_carries": 0
+        "pbp_carries": 3,
+        "rz_carries": 0,
+        "rz_tgts": 1
       },
       "usageBaseline": {
         "targShare": 0.0943,
@@ -6673,9 +6675,10 @@
         "snapShare": 0.709,
         "aDOT": 7.0784,
         "catchRate": 0.6471,
-        "yacPerRec": 6.2424
+        "yacPerRec": 6.2424,
+        "rzTargetShare": 0.096
       },
-      "usageNote": "2026: 4g \u2014 100% 2026 + 0% 2025 baseline"
+      "usageNote": "2026: 5g \u2014 100% 2026 + 0% 2025 baseline"
     },
     "Kareem Hunt": {
       "name": "Kareem Hunt",
@@ -6763,7 +6766,7 @@
       "rzCarryShare": 0.064,
       "rzTargetShare": 0.046,
       "snapShare": 0.319,
-      "depthRank": 5,
+      "depthRank": 4,
       "depthPos": "RB",
       "team2026": "WAS",
       "usageSource": "baseline"
@@ -9878,7 +9881,7 @@
       "rzCarryShare": 0.553,
       "rzTargetShare": 0.078,
       "snapShare": 0.593,
-      "depthRank": 4,
+      "depthRank": 5,
       "depthPos": "RB",
       "team2026": "GB",
       "usageSource": "baseline"
@@ -11146,58 +11149,58 @@
       "recYdsPG": 82.84615384615384,
       "recsPG": 5.769230769230769,
       "recTDsPG": 0.23076923076923078,
-      "targShare": 0.3113,
-      "airYdShare": 0.4432,
-      "wopr": 0.7772,
+      "targShare": 0.2729,
+      "airYdShare": 0.386,
+      "wopr": 0.6795,
       "recEPA": 28.9908193846128,
       "rushYdsPG": 0.15384615384615385,
       "ypr": 14.36,
-      "catchRate": 0.7468,
-      "aDOT": 10.8421,
-      "yacPerRec": 4.2527,
+      "catchRate": 0.724,
+      "aDOT": 10.8656,
+      "yacPerRec": 4.1198,
       "carryShare": 0.002,
       "breakawayRate": 0.0,
       "rzCarryShare": 0.0,
-      "rzTargetShare": 0.2163,
-      "snapShare": 0.81,
+      "rzTargetShare": 0.1967,
+      "snapShare": 0.762,
       "depthRank": 1,
       "depthPos": "WR",
       "team2026": "DAL",
       "usageSource": "blended_2026",
-      "rushYdsPG_seasonBlended": 0.1,
-      "recYdsPG_seasonBlended": 103.1,
-      "recsPG_seasonBlended": 7.7,
+      "rushYdsPG_seasonBlended": -0.1,
+      "recYdsPG_seasonBlended": 94.0,
+      "recsPG_seasonBlended": 7.2,
       "seasonBlendWeights": {
-        "current": 0.5,
-        "prior1": 0.333,
-        "prior2": 0.167,
-        "games": 4,
+        "current": 0.625,
+        "prior1": 0.25,
+        "prior2": 0.125,
+        "games": 5,
         "hasPrior2Data": true
       },
-      "seasonBlendNote": "2026: 4g played \u2014 50% 2026 + 33% 2025 + 17% 2024",
-      "games2026": 4,
+      "seasonBlendNote": "2026: 5g played \u2014 62% 2026 + 25% 2025 + 12% 2024",
+      "games2026": 5,
       "blendWeight2026": 1.0,
-      "blendWeight2026PG": 0.5,
+      "blendWeight2026PG": 0.625,
       "usage2026": {
-        "games": 4,
-        "targets": 46,
-        "receptions": 37,
+        "games": 5,
+        "targets": 51,
+        "receptions": 39,
         "carries": 2,
-        "recYds": 498.0,
+        "recYds": 507.0,
         "rushYds": -6.0,
-        "targShare": 0.3113,
-        "airYdShare": 0.4432,
-        "wopr": 0.7772,
-        "carryShare": 0.0239,
-        "recYdsPG": 124.5,
-        "recsPG": 9.25,
-        "rushYdsPG": -1.5,
-        "aDOT": 10.2174,
-        "catchRate": 0.8043,
-        "yacPerRec": 4.2162,
+        "targShare": 0.2729,
+        "airYdShare": 0.386,
+        "wopr": 0.6795,
+        "carryShare": 0.0191,
+        "recYdsPG": 101.4,
+        "recsPG": 7.8,
+        "rushYdsPG": -1.2,
+        "aDOT": 10.3137,
+        "catchRate": 0.7647,
+        "yacPerRec": 4.0,
         "ypc": -3.0,
-        "snapShare": 0.81,
-        "rzTargetShare": 0.292,
+        "snapShare": 0.762,
+        "rzTargetShare": 0.25,
         "rzCarryShare": 0.0,
         "breakawayRate": 0.0,
         "pbp_carries": 2,
@@ -11214,7 +11217,7 @@
         "yacPerRec": 4.3067,
         "rzTargetShare": 0.15
       },
-      "usageNote": "2026: 4g \u2014 100% 2026 + 0% 2025 baseline"
+      "usageNote": "2026: 5g \u2014 100% 2026 + 0% 2025 baseline"
     },
     "Clyde Edwards-Helaire": {
       "name": "Clyde Edwards-Helaire",
@@ -13103,56 +13106,68 @@
       "rushTDsPG": 0.29411764705882354,
       "recYdsPG": 28.58823529411765,
       "recsPG": 4.294117647058823,
-      "targShare": 0.0945,
+      "targShare": 0.1076,
       "rushEPA": -0.656572956941091,
-      "ypc": 4.0457,
-      "catchRate": 0.7965,
+      "ypc": 4.0776,
+      "catchRate": 0.792,
+      "carryShare": 0.1344,
+      "breakawayRate": 0.0372,
+      "rzCarryShare": 0.2596,
+      "rzTargetShare": 0.1795,
       "depthRank": 2,
       "depthPos": "RB",
       "team2026": "TB",
       "usageSource": "blended_2026",
-      "rushYdsPG_seasonBlended": 16.6,
-      "recYdsPG_seasonBlended": 16.2,
+      "rushYdsPG_seasonBlended": 15.5,
+      "recYdsPG_seasonBlended": 14.7,
       "recsPG_seasonBlended": 2.6,
       "seasonBlendWeights": {
-        "current": 0.5,
-        "prior1": 0.333,
-        "prior2": 0.167,
-        "games": 4,
+        "current": 0.625,
+        "prior1": 0.25,
+        "prior2": 0.125,
+        "games": 5,
         "hasPrior2Data": true
       },
-      "seasonBlendNote": "2026: 4g played \u2014 50% 2026 + 33% 2025 + 17% 2024",
-      "carryShare": 0.1424,
-      "yacPerRec": 9.25,
-      "games2026": 4,
+      "seasonBlendNote": "2026: 5g played \u2014 62% 2026 + 25% 2025 + 12% 2024",
+      "yacPerRec": 9.0909,
+      "games2026": 5,
       "blendWeight2026": 1.0,
-      "blendWeight2026PG": 0.5,
+      "blendWeight2026PG": 0.625,
       "usage2026": {
-        "games": 4,
-        "targets": 12,
-        "receptions": 8,
-        "carries": 13,
-        "recYds": 44.0,
-        "rushYds": 26.0,
-        "targShare": 0.0945,
-        "airYdShare": -0.0103,
-        "wopr": 0.1345,
-        "carryShare": 0.1424,
-        "recYdsPG": 11.0,
-        "recsPG": 2.0,
-        "rushYdsPG": 6.5,
-        "aDOT": -0.5,
-        "catchRate": 0.6667,
-        "yacPerRec": 9.25,
-        "ypc": 2.0
+        "games": 5,
+        "targets": 16,
+        "receptions": 11,
+        "carries": 17,
+        "recYds": 54.0,
+        "rushYds": 44.0,
+        "targShare": 0.1076,
+        "airYdShare": -0.0578,
+        "wopr": 0.1209,
+        "carryShare": 0.1344,
+        "recYdsPG": 10.8,
+        "recsPG": 2.2,
+        "rushYdsPG": 8.8,
+        "aDOT": -2.0625,
+        "catchRate": 0.6875,
+        "yacPerRec": 9.0909,
+        "ypc": 2.5882,
+        "rzTargetShare": 0.13,
+        "rzCarryShare": 0.04,
+        "breakawayRate": 0.0,
+        "pbp_carries": 17,
+        "rz_carries": 1,
+        "rz_tgts": 3
       },
       "usageBaseline": {
         "targShare": 0.1628,
-        "carryShare": 0.139,
+        "carryShare": 0.28,
         "catchRate": 0.8588,
-        "ypc": 4.7105
+        "ypc": 4.7105,
+        "breakawayRate": 0.053,
+        "rzTargetShare": 0.198,
+        "rzCarryShare": 0.287
       },
-      "usageNote": "2026: 4g \u2014 100% 2026 + 0% 2025 baseline"
+      "usageNote": "2026: 5g \u2014 100% 2026 + 0% 2025 baseline"
     },
     "Michael Carter": {
       "name": "Michael Carter",
@@ -13604,58 +13619,58 @@
       "rushTDsPG": 0.6875,
       "recYdsPG": 8.5625,
       "recsPG": 2.1875,
-      "targShare": 0.1217,
+      "targShare": 0.1117,
       "rushEPA": 12.2050037380845,
-      "ypc": 4.1337,
-      "catchRate": 0.7656,
-      "carryShare": 0.6579,
-      "breakawayRate": 0.0496,
-      "rzCarryShare": 0.6922,
-      "rzTargetShare": 0.1112,
-      "snapShare": 0.7525,
+      "ypc": 4.0933,
+      "catchRate": 0.759,
+      "carryShare": 0.7109,
+      "breakawayRate": 0.0533,
+      "rzCarryShare": 0.7086,
+      "rzTargetShare": 0.1063,
+      "snapShare": 0.772,
       "depthRank": 1,
       "depthPos": "RB",
       "team2026": "DAL",
       "usageSource": "blended_2026",
-      "rushYdsPG_seasonBlended": 58.9,
-      "recYdsPG_seasonBlended": 15.9,
+      "rushYdsPG_seasonBlended": 57.0,
+      "recYdsPG_seasonBlended": 16.4,
       "recsPG_seasonBlended": 3.1,
       "seasonBlendWeights": {
-        "current": 0.5,
-        "prior1": 0.333,
-        "prior2": 0.167,
-        "games": 4,
+        "current": 0.625,
+        "prior1": 0.25,
+        "prior2": 0.125,
+        "games": 5,
         "hasPrior2Data": true
       },
-      "seasonBlendNote": "2026: 4g played \u2014 50% 2026 + 33% 2025 + 17% 2024",
-      "yacPerRec": 6.6,
-      "games2026": 4,
+      "seasonBlendNote": "2026: 5g played \u2014 62% 2026 + 25% 2025 + 12% 2024",
+      "yacPerRec": 6.5882,
+      "games2026": 5,
       "blendWeight2026": 1.0,
-      "blendWeight2026PG": 0.5,
+      "blendWeight2026PG": 0.625,
       "usage2026": {
-        "games": 4,
-        "targets": 17,
-        "receptions": 15,
-        "carries": 62,
-        "recYds": 77.0,
-        "rushYds": 231.0,
-        "targShare": 0.1217,
-        "airYdShare": -0.0285,
-        "wopr": 0.1627,
-        "carryShare": 0.6579,
-        "recYdsPG": 19.25,
-        "recsPG": 3.75,
-        "rushYdsPG": 57.75,
-        "aDOT": -1.8235,
-        "catchRate": 0.8824,
-        "yacPerRec": 6.6,
-        "ypc": 3.7258,
-        "snapShare": 0.7525,
-        "rzTargetShare": 0.125,
-        "rzCarryShare": 0.731,
-        "breakawayRate": 0.048,
-        "pbp_carries": 62,
-        "rz_carries": 19,
+        "games": 5,
+        "targets": 20,
+        "receptions": 17,
+        "carries": 74,
+        "recYds": 94.0,
+        "rushYds": 276.0,
+        "targShare": 0.1117,
+        "airYdShare": -0.02,
+        "wopr": 0.1535,
+        "carryShare": 0.7109,
+        "recYdsPG": 18.8,
+        "recsPG": 3.4,
+        "rushYdsPG": 55.2,
+        "aDOT": -1.3,
+        "catchRate": 0.85,
+        "yacPerRec": 6.5882,
+        "ypc": 3.7297,
+        "snapShare": 0.772,
+        "rzTargetShare": 0.107,
+        "rzCarryShare": 0.75,
+        "breakawayRate": 0.054,
+        "pbp_carries": 74,
+        "rz_carries": 21,
         "rz_tgts": 3
       },
       "usageBaseline": {
@@ -13668,7 +13683,7 @@
         "rzTargetShare": 0.106,
         "rzCarryShare": 0.6
       },
-      "usageNote": "2026: 4g \u2014 100% 2026 + 0% 2025 baseline"
+      "usageNote": "2026: 5g \u2014 100% 2026 + 0% 2025 baseline"
     },
     "Hunter Long": {
       "name": "Hunter Long",
@@ -14064,13 +14079,13 @@
       "rushTDsPG": 0.0,
       "recYdsPG": 0.8,
       "recsPG": 0.2,
-      "targShare": 0.0149,
+      "targShare": 0.0135,
       "rushEPA": -2.98170059034601,
       "ypc": 2.8707,
       "catchRate": 0.6543,
-      "carryShare": 0.09,
+      "carryShare": 0.085,
       "breakawayRate": 0.0,
-      "rzCarryShare": 0.0042,
+      "rzCarryShare": 0.004,
       "rzTargetShare": 0.011,
       "snapShare": 0.115,
       "depthRank": 2,
@@ -14089,29 +14104,29 @@
       },
       "seasonBlendNote": "2026: 2g played \u2014 25% 2026 + 50% 2025 + 25% 2024",
       "yacPerRec": 1.0,
-      "games2026": 2,
-      "blendWeight2026": 0.5,
-      "blendWeight2026PG": 0.25,
+      "games2026": 3,
+      "blendWeight2026": 0.75,
+      "blendWeight2026PG": 0.375,
       "usage2026": {
-        "games": 2,
+        "games": 3,
         "targets": 2,
         "receptions": 1,
         "carries": 9,
         "recYds": -5.0,
         "rushYds": 34.0,
-        "targShare": 0.0241,
-        "airYdShare": -0.013,
-        "wopr": 0.0271,
-        "carryShare": 0.16,
-        "recYdsPG": -2.5,
-        "recsPG": 0.5,
-        "rushYdsPG": 17.0,
+        "targShare": 0.0161,
+        "airYdShare": -0.0086,
+        "wopr": 0.0181,
+        "carryShare": 0.1067,
+        "recYdsPG": -1.6667,
+        "recsPG": 0.3333,
+        "rushYdsPG": 11.3333,
         "aDOT": -3.5,
         "catchRate": 0.5,
         "yacPerRec": 1.0,
         "ypc": 3.7778,
-        "snapShare": 0.18,
-        "rzCarryShare": 0.038,
+        "snapShare": 0.1367,
+        "rzCarryShare": 0.036,
         "breakawayRate": 0.0,
         "pbp_carries": 9,
         "rz_carries": 1
@@ -14125,7 +14140,7 @@
         "breakawayRate": 0.0,
         "rzCarryShare": 0.0
       },
-      "usageNote": "2026: 2g \u2014 50% 2026 + 50% 2025 baseline"
+      "usageNote": "2026: 3g \u2014 75% 2026 + 25% 2025 baseline"
     },
     "Bam Knight": {
       "name": "Bam Knight",
@@ -14605,55 +14620,55 @@
       "recYdsPG": 84.05882352941177,
       "recsPG": 5.470588235294118,
       "recTDsPG": 0.5294117647058824,
-      "targShare": 0.2007,
-      "airYdShare": 0.3129,
-      "wopr": 0.5201,
+      "targShare": 0.2225,
+      "airYdShare": 0.3217,
+      "wopr": 0.5589,
       "recEPA": 88.7427112801041,
       "rushYdsPG": 0.0,
       "ypr": 15.365591397849462,
-      "catchRate": 0.6598,
-      "aDOT": 11.7415,
-      "yacPerRec": 3.8085,
-      "rzTargetShare": 0.1883,
-      "snapShare": 0.8275,
+      "catchRate": 0.6662,
+      "aDOT": 11.353,
+      "yacPerRec": 4.0147,
+      "rzTargetShare": 0.1993,
+      "snapShare": 0.838,
       "depthRank": 2,
       "depthPos": "WR",
       "team2026": "DAL",
       "usageSource": "blended_2026",
-      "rushYdsPG_seasonBlended": -0.1,
-      "recYdsPG_seasonBlended": 66.9,
-      "recsPG_seasonBlended": 4.8,
+      "rushYdsPG_seasonBlended": -0.0,
+      "recYdsPG_seasonBlended": 73.4,
+      "recsPG_seasonBlended": 5.3,
       "seasonBlendWeights": {
-        "current": 0.5,
-        "prior1": 0.333,
-        "prior2": 0.167,
-        "games": 4,
+        "current": 0.625,
+        "prior1": 0.25,
+        "prior2": 0.125,
+        "games": 5,
         "hasPrior2Data": true
       },
-      "seasonBlendNote": "2026: 4g played \u2014 50% 2026 + 33% 2025 + 17% 2024",
-      "games2026": 4,
+      "seasonBlendNote": "2026: 5g played \u2014 62% 2026 + 25% 2025 + 12% 2024",
+      "games2026": 5,
       "blendWeight2026": 1.0,
-      "blendWeight2026PG": 0.5,
+      "blendWeight2026PG": 0.625,
       "usage2026": {
-        "games": 4,
-        "targets": 28,
-        "receptions": 18,
+        "games": 5,
+        "targets": 41,
+        "receptions": 27,
         "carries": 0,
-        "recYds": 225.0,
+        "recYds": 355.0,
         "rushYds": 0.0,
-        "targShare": 0.2007,
-        "airYdShare": 0.3129,
-        "wopr": 0.5201,
+        "targShare": 0.2225,
+        "airYdShare": 0.3217,
+        "wopr": 0.5589,
         "carryShare": 0.0,
-        "recYdsPG": 56.25,
-        "recsPG": 4.5,
+        "recYdsPG": 71.0,
+        "recsPG": 5.4,
         "rushYdsPG": 0.0,
-        "aDOT": 12.1429,
-        "catchRate": 0.6429,
-        "yacPerRec": 1.9444,
-        "snapShare": 0.8275,
-        "rzTargetShare": 0.125,
-        "rz_tgts": 3
+        "aDOT": 11.3902,
+        "catchRate": 0.6585,
+        "yacPerRec": 2.963,
+        "snapShare": 0.838,
+        "rzTargetShare": 0.179,
+        "rz_tgts": 5
       },
       "usageBaseline": {
         "targShare": 0.2257,
@@ -14665,7 +14680,7 @@
         "yacPerRec": 5.1505,
         "rzTargetShare": 0.212
       },
-      "usageNote": "2026: 4g \u2014 100% 2026 + 0% 2025 baseline"
+      "usageNote": "2026: 5g \u2014 100% 2026 + 0% 2025 baseline"
     },
     "James Cook": {
       "name": "James Cook",
@@ -15568,7 +15583,7 @@
       "breakawayRate": 0.077,
       "rzCarryShare": 0.089,
       "snapShare": 0.208,
-      "depthRank": 4,
+      "depthRank": 3,
       "depthPos": "RB",
       "team2026": "DAL",
       "usageSource": "baseline"
@@ -16225,59 +16240,59 @@
       "recYdsPG": 26.4,
       "recsPG": 1.7333333333333334,
       "recTDsPG": 0.13333333333333333,
-      "targShare": 0.0208,
-      "airYdShare": 0.0146,
-      "wopr": 0.0415,
+      "targShare": 0.0357,
+      "airYdShare": 0.0268,
+      "wopr": 0.0724,
       "recEPA": 16.7210022878972,
       "rushYdsPG": 5.933333333333334,
       "ypr": 15.23076923076923,
-      "catchRate": 0.6823,
-      "aDOT": 8.5367,
-      "yacPerRec": 8.1026,
+      "catchRate": 0.6595,
+      "aDOT": 8.3133,
+      "yacPerRec": 7.7507,
       "carryShare": 0.037,
       "breakawayRate": 0.059,
       "rzCarryShare": 0.0,
-      "rzTargetShare": 0.0438,
-      "snapShare": 0.1225,
+      "rzTargetShare": 0.0431,
+      "snapShare": 0.178,
       "depthRank": 4,
       "depthPos": "WR",
       "team2026": "DAL",
       "usageSource": "blended_2026",
-      "rushYdsPG_seasonBlended": 4.1,
-      "recYdsPG_seasonBlended": 15.0,
-      "recsPG_seasonBlended": 1.1,
+      "rushYdsPG_seasonBlended": 3.4,
+      "recYdsPG_seasonBlended": 14.6,
+      "recsPG_seasonBlended": 1.2,
       "seasonBlendWeights": {
-        "current": 0.5,
-        "prior1": 0.333,
-        "prior2": 0.167,
-        "games": 4,
+        "current": 0.625,
+        "prior1": 0.25,
+        "prior2": 0.125,
+        "games": 5,
         "hasPrior2Data": true
       },
-      "seasonBlendNote": "2026: 4g played \u2014 50% 2026 + 33% 2025 + 17% 2024",
-      "games2026": 4,
+      "seasonBlendNote": "2026: 5g played \u2014 62% 2026 + 25% 2025 + 12% 2024",
+      "games2026": 5,
       "blendWeight2026": 1.0,
-      "blendWeight2026PG": 0.5,
+      "blendWeight2026PG": 0.625,
       "usage2026": {
-        "games": 4,
-        "targets": 3,
-        "receptions": 2,
+        "games": 5,
+        "targets": 7,
+        "receptions": 4,
         "carries": 2,
-        "recYds": 17.0,
+        "recYds": 39.0,
         "rushYds": 10.0,
-        "targShare": 0.0208,
-        "airYdShare": 0.0146,
-        "wopr": 0.0415,
-        "carryShare": 0.0202,
-        "recYdsPG": 4.25,
-        "recsPG": 0.5,
-        "rushYdsPG": 2.5,
-        "aDOT": 5.3333,
-        "catchRate": 0.6667,
-        "yacPerRec": 6.5,
+        "targShare": 0.0357,
+        "airYdShare": 0.0268,
+        "wopr": 0.0724,
+        "carryShare": 0.0162,
+        "recYdsPG": 7.8,
+        "recsPG": 0.8,
+        "rushYdsPG": 2.0,
+        "aDOT": 6.1429,
+        "catchRate": 0.5714,
+        "yacPerRec": 4.75,
         "ypc": 5.0,
-        "snapShare": 0.1225,
-        "rzTargetShare": 0.042,
-        "rzCarryShare": 0.077,
+        "snapShare": 0.178,
+        "rzTargetShare": 0.036,
+        "rzCarryShare": 0.071,
         "breakawayRate": 0.0,
         "pbp_carries": 2,
         "rz_carries": 2,
@@ -16293,7 +16308,7 @@
         "yacPerRec": 8.2308,
         "rzTargetShare": 0.044
       },
-      "usageNote": "2026: 4g \u2014 100% 2026 + 0% 2025 baseline"
+      "usageNote": "2026: 5g \u2014 100% 2026 + 0% 2025 baseline"
     },
     "Jeremy Ruckert": {
       "name": "Jeremy Ruckert",
@@ -16750,57 +16765,57 @@
       "recYdsPG": 35.294117647058826,
       "recsPG": 4.823529411764706,
       "recTDsPG": 0.47058823529411764,
-      "targShare": 0.1034,
-      "airYdShare": 0.0629,
-      "wopr": 0.1992,
+      "targShare": 0.1113,
+      "airYdShare": 0.0666,
+      "wopr": 0.2136,
       "recEPA": 19.060186915451,
       "rushYdsPG": 0.058823529411764705,
       "ypr": 7.317073170731708,
-      "catchRate": 0.8025,
-      "aDOT": 4.5355,
-      "yacPerRec": 3.3405,
+      "catchRate": 0.763,
+      "aDOT": 4.5744,
+      "yacPerRec": 3.4899,
       "carryShare": 0.002,
       "breakawayRate": 0.0,
       "rzCarryShare": 0.0,
-      "rzTargetShare": 0.203,
-      "snapShare": 0.69,
+      "rzTargetShare": 0.195,
+      "snapShare": 0.718,
       "depthRank": 1,
       "depthPos": "TE",
       "team2026": "DAL",
       "usageSource": "blended_2026",
       "rushYdsPG_seasonBlended": 0.0,
-      "recYdsPG_seasonBlended": 28.0,
-      "recsPG_seasonBlended": 3.8,
+      "recYdsPG_seasonBlended": 26.0,
+      "recsPG_seasonBlended": 3.6,
       "seasonBlendWeights": {
-        "current": 0.5,
-        "prior1": 0.333,
-        "prior2": 0.167,
-        "games": 4,
+        "current": 0.625,
+        "prior1": 0.25,
+        "prior2": 0.125,
+        "games": 5,
         "hasPrior2Data": true
       },
-      "seasonBlendNote": "2026: 4g played \u2014 50% 2026 + 33% 2025 + 17% 2024",
-      "games2026": 4,
+      "seasonBlendNote": "2026: 5g played \u2014 62% 2026 + 25% 2025 + 12% 2024",
+      "games2026": 5,
       "blendWeight2026": 1.0,
-      "blendWeight2026PG": 0.5,
+      "blendWeight2026PG": 0.625,
       "usage2026": {
-        "games": 4,
-        "targets": 15,
-        "receptions": 12,
+        "games": 5,
+        "targets": 21,
+        "receptions": 15,
         "carries": 0,
-        "recYds": 83.0,
+        "recYds": 102.0,
         "rushYds": 0.0,
-        "targShare": 0.1034,
-        "airYdShare": 0.0629,
-        "wopr": 0.1992,
+        "targShare": 0.1113,
+        "airYdShare": 0.0666,
+        "wopr": 0.2136,
         "carryShare": 0.0,
-        "recYdsPG": 20.75,
+        "recYdsPG": 20.4,
         "recsPG": 3.0,
         "rushYdsPG": 0.0,
-        "aDOT": 4.3333,
-        "catchRate": 0.8,
-        "yacPerRec": 2.5,
-        "snapShare": 0.69,
-        "rzTargetShare": 0.167,
+        "aDOT": 4.4762,
+        "catchRate": 0.7143,
+        "yacPerRec": 3.0667,
+        "snapShare": 0.718,
+        "rzTargetShare": 0.143,
         "rz_tgts": 4
       },
       "usageBaseline": {
@@ -16813,7 +16828,7 @@
         "yacPerRec": 3.7439,
         "rzTargetShare": 0.221
       },
-      "usageNote": "2026: 4g \u2014 100% 2026 + 0% 2025 baseline"
+      "usageNote": "2026: 5g \u2014 100% 2026 + 0% 2025 baseline"
     },
     "Charlie Kolar": {
       "name": "Charlie Kolar",
@@ -17327,54 +17342,54 @@
       "recYdsPG": 38.13333333333333,
       "recsPG": 3.933333333333333,
       "recTDsPG": 0.06666666666666667,
-      "targShare": 0.1923,
-      "airYdShare": 0.1723,
-      "wopr": 0.409,
+      "targShare": 0.1858,
+      "airYdShare": 0.1818,
+      "wopr": 0.406,
       "recEPA": 3.08032558020279,
       "rushYdsPG": 0.0,
       "ypr": 9.694915254237289,
-      "catchRate": 0.6919,
-      "aDOT": 6.0484,
-      "yacPerRec": 6.2983,
-      "rzTargetShare": 0.0882,
-      "snapShare": 0.94,
+      "catchRate": 0.6963,
+      "aDOT": 6.0446,
+      "yacPerRec": 6.0914,
+      "rzTargetShare": 0.0846,
+      "snapShare": 0.936,
       "depthRank": 1,
       "depthPos": "TE",
       "team2026": "TB",
       "usageSource": "blended_2026",
       "rushYdsPG_seasonBlended": -0.0,
-      "recYdsPG_seasonBlended": 39.5,
-      "recsPG_seasonBlended": 3.9,
+      "recYdsPG_seasonBlended": 37.6,
+      "recsPG_seasonBlended": 3.8,
       "seasonBlendWeights": {
-        "current": 0.5,
-        "prior1": 0.333,
-        "prior2": 0.167,
-        "games": 4,
+        "current": 0.625,
+        "prior1": 0.25,
+        "prior2": 0.125,
+        "games": 5,
         "hasPrior2Data": true
       },
-      "seasonBlendNote": "2026: 4g played \u2014 50% 2026 + 33% 2025 + 17% 2024",
-      "games2026": 4,
+      "seasonBlendNote": "2026: 5g played \u2014 62% 2026 + 25% 2025 + 12% 2024",
+      "games2026": 5,
       "blendWeight2026": 1.0,
-      "blendWeight2026PG": 0.5,
+      "blendWeight2026PG": 0.625,
       "usage2026": {
-        "games": 4,
-        "targets": 23,
-        "receptions": 15,
+        "games": 5,
+        "targets": 27,
+        "receptions": 18,
         "carries": 0,
-        "recYds": 157.0,
+        "recYds": 182.0,
         "rushYds": 0.0,
-        "targShare": 0.1923,
-        "airYdShare": 0.1723,
-        "wopr": 0.409,
+        "targShare": 0.1858,
+        "airYdShare": 0.1818,
+        "wopr": 0.406,
         "carryShare": 0.0,
-        "recYdsPG": 39.25,
-        "recsPG": 3.75,
+        "recYdsPG": 36.4,
+        "recsPG": 3.6,
         "rushYdsPG": 0.0,
-        "aDOT": 7.0,
-        "catchRate": 0.6522,
-        "yacPerRec": 8.0667,
-        "snapShare": 0.94,
-        "rzTargetShare": 0.105,
+        "aDOT": 6.8519,
+        "catchRate": 0.6667,
+        "yacPerRec": 7.2778,
+        "snapShare": 0.936,
+        "rzTargetShare": 0.087,
         "rz_tgts": 2
       },
       "usageBaseline": {
@@ -17387,7 +17402,7 @@
         "yacPerRec": 5.2373,
         "rzTargetShare": 0.084
       },
-      "usageNote": "2026: 4g \u2014 100% 2026 + 0% 2025 baseline"
+      "usageNote": "2026: 5g \u2014 100% 2026 + 0% 2025 baseline"
     },
     "Kenneth Walker III": {
       "name": "Kenneth Walker III",
@@ -17710,7 +17725,7 @@
       },
       "seasonBlendNote": "2026: 4g played \u2014 50% 2026 + 33% 2025 + 17% 2024",
       "yacPerRec": 4.8889,
-      "rzTargetShare": 0.0203,
+      "rzTargetShare": 0.0212,
       "games2026": 4,
       "blendWeight2026": 1.0,
       "blendWeight2026PG": 0.5,
@@ -17747,7 +17762,7 @@
         "catchRate": 0.75,
         "ypc": 5.7797,
         "breakawayRate": 0.102,
-        "rzTargetShare": 0.0145,
+        "rzTargetShare": 0.0155,
         "rzCarryShare": 0.132
       },
       "usageNote": "2026: 4g \u2014 100% 2026 + 0% 2025 baseline"
@@ -17995,53 +18010,53 @@
       "recYdsPG": 9.428571428571429,
       "recsPG": 1.0,
       "recTDsPG": 0.0,
-      "targShare": 0.0146,
-      "airYdShare": 0.0152,
-      "wopr": 0.0325,
+      "targShare": 0.0164,
+      "airYdShare": 0.015,
+      "wopr": 0.0351,
       "recEPA": 3.64015665097395,
       "rushYdsPG": 0.0,
       "ypr": 9.428571428571429,
-      "catchRate": 0.6377,
-      "aDOT": 7.3092,
-      "yacPerRec": 5.5344,
+      "catchRate": 0.6506,
+      "aDOT": 7.2267,
+      "yacPerRec": 5.4796,
       "rzTargetShare": 0.018,
-      "snapShare": 0.2025,
+      "snapShare": 0.178,
       "depthRank": 3,
       "depthPos": "TE",
       "team2026": "DAL",
       "usageSource": "blended_2026",
       "rushYdsPG_seasonBlended": 0.0,
-      "recYdsPG_seasonBlended": 12.4,
-      "recsPG_seasonBlended": 1.3,
+      "recYdsPG_seasonBlended": 11.9,
+      "recsPG_seasonBlended": 1.2,
       "seasonBlendWeights": {
-        "current": 0.25,
-        "prior1": 0.5,
-        "prior2": 0.25,
-        "games": 2,
+        "current": 0.375,
+        "prior1": 0.417,
+        "prior2": 0.208,
+        "games": 3,
         "hasPrior2Data": true
       },
-      "seasonBlendNote": "2026: 2g played \u2014 25% 2026 + 50% 2025 + 25% 2024",
-      "games2026": 4,
+      "seasonBlendNote": "2026: 3g played \u2014 38% 2026 + 42% 2025 + 21% 2024",
+      "games2026": 5,
       "blendWeight2026": 1.0,
-      "blendWeight2026PG": 0.5,
+      "blendWeight2026PG": 0.625,
       "usage2026": {
-        "games": 4,
-        "targets": 2,
-        "receptions": 2,
+        "games": 5,
+        "targets": 3,
+        "receptions": 3,
         "carries": 0,
-        "recYds": 21.0,
+        "recYds": 30.0,
         "rushYds": 0.0,
-        "targShare": 0.0146,
-        "airYdShare": 0.0152,
-        "wopr": 0.0325,
+        "targShare": 0.0164,
+        "airYdShare": 0.015,
+        "wopr": 0.0351,
         "carryShare": 0.0,
-        "recYdsPG": 5.25,
-        "recsPG": 0.5,
+        "recYdsPG": 6.0,
+        "recsPG": 0.6,
         "rushYdsPG": 0.0,
-        "aDOT": 9.0,
+        "aDOT": 7.6667,
         "catchRate": 1.0,
-        "yacPerRec": 1.5,
-        "snapShare": 0.2025
+        "yacPerRec": 2.3333,
+        "snapShare": 0.178
       },
       "usageBaseline": {
         "targShare": 0.0379,
@@ -18052,7 +18067,7 @@
         "catchRate": 0.6087,
         "yacPerRec": 5.8571
       },
-      "usageNote": "2026: 4g \u2014 100% 2026 + 0% 2025 baseline"
+      "usageNote": "2026: 5g \u2014 100% 2026 + 0% 2025 baseline"
     },
     "Kendre Miller": {
       "name": "Kendre Miller",
@@ -18090,7 +18105,7 @@
       },
       "seasonBlendNote": "2026: 3g played \u2014 38% 2026 + 42% 2025 + 21% 2024",
       "yacPerRec": 2.5,
-      "rzTargetShare": 0.0169,
+      "rzTargetShare": 0.0178,
       "games2026": 3,
       "blendWeight2026": 0.75,
       "blendWeight2026PG": 0.375,
@@ -18127,7 +18142,7 @@
         "catchRate": 1.0,
         "ypc": 4.1064,
         "breakawayRate": 0.021,
-        "rzTargetShare": 0.0145,
+        "rzTargetShare": 0.0155,
         "rzCarryShare": 0.075
       },
       "usageNote": "2026: 3g \u2014 75% 2026 + 25% 2025 baseline"
@@ -19099,12 +19114,9 @@
       "catchRate": 0.65,
       "carryShare": 0.1235,
       "breakawayRate": 0.1013,
-      "rzCarryShare": 0.0896,
+      "rzCarryShare": 0.0893,
       "rzTargetShare": 0.034,
       "snapShare": 0.1785,
-      "depthRank": 3,
-      "depthPos": "RB",
-      "team2026": "DAL",
       "usageSource": "blended_2026",
       "rushYdsPG_seasonBlended": 19.2,
       "recYdsPG_seasonBlended": 6.2,
@@ -19120,6 +19132,7 @@
       "games2026": 2,
       "blendWeight2026": 0.5,
       "blendWeight2026PG": 0.25,
+      "team2026": "DAL",
       "usage2026": {
         "games": 2,
         "targets": 0,
@@ -19136,7 +19149,7 @@
         "rushYdsPG": 7.5,
         "ypc": 3.0,
         "snapShare": 0.125,
-        "rzCarryShare": 0.038,
+        "rzCarryShare": 0.036,
         "breakawayRate": 0.0,
         "pbp_carries": 5,
         "rz_carries": 1
@@ -19190,53 +19203,53 @@
       "rushTDsPG": 0.0,
       "recYdsPG": 7.785714285714286,
       "recsPG": 0.9285714285714286,
-      "targShare": 0.0058,
+      "targShare": 0.0047,
       "rushEPA": -1.59804113929564,
-      "ypc": 4.4167,
+      "ypc": 4.4302,
       "catchRate": 0.8718,
-      "carryShare": 0.0258,
+      "carryShare": 0.036,
       "breakawayRate": 0.0,
       "rzCarryShare": 0.011,
       "rzTargetShare": 0.035,
-      "snapShare": 0.175,
+      "snapShare": 0.164,
       "usageSource": "blended_2026",
-      "rushYdsPG_seasonBlended": 3.7,
-      "recYdsPG_seasonBlended": 5.1,
-      "recsPG_seasonBlended": 0.7,
+      "rushYdsPG_seasonBlended": 3.8,
+      "recYdsPG_seasonBlended": 4.2,
+      "recsPG_seasonBlended": 0.6,
       "seasonBlendWeights": {
-        "current": 0.375,
-        "prior1": 0.417,
-        "prior2": 0.208,
-        "games": 3,
+        "current": 0.5,
+        "prior1": 0.333,
+        "prior2": 0.167,
+        "games": 4,
         "hasPrior2Data": true
       },
-      "seasonBlendNote": "2026: 3g played \u2014 38% 2026 + 42% 2025 + 21% 2024",
-      "games2026": 4,
+      "seasonBlendNote": "2026: 4g played \u2014 50% 2026 + 33% 2025 + 17% 2024",
+      "games2026": 5,
       "blendWeight2026": 1.0,
-      "blendWeight2026PG": 0.5,
+      "blendWeight2026PG": 0.625,
       "team2026": "DAL",
       "usage2026": {
-        "games": 4,
+        "games": 5,
         "targets": 1,
         "receptions": 1,
-        "carries": 2,
+        "carries": 3,
         "recYds": 2.0,
-        "rushYds": 8.0,
-        "targShare": 0.0058,
-        "airYdShare": 0.0019,
-        "wopr": 0.0101,
-        "carryShare": 0.0258,
-        "recYdsPG": 0.5,
-        "recsPG": 0.25,
-        "rushYdsPG": 2.0,
+        "rushYds": 13.0,
+        "targShare": 0.0047,
+        "airYdShare": 0.0015,
+        "wopr": 0.0081,
+        "carryShare": 0.036,
+        "recYdsPG": 0.4,
+        "recsPG": 0.2,
+        "rushYdsPG": 2.6,
         "aDOT": 2.0,
         "catchRate": 1.0,
         "yacPerRec": 0.0,
-        "ypc": 4.0,
-        "snapShare": 0.175,
+        "ypc": 4.3333,
+        "snapShare": 0.164,
         "rzCarryShare": 0.0,
         "breakawayRate": 0.0,
-        "pbp_carries": 2,
+        "pbp_carries": 3,
         "rz_carries": 0
       },
       "usageBaseline": {
@@ -19247,7 +19260,7 @@
         "ypc": 4.4375,
         "breakawayRate": 0.0
       },
-      "usageNote": "2026: 4g \u2014 100% 2026 + 0% 2025 baseline"
+      "usageNote": "2026: 5g \u2014 100% 2026 + 0% 2025 baseline"
     },
     "Nate Adkins": {
       "name": "Nate Adkins",
@@ -19801,53 +19814,53 @@
       "rushTDsPG": 0.4117647058823529,
       "recYdsPG": 2.0,
       "recsPG": 0.47058823529411764,
-      "targShare": 0.0102,
+      "targShare": 0.0051,
       "rushEPA": -3.65632613620567,
-      "ypc": 3.6939,
+      "ypc": 3.6841,
       "catchRate": 0.7272727272727273,
-      "carryShare": 0.1147,
-      "breakawayRate": 0.0326,
-      "rzCarryShare": 0.2698,
+      "carryShare": 0.1015,
+      "breakawayRate": 0.0292,
+      "rzCarryShare": 0.2507,
       "rzTargetShare": 0.036,
-      "snapShare": 0.094,
+      "snapShare": 0.0795,
       "depthRank": 3,
       "depthPos": "RB",
       "team2026": "TB",
       "usageSource": "blended_2026",
-      "rushYdsPG_seasonBlended": 17.5,
-      "recYdsPG_seasonBlended": 3.0,
+      "rushYdsPG_seasonBlended": 17.4,
+      "recYdsPG_seasonBlended": 2.6,
       "recsPG_seasonBlended": 0.4,
       "seasonBlendWeights": {
-        "current": 0.125,
-        "prior1": 0.583,
-        "prior2": 0.292,
-        "games": 1,
+        "current": 0.25,
+        "prior1": 0.5,
+        "prior2": 0.25,
+        "games": 2,
         "hasPrior2Data": true
       },
-      "seasonBlendNote": "2026: 1g played \u2014 12% 2026 + 58% 2025 + 29% 2024",
-      "games2026": 2,
-      "blendWeight2026": 0.5,
-      "blendWeight2026PG": 0.25,
+      "seasonBlendNote": "2026: 2g played \u2014 25% 2026 + 50% 2025 + 25% 2024",
+      "games2026": 3,
+      "blendWeight2026": 0.75,
+      "blendWeight2026PG": 0.375,
       "usage2026": {
-        "games": 2,
+        "games": 3,
         "targets": 0,
         "receptions": 0,
-        "carries": 3,
+        "carries": 8,
         "recYds": 0.0,
-        "rushYds": 10.0,
+        "rushYds": 28.0,
         "targShare": 0.0,
         "airYdShare": 0.0,
         "wopr": 0.0,
-        "carryShare": 0.0484,
+        "carryShare": 0.075,
         "recYdsPG": 0.0,
         "recsPG": 0.0,
-        "rushYdsPG": 5.0,
-        "ypc": 3.3333,
-        "snapShare": 0.03,
-        "rzCarryShare": 0.2,
+        "rushYdsPG": 9.3333,
+        "ypc": 3.5,
+        "snapShare": 0.0533,
+        "rzCarryShare": 0.16,
         "breakawayRate": 0.0,
-        "pbp_carries": 3,
-        "rz_carries": 3
+        "pbp_carries": 8,
+        "rz_carries": 4
       },
       "usageBaseline": {
         "targShare": 0.0203,
@@ -19857,7 +19870,7 @@
         "breakawayRate": 0.035,
         "rzCarryShare": 0.296
       },
-      "usageNote": "2026: 2g \u2014 50% 2026 + 50% 2025 baseline"
+      "usageNote": "2026: 3g \u2014 75% 2026 + 25% 2025 baseline"
     },
     "Dylan Drummond": {
       "name": "Dylan Drummond",
@@ -21194,7 +21207,7 @@
       },
       "seasonBlendNote": "2026: 4g played \u2014 50% 2026 + 33% 2025 + 17% 2024",
       "yacPerRec": 9.1429,
-      "rzTargetShare": 0.0182,
+      "rzTargetShare": 0.0191,
       "games2026": 4,
       "blendWeight2026": 1.0,
       "blendWeight2026PG": 0.5,
@@ -21231,7 +21244,7 @@
         "catchRate": 1.0,
         "ypc": 3.3182,
         "breakawayRate": 0.0,
-        "rzTargetShare": 0.0145,
+        "rzTargetShare": 0.0155,
         "rzCarryShare": 0.05
       },
       "usageNote": "2026: 4g \u2014 100% 2026 + 0% 2025 baseline"
@@ -21610,59 +21623,59 @@
       "rushTDsPG": 0.1,
       "recYdsPG": 27.7,
       "recsPG": 3.0,
-      "targShare": 0.1237,
+      "targShare": 0.123,
       "rushEPA": -35.5774122046528,
-      "ypc": 3.9266,
-      "catchRate": 0.8607,
-      "carryShare": 0.5776,
-      "breakawayRate": 0.0201,
-      "rzCarryShare": 0.2844,
-      "rzTargetShare": 0.1023,
-      "snapShare": 0.625,
+      "ypc": 4.6321,
+      "catchRate": 0.8472,
+      "carryShare": 0.5698,
+      "breakawayRate": 0.0335,
+      "rzCarryShare": 0.3896,
+      "rzTargetShare": 0.113,
+      "snapShare": 0.608,
       "depthRank": 1,
       "depthPos": "RB",
       "team2026": "TB",
       "usageSource": "blended_2026",
-      "rushYdsPG_seasonBlended": 60.7,
-      "recYdsPG_seasonBlended": 20.7,
-      "recsPG_seasonBlended": 3.1,
+      "rushYdsPG_seasonBlended": 73.7,
+      "recYdsPG_seasonBlended": 18.7,
+      "recsPG_seasonBlended": 3.0,
       "seasonBlendWeights": {
-        "current": 0.5,
-        "prior1": 0.333,
-        "prior2": 0.167,
-        "games": 4,
+        "current": 0.625,
+        "prior1": 0.25,
+        "prior2": 0.125,
+        "games": 5,
         "hasPrior2Data": true
       },
-      "seasonBlendNote": "2026: 4g played \u2014 50% 2026 + 33% 2025 + 17% 2024",
-      "yacPerRec": 7.5385,
-      "games2026": 4,
+      "seasonBlendNote": "2026: 5g played \u2014 62% 2026 + 25% 2025 + 12% 2024",
+      "yacPerRec": 7.4667,
+      "games2026": 5,
       "blendWeight2026": 1.0,
-      "blendWeight2026PG": 0.5,
+      "blendWeight2026PG": 0.625,
       "usage2026": {
-        "games": 4,
-        "targets": 15,
-        "receptions": 13,
-        "carries": 56,
-        "recYds": 61.0,
-        "rushYds": 241.0,
-        "targShare": 0.1237,
-        "airYdShare": -0.0479,
-        "wopr": 0.152,
-        "carryShare": 0.5776,
-        "recYdsPG": 15.25,
-        "recsPG": 3.25,
-        "rushYdsPG": 60.25,
-        "aDOT": -2.2,
-        "catchRate": 0.8667,
-        "yacPerRec": 7.5385,
-        "ypc": 4.3036,
-        "snapShare": 0.625,
-        "rzTargetShare": 0.211,
-        "rzCarryShare": 0.333,
-        "breakawayRate": 0.018,
-        "pbp_carries": 56,
-        "rz_carries": 5,
-        "rz_tgts": 4
+        "games": 5,
+        "targets": 18,
+        "receptions": 15,
+        "carries": 77,
+        "recYds": 71.0,
+        "rushYds": 406.0,
+        "targShare": 0.123,
+        "airYdShare": -0.0365,
+        "wopr": 0.1589,
+        "carryShare": 0.5698,
+        "recYdsPG": 14.2,
+        "recsPG": 3.0,
+        "rushYdsPG": 81.2,
+        "aDOT": -1.7778,
+        "catchRate": 0.8333,
+        "yacPerRec": 7.4667,
+        "ypc": 5.2727,
+        "snapShare": 0.608,
+        "rzTargetShare": 0.217,
+        "rzCarryShare": 0.48,
+        "breakawayRate": 0.039,
+        "pbp_carries": 77,
+        "rz_carries": 12,
+        "rz_tgts": 5
       },
       "usageBaseline": {
         "targShare": 0.0647,
@@ -21674,7 +21687,7 @@
         "rzTargetShare": 0.048,
         "rzCarryShare": 0.254
       },
-      "usageNote": "2026: 4g \u2014 100% 2026 + 0% 2025 baseline"
+      "usageNote": "2026: 5g \u2014 100% 2026 + 0% 2025 baseline"
     },
     "Audric Estim\u00e9": {
       "name": "Audric Estim\u00e9",
@@ -22022,58 +22035,58 @@
       "recYdsPG": 31.666666666666668,
       "recsPG": 2.6666666666666665,
       "recTDsPG": 0.26666666666666666,
-      "targShare": 0.1608,
-      "airYdShare": 0.1116,
-      "wopr": 0.3193,
+      "targShare": 0.1477,
+      "airYdShare": 0.1174,
+      "wopr": 0.3037,
       "recEPA": 28.6348330703759,
       "rushYdsPG": 1.6666666666666667,
       "ypr": 11.875,
-      "catchRate": 0.6429,
-      "aDOT": 6.8966,
-      "yacPerRec": 5.0395,
+      "catchRate": 0.6511,
+      "aDOT": 7.3276,
+      "yacPerRec": 5.7195,
       "carryShare": 0.009,
       "breakawayRate": 0.0,
       "rzCarryShare": 0.0,
-      "rzTargetShare": 0.1182,
-      "snapShare": 0.7175,
+      "rzTargetShare": 0.1271,
+      "snapShare": 0.71,
       "depthRank": 3,
       "depthPos": "WR",
       "team2026": "DAL",
       "usageSource": "blended_2026",
-      "rushYdsPG_seasonBlended": 0.6,
-      "recYdsPG_seasonBlended": 25.4,
-      "recsPG_seasonBlended": 2.7,
+      "rushYdsPG_seasonBlended": 0.4,
+      "recYdsPG_seasonBlended": 33.6,
+      "recsPG_seasonBlended": 2.8,
       "seasonBlendWeights": {
-        "current": 0.5,
-        "prior1": 0.333,
-        "prior2": 0.167,
-        "games": 4,
+        "current": 0.625,
+        "prior1": 0.25,
+        "prior2": 0.125,
+        "games": 5,
         "hasPrior2Data": true
       },
-      "seasonBlendNote": "2026: 4g played \u2014 50% 2026 + 33% 2025 + 17% 2024",
-      "games2026": 4,
+      "seasonBlendNote": "2026: 5g played \u2014 62% 2026 + 25% 2025 + 12% 2024",
+      "games2026": 5,
       "blendWeight2026": 1.0,
-      "blendWeight2026PG": 0.5,
+      "blendWeight2026PG": 0.625,
       "usage2026": {
-        "games": 4,
-        "targets": 23,
-        "receptions": 13,
+        "games": 5,
+        "targets": 27,
+        "receptions": 16,
         "carries": 0,
-        "recYds": 104.0,
+        "recYds": 194.0,
         "rushYds": 0.0,
-        "targShare": 0.1608,
-        "airYdShare": 0.1116,
-        "wopr": 0.3193,
+        "targShare": 0.1477,
+        "airYdShare": 0.1174,
+        "wopr": 0.3037,
         "carryShare": 0.0,
-        "recYdsPG": 26.0,
-        "recsPG": 3.25,
+        "recYdsPG": 38.8,
+        "recsPG": 3.2,
         "rushYdsPG": 0.0,
-        "aDOT": 5.3478,
-        "catchRate": 0.5652,
-        "yacPerRec": 4.9231,
-        "snapShare": 0.7175,
-        "rzTargetShare": 0.208,
-        "rz_tgts": 5
+        "aDOT": 6.4074,
+        "catchRate": 0.5926,
+        "yacPerRec": 6.6875,
+        "snapShare": 0.71,
+        "rzTargetShare": 0.214,
+        "rz_tgts": 6
       },
       "usageBaseline": {
         "targShare": 0.0923,
@@ -22085,7 +22098,7 @@
         "yacPerRec": 5.1,
         "rzTargetShare": 0.062
       },
-      "usageNote": "2026: 4g \u2014 100% 2026 + 0% 2025 baseline"
+      "usageNote": "2026: 5g \u2014 100% 2026 + 0% 2025 baseline"
     },
     "Devaughn Vele": {
       "name": "Devaughn Vele",
@@ -22349,64 +22362,63 @@
       "recYdsPG": 5.625,
       "recsPG": 0.5625,
       "recTDsPG": 0.0625,
-      "targShare": 0.0287,
-      "airYdShare": 0.0048,
-      "wopr": 0.0464,
+      "targShare": 0.0325,
+      "airYdShare": -0.0007,
+      "wopr": 0.0483,
       "recEPA": -0.64272227382753,
       "rushYdsPG": 0.0,
       "ypr": 10.0,
-      "catchRate": 0.7003,
-      "aDOT": 7.3024,
+      "catchRate": 0.6551,
+      "aDOT": 8.23076923076923,
       "yacPerRec": 4.1667,
       "rzTargetShare": 0.018,
-      "snapShare": 0.345,
+      "snapShare": 0.342,
       "depthRank": 2,
       "depthPos": "TE",
       "team2026": "DAL",
       "usageSource": "blended_2026",
       "rushYdsPG_seasonBlended": 0.0,
-      "recYdsPG_seasonBlended": 7.3,
-      "recsPG_seasonBlended": 0.7,
+      "recYdsPG_seasonBlended": 6.5,
+      "recsPG_seasonBlended": 0.6,
       "seasonBlendWeights": {
-        "current": 0.5,
-        "prior1": 0.333,
-        "prior2": 0.167,
-        "games": 4,
+        "current": 0.625,
+        "prior1": 0.25,
+        "prior2": 0.125,
+        "games": 5,
         "hasPrior2Data": true
       },
-      "seasonBlendNote": "2026: 4g played \u2014 50% 2026 + 33% 2025 + 17% 2024",
-      "games2026": 4,
+      "seasonBlendNote": "2026: 5g played \u2014 62% 2026 + 25% 2025 + 12% 2024",
+      "games2026": 5,
       "blendWeight2026": 1.0,
-      "blendWeight2026PG": 0.5,
+      "blendWeight2026PG": 0.625,
       "usage2026": {
-        "games": 4,
-        "targets": 4,
+        "games": 5,
+        "targets": 6,
         "receptions": 3,
         "carries": 0,
         "recYds": 33.0,
         "rushYds": 0.0,
-        "targShare": 0.0287,
-        "airYdShare": 0.0048,
-        "wopr": 0.0464,
+        "targShare": 0.0325,
+        "airYdShare": -0.0007,
+        "wopr": 0.0483,
         "carryShare": 0.0,
-        "recYdsPG": 8.25,
-        "recsPG": 0.75,
+        "recYdsPG": 6.6,
+        "recsPG": 0.6,
         "rushYdsPG": 0.0,
-        "aDOT": 1.5,
-        "catchRate": 0.75,
+        "aDOT": -0.3333,
+        "catchRate": 0.5,
         "yacPerRec": 8.3333,
-        "snapShare": 0.345
+        "snapShare": 0.342
       },
       "usageBaseline": {
         "targShare": 0.0214,
         "airYdShare": 0.0211,
         "wopr": 0.0469,
         "snapShare": 0.249,
-        "aDOT": 8.2308,
         "catchRate": 0.6923,
         "yacPerRec": 3.6667
       },
-      "usageNote": "2026: 4g \u2014 100% 2026 + 0% 2025 baseline"
+      "usageNote": "2026: 5g \u2014 100% 2026 + 0% 2025 baseline"
     },
     "British Brooks": {
       "name": "British Brooks",
@@ -24935,63 +24947,63 @@
       "recYdsPG": 55.1764705882353,
       "recsPG": 3.7058823529411766,
       "recTDsPG": 0.35294117647058826,
-      "targShare": 0.1962,
-      "airYdShare": 0.289,
-      "wopr": 0.4965,
+      "targShare": 0.2289,
+      "airYdShare": 0.3614,
+      "wopr": 0.5964,
       "recEPA": 7.14314297718989,
       "rushYdsPG": 0.5294117647058824,
       "ypr": 14.88888888888889,
-      "catchRate": 0.5592,
-      "aDOT": 11.7847,
-      "yacPerRec": 4.8734,
+      "catchRate": 0.5759,
+      "aDOT": 11.1802,
+      "yacPerRec": 4.5856,
       "carryShare": 0.006,
       "breakawayRate": 0.0,
       "rzCarryShare": 0.014,
-      "rzTargetShare": 0.1747,
-      "snapShare": 0.85,
+      "rzTargetShare": 0.1948,
+      "snapShare": 0.858,
       "depthRank": 1,
       "depthPos": "WR",
       "team2026": "TB",
       "usageSource": "blended_2026",
-      "rushYdsPG_seasonBlended": -0.1,
-      "recYdsPG_seasonBlended": 46.8,
-      "recsPG_seasonBlended": 3.7,
+      "rushYdsPG_seasonBlended": 1.6,
+      "recYdsPG_seasonBlended": 44.7,
+      "recsPG_seasonBlended": 4.0,
       "seasonBlendWeights": {
-        "current": 0.5,
-        "prior1": 0.5,
+        "current": 0.625,
+        "prior1": 0.375,
         "prior2": 0.0,
-        "games": 4,
+        "games": 5,
         "hasPrior2Data": false
       },
-      "seasonBlendNote": "2026: 4g played \u2014 50% 2026 + 50% 2025",
-      "games2026": 4,
+      "seasonBlendNote": "2026: 5g played \u2014 62% 2026 + 38% 2025",
+      "games2026": 5,
       "blendWeight2026": 1.0,
-      "blendWeight2026PG": 0.5,
+      "blendWeight2026PG": 0.625,
       "usage2026": {
-        "games": 4,
-        "targets": 24,
-        "receptions": 15,
-        "carries": 1,
-        "recYds": 154.0,
-        "rushYds": -3.0,
-        "targShare": 0.1962,
-        "airYdShare": 0.289,
-        "wopr": 0.4965,
-        "carryShare": 0.01,
-        "recYdsPG": 38.5,
-        "recsPG": 3.75,
-        "rushYdsPG": -0.75,
-        "aDOT": 11.1667,
-        "catchRate": 0.625,
-        "yacPerRec": 4.1333,
-        "ypc": -3.0,
-        "snapShare": 0.85,
-        "rzTargetShare": 0.158,
-        "rzCarryShare": 0.0,
+        "games": 5,
+        "targets": 33,
+        "receptions": 21,
+        "carries": 2,
+        "recYds": 192.0,
+        "rushYds": 11.0,
+        "targShare": 0.2289,
+        "airYdShare": 0.3614,
+        "wopr": 0.5964,
+        "carryShare": 0.0131,
+        "recYdsPG": 38.4,
+        "recsPG": 4.2,
+        "rushYdsPG": 2.2,
+        "aDOT": 10.2727,
+        "catchRate": 0.6364,
+        "yacPerRec": 3.7143,
+        "ypc": 5.5,
+        "snapShare": 0.858,
+        "rzTargetShare": 0.217,
+        "rzCarryShare": 0.04,
         "breakawayRate": 0.0,
-        "pbp_carries": 1,
-        "rz_carries": 0,
-        "rz_tgts": 3
+        "pbp_carries": 2,
+        "rz_carries": 1,
+        "rz_tgts": 5
       },
       "usageBaseline": {
         "targShare": 0.2348,
@@ -25003,7 +25015,7 @@
         "yacPerRec": 5.3175,
         "rzTargetShare": 0.181
       },
-      "usageNote": "2026: 4g \u2014 100% 2026 + 0% 2025 baseline"
+      "usageNote": "2026: 5g \u2014 100% 2026 + 0% 2025 baseline"
     },
     "Jayden Higgins": {
       "name": "Jayden Higgins",
@@ -25027,7 +25039,7 @@
       "yacPerRec": 3.0,
       "rzTargetShare": 0.099,
       "snapShare": 0.583,
-      "depthRank": 7,
+      "depthRank": 8,
       "depthPos": "WR",
       "team2026": "HOU",
       "usageSource": "baseline"
@@ -26121,58 +26133,58 @@
       "recYdsPG": 21.466666666666665,
       "recsPG": 1.8666666666666667,
       "recTDsPG": 0.3333333333333333,
-      "targShare": 0.0731,
-      "airYdShare": 0.1703,
-      "wopr": 0.2288,
+      "targShare": 0.0665,
+      "airYdShare": 0.1968,
+      "wopr": 0.2374,
       "recEPA": 16.3423941852502,
       "rushYdsPG": 1.4666666666666666,
       "ypr": 11.5,
-      "catchRate": 0.5856,
-      "aDOT": 15.2406,
-      "yacPerRec": 3.766,
+      "catchRate": 0.5974,
+      "aDOT": 15.7481,
+      "yacPerRec": 4.6738,
       "carryShare": 0.015,
       "breakawayRate": 0.0,
       "rzCarryShare": 0.028,
-      "rzTargetShare": 0.0882,
-      "snapShare": 0.3275,
+      "rzTargetShare": 0.0846,
+      "snapShare": 0.34,
       "depthRank": 4,
       "depthPos": "WR",
       "team2026": "TB",
       "usageSource": "blended_2026",
-      "rushYdsPG_seasonBlended": 1.5,
-      "recYdsPG_seasonBlended": 20.0,
-      "recsPG_seasonBlended": 1.4,
+      "rushYdsPG_seasonBlended": 1.3,
+      "recYdsPG_seasonBlended": 25.3,
+      "recsPG_seasonBlended": 1.3,
       "seasonBlendWeights": {
-        "current": 0.5,
-        "prior1": 0.5,
+        "current": 0.625,
+        "prior1": 0.375,
         "prior2": 0.0,
-        "games": 4,
+        "games": 5,
         "hasPrior2Data": false
       },
-      "seasonBlendNote": "2026: 4g played \u2014 50% 2026 + 50% 2025",
-      "games2026": 4,
+      "seasonBlendNote": "2026: 5g played \u2014 62% 2026 + 38% 2025",
+      "games2026": 5,
       "blendWeight2026": 1.0,
-      "blendWeight2026PG": 0.5,
+      "blendWeight2026PG": 0.625,
       "usage2026": {
-        "games": 4,
-        "targets": 9,
-        "receptions": 4,
+        "games": 5,
+        "targets": 10,
+        "receptions": 5,
         "carries": 2,
-        "recYds": 74.0,
+        "recYds": 138.0,
         "rushYds": 6.0,
-        "targShare": 0.0731,
-        "airYdShare": 0.1703,
-        "wopr": 0.2288,
-        "carryShare": 0.0206,
-        "recYdsPG": 18.5,
+        "targShare": 0.0665,
+        "airYdShare": 0.1968,
+        "wopr": 0.2374,
+        "carryShare": 0.0165,
+        "recYdsPG": 27.6,
         "recsPG": 1.0,
-        "rushYdsPG": 1.5,
-        "aDOT": 25.0,
-        "catchRate": 0.4444,
-        "yacPerRec": 2.75,
+        "rushYdsPG": 1.2,
+        "aDOT": 25.8,
+        "catchRate": 0.5,
+        "yacPerRec": 8.4,
         "ypc": 3.0,
-        "snapShare": 0.3275,
-        "rzTargetShare": 0.105,
+        "snapShare": 0.34,
+        "rzTargetShare": 0.087,
         "rzCarryShare": 0.0,
         "breakawayRate": 0.0,
         "pbp_carries": 2,
@@ -26189,7 +26201,7 @@
         "yacPerRec": 3.9286,
         "rzTargetShare": 0.084
       },
-      "usageNote": "2026: 4g \u2014 100% 2026 + 0% 2025 baseline"
+      "usageNote": "2026: 5g \u2014 100% 2026 + 0% 2025 baseline"
     },
     "LeQuint Allen Jr.": {
       "name": "LeQuint Allen Jr.",
@@ -29499,6 +29511,9 @@
       "rushEPA": -1.51613372412976,
       "ypc": 4.153846153846154,
       "catchRate": 0.6363636363636364,
+      "depthRank": 4,
+      "depthPos": "RB",
+      "team2026": "GB",
       "usageSource": "baseline"
     },
     "Desmond Ridder": {
@@ -29637,7 +29652,7 @@
       "catchRate": 0.6296296296296297,
       "aDOT": 0.0,
       "yacPerRec": 0.0,
-      "depthRank": 6,
+      "depthRank": 7,
       "depthPos": "WR",
       "team2026": "HOU",
       "usageSource": "baseline"
@@ -31201,7 +31216,7 @@
       "depthRank": 2,
       "depthPos": "RB",
       "team2026": "MIN",
-      "rzTargetShare": 0.0145,
+      "rzTargetShare": 0.0155,
       "targShare": 0.0316,
       "ypc": 4.11,
       "catchRate": 0.7892,
@@ -32162,13 +32177,13 @@
       "isRookie": false,
       "nflGames": 0,
       "source": "roster_2026_skeleton",
-      "snapShare": 0.0825,
+      "snapShare": 0.05,
       "depthRank": 3,
       "depthPos": "TE",
       "team2026": "TB",
-      "targShare": 0.0197,
-      "airYdShare": 0.0118,
-      "wopr": 0.0367,
+      "targShare": 0.0098,
+      "airYdShare": 0.0059,
+      "wopr": 0.0184,
       "aDOT": 4.8235,
       "catchRate": 0.7048,
       "yacPerRec": 4.9076,
@@ -32176,7 +32191,7 @@
       "recYdsPG": 12.7208,
       "recsPG": 1.3958,
       "usageSource": "blended_2026",
-      "usageNote": "2026: 2g \u2014 50% 2026 + 50% depth-2+ prior",
+      "usageNote": "2026: 3g \u2014 75% 2026 + 25% depth-2+ prior",
       "recYdsPG_seasonBlended": 7.4,
       "recsPG_seasonBlended": 0.8,
       "seasonBlendWeights": {
@@ -32188,11 +32203,11 @@
       },
       "seasonBlendNote": "2026: 1g played \u2014 12% 2026 + 58% 2025 + 29% 2024",
       "rushYdsPG_seasonBlended": 0.0,
-      "games2026": 2,
-      "blendWeight2026": 0.5,
-      "blendWeight2026PG": 0.25,
+      "games2026": 3,
+      "blendWeight2026": 0.75,
+      "blendWeight2026PG": 0.375,
       "usage2026": {
-        "games": 2,
+        "games": 3,
         "targets": 0,
         "receptions": 0,
         "carries": 0,
@@ -32205,7 +32220,7 @@
         "recYdsPG": 0.0,
         "recsPG": 0.0,
         "rushYdsPG": 0.0,
-        "snapShare": 0.025
+        "snapShare": 0.02
       },
       "usageBaseline": {
         "targShare": 0.0394,
@@ -34207,51 +34222,52 @@
       "nflGames": 0,
       "source": "roster_2026_skeleton",
       "rzTargetShare": 0.012,
-      "snapShare": 0.2025,
+      "snapShare": 0.238,
       "depthRank": 2,
       "depthPos": "TE",
       "team2026": "TB",
-      "targShare": 0.0071,
-      "airYdShare": 0.0025,
-      "wopr": 0.0125,
-      "aDOT": 4.7918,
-      "catchRate": 0.6777,
-      "yacPerRec": 4.9076,
+      "targShare": 0.0137,
+      "airYdShare": 0.0057,
+      "wopr": 0.0246,
+      "aDOT": 4.6884,
+      "catchRate": 0.6896,
+      "yacPerRec": 4.8342,
       "recYdsPG": 12.7208,
       "recsPG": 1.3958,
       "usageSource": "blended_2026",
-      "usageNote": "2026: 4g \u2014 100% 2026 + 0% depth-2+ prior",
-      "recYdsPG_seasonBlended": 11.6,
+      "usageNote": "2026: 5g \u2014 100% 2026 + 0% depth-2+ prior",
+      "recYdsPG_seasonBlended": 10.6,
       "recsPG_seasonBlended": 1.2,
       "seasonBlendWeights": {
-        "current": 0.125,
-        "prior1": 0.583,
-        "prior2": 0.292,
-        "games": 1,
+        "current": 0.25,
+        "prior1": 0.5,
+        "prior2": 0.25,
+        "games": 2,
         "hasPrior2Data": true
       },
-      "seasonBlendNote": "2026: 1g played \u2014 12% 2026 + 58% 2025 + 29% 2024",
+      "seasonBlendNote": "2026: 2g played \u2014 25% 2026 + 50% 2025 + 25% 2024",
       "rushYdsPG_seasonBlended": 0.0,
-      "games2026": 4,
+      "games2026": 5,
       "blendWeight2026": 1.0,
-      "blendWeight2026PG": 0.5,
+      "blendWeight2026PG": 0.625,
       "usage2026": {
-        "games": 4,
-        "targets": 1,
-        "receptions": 0,
+        "games": 5,
+        "targets": 2,
+        "receptions": 1,
         "carries": 0,
-        "recYds": 0.0,
+        "recYds": 5.0,
         "rushYds": 0.0,
-        "targShare": 0.0071,
-        "airYdShare": 0.0025,
-        "wopr": 0.0125,
+        "targShare": 0.0137,
+        "airYdShare": 0.0057,
+        "wopr": 0.0246,
         "carryShare": 0.0,
-        "recYdsPG": 0.0,
-        "recsPG": 0.0,
+        "recYdsPG": 1.0,
+        "recsPG": 0.2,
         "rushYdsPG": 0.0,
-        "aDOT": 4.0,
-        "catchRate": 0.0,
-        "snapShare": 0.2025
+        "aDOT": 3.0,
+        "catchRate": 0.5,
+        "yacPerRec": 3.0,
+        "snapShare": 0.238
       },
       "usageBaseline": {
         "targShare": 0.0394,
@@ -34259,7 +34275,8 @@
         "wopr": 0.0735,
         "snapShare": 0.318,
         "aDOT": 4.8235,
-        "catchRate": 0.7048
+        "catchRate": 0.7048,
+        "yacPerRec": 4.9076
       }
     },
     "Jonathan Mingo": {
@@ -34270,53 +34287,55 @@
       "isRookie": false,
       "nflGames": 0,
       "source": "roster_2026_skeleton",
-      "snapShare": 0.1875,
+      "snapShare": 0.19,
       "depthRank": 5,
       "depthPos": "WR",
       "team2026": "DAL",
-      "targShare": 0.02,
-      "airYdShare": 0.0243,
-      "wopr": 0.0469,
-      "aDOT": 11.5916,
-      "catchRate": 0.5394,
-      "yacPerRec": 3.4444,
-      "rzTargetShare": 0.028,
+      "targShare": 0.035,
+      "airYdShare": 0.0559,
+      "wopr": 0.0917,
+      "aDOT": 12.1739,
+      "catchRate": 0.5345,
+      "yacPerRec": 3.1111,
+      "rzTargetShare": 0.0289,
       "recYdsPG": 17.1176,
       "recsPG": 1.4286,
       "usageSource": "blended_2026",
-      "usageNote": "2026: 4g \u2014 100% 2026 + 0% depth-4+ prior",
-      "recYdsPG_seasonBlended": 12.8,
-      "recsPG_seasonBlended": 1.1,
+      "usageNote": "2026: 5g \u2014 100% 2026 + 0% depth-4+ prior",
+      "recYdsPG_seasonBlended": 13.4,
+      "recsPG_seasonBlended": 1.2,
       "seasonBlendWeights": {
-        "current": 0.25,
-        "prior1": 0.5,
-        "prior2": 0.25,
-        "games": 2,
+        "current": 0.375,
+        "prior1": 0.417,
+        "prior2": 0.208,
+        "games": 3,
         "hasPrior2Data": true
       },
-      "seasonBlendNote": "2026: 2g played \u2014 25% 2026 + 50% 2025 + 25% 2024",
+      "seasonBlendNote": "2026: 3g played \u2014 38% 2026 + 42% 2025 + 21% 2024",
       "rushYdsPG_seasonBlended": 0.0,
-      "games2026": 4,
+      "games2026": 5,
       "blendWeight2026": 1.0,
-      "blendWeight2026PG": 0.5,
+      "blendWeight2026PG": 0.625,
       "usage2026": {
-        "games": 4,
-        "targets": 3,
-        "receptions": 1,
+        "games": 5,
+        "targets": 7,
+        "receptions": 3,
         "carries": 0,
-        "recYds": 10.0,
+        "recYds": 30.0,
         "rushYds": 0.0,
-        "targShare": 0.02,
-        "airYdShare": 0.0243,
-        "wopr": 0.0469,
+        "targShare": 0.035,
+        "airYdShare": 0.0559,
+        "wopr": 0.0917,
         "carryShare": 0.0,
-        "recYdsPG": 2.5,
-        "recsPG": 0.25,
+        "recYdsPG": 6.0,
+        "recsPG": 0.6,
         "rushYdsPG": 0.0,
-        "aDOT": 9.0,
-        "catchRate": 0.3333,
-        "yacPerRec": -1.0,
-        "snapShare": 0.1875
+        "aDOT": 13.1429,
+        "catchRate": 0.4286,
+        "yacPerRec": 0.3333,
+        "snapShare": 0.19,
+        "rzTargetShare": 0.036,
+        "rz_tgts": 1
       },
       "usageBaseline": {
         "targShare": 0.0433,
@@ -34324,7 +34343,9 @@
         "wopr": 0.1028,
         "snapShare": 0.207,
         "aDOT": 11.9026,
-        "catchRate": 0.5641
+        "catchRate": 0.5641,
+        "yacPerRec": 3.4444,
+        "rzTargetShare": 0.028
       }
     },
     "Stetson Bennett": {
@@ -34541,7 +34562,7 @@
       "depthRank": 2,
       "depthPos": "RB",
       "team2026": "DET",
-      "rzTargetShare": 0.0145,
+      "rzTargetShare": 0.0155,
       "targShare": 0.0309,
       "ypc": 4.219,
       "catchRate": 0.7699,
@@ -35076,13 +35097,13 @@
       "carryShare": 0.004,
       "breakawayRate": 0.0,
       "rzCarryShare": 0.0,
-      "snapShare": 0.0693,
+      "snapShare": 0.0525,
       "depthRank": 5,
       "depthPos": "WR",
       "team2026": "TB",
-      "targShare": 0.0301,
-      "airYdShare": 0.0199,
-      "wopr": 0.0576,
+      "targShare": 0.0192,
+      "airYdShare": 0.0044,
+      "wopr": 0.0319,
       "aDOT": 11.095,
       "catchRate": 0.5594,
       "yacPerRec": 3.4658,
@@ -35090,39 +35111,39 @@
       "recYdsPG": 17.1176,
       "recsPG": 1.4286,
       "usageSource": "blended_2026",
-      "usageNote": "2026: 3g \u2014 75% 2026 + 25% depth-4+ prior",
-      "recYdsPG_seasonBlended": 6.1,
-      "recsPG_seasonBlended": 0.6,
+      "usageNote": "2026: 4g \u2014 100% 2026 + 0% depth-4+ prior",
+      "recYdsPG_seasonBlended": 4.7,
+      "recsPG_seasonBlended": 0.5,
       "seasonBlendWeights": {
-        "current": 0.5,
-        "prior1": 0.333,
-        "prior2": 0.167,
-        "games": 4,
+        "current": 0.625,
+        "prior1": 0.25,
+        "prior2": 0.125,
+        "games": 5,
         "hasPrior2Data": true
       },
-      "seasonBlendNote": "2026: 4g played \u2014 50% 2026 + 33% 2025 + 17% 2024",
+      "seasonBlendNote": "2026: 5g played \u2014 62% 2026 + 25% 2025 + 12% 2024",
       "rushYdsPG_seasonBlended": 0.0,
-      "games2026": 3,
-      "blendWeight2026": 0.75,
-      "blendWeight2026PG": 0.375,
+      "games2026": 4,
+      "blendWeight2026": 1.0,
+      "blendWeight2026PG": 0.5,
       "usage2026": {
-        "games": 3,
+        "games": 4,
         "targets": 2,
         "receptions": 1,
         "carries": 0,
         "recYds": 3.0,
         "rushYds": 0.0,
-        "targShare": 0.0256,
-        "airYdShare": 0.0059,
-        "wopr": 0.0426,
+        "targShare": 0.0192,
+        "airYdShare": 0.0044,
+        "wopr": 0.0319,
         "carryShare": 0.0,
-        "recYdsPG": 1.0,
-        "recsPG": 0.3333,
+        "recYdsPG": 0.75,
+        "recsPG": 0.25,
         "rushYdsPG": 0.0,
         "aDOT": 1.0,
         "catchRate": 0.5,
         "yacPerRec": 4.0,
-        "snapShare": 0.06
+        "snapShare": 0.0525
       },
       "usageBaseline": {
         "targShare": 0.0433,
@@ -35212,6 +35233,9 @@
       "nflGames": 0,
       "source": "roster_2026_skeleton",
       "snapShare": 0.173,
+      "depthRank": 6,
+      "depthPos": "WR",
+      "team2026": "HOU",
       "targShare": 0.0433,
       "airYdShare": 0.0618,
       "wopr": 0.1028,
@@ -38556,7 +38580,11 @@
         "catchRate": 0.6875,
         "yacPerRec": 6.2727,
         "ypc": 10.0,
-        "snapShare": 0.4475
+        "snapShare": 0.4475,
+        "rzCarryShare": 0.0,
+        "breakawayRate": 0.0,
+        "pbp_carries": 1,
+        "rz_carries": 0
       },
       "usageBaseline": {
         "targShare": 0.0433,
@@ -38700,7 +38728,11 @@
         "catchRate": 0.6667,
         "yacPerRec": 2.3,
         "ypc": -5.0,
-        "snapShare": 0.6775
+        "snapShare": 0.6775,
+        "rzCarryShare": 0.0,
+        "breakawayRate": 0.0,
+        "pbp_carries": 1,
+        "rz_carries": 0
       },
       "usageBaseline": {
         "targShare": 0.0938,
@@ -38761,7 +38793,7 @@
       "catchRate": 0.5394,
       "yacPerRec": 3.4658,
       "snapShare": 0.403,
-      "rzTargetShare": 0.028,
+      "rzTargetShare": 0.049,
       "recYdsPG": 17.1176,
       "recsPG": 1.4286,
       "usageSource": "blended_2026",
@@ -38797,7 +38829,9 @@
         "aDOT": 10.0,
         "catchRate": 0.3333,
         "yacPerRec": 4.0,
-        "snapShare": 0.4
+        "snapShare": 0.4,
+        "rzTargetShare": 0.133,
+        "rz_tgts": 2
       },
       "usageBaseline": {
         "targShare": 0.0433,
@@ -38806,7 +38840,8 @@
         "snapShare": 0.404,
         "aDOT": 11.9026,
         "catchRate": 0.5641,
-        "yacPerRec": 3.4444
+        "yacPerRec": 3.4444,
+        "rzTargetShare": 0.028
       }
     },
     "Elijah Sarratt": {
@@ -38947,10 +38982,10 @@
       "depthPos": "RB",
       "team2026": "LV",
       "carryShare": 0.206,
-      "rzCarryShare": 0.147,
-      "rzTargetShare": 0.0145,
+      "rzCarryShare": 0.1813,
+      "rzTargetShare": 0.0155,
       "targShare": 0.019,
-      "breakawayRate": 0.0355,
+      "breakawayRate": 0.0536,
       "ypc": 4.4802,
       "catchRate": 0.7178,
       "snapShare": 0.1875,
@@ -38992,14 +39027,20 @@
         "catchRate": 0.3333,
         "yacPerRec": 3.0,
         "ypc": 5.0,
-        "snapShare": 0.1875
+        "snapShare": 0.1875,
+        "rzCarryShare": 0.211,
+        "breakawayRate": 0.083,
+        "pbp_carries": 24,
+        "rz_carries": 4
       },
       "usageBaseline": {
         "targShare": 0.0277,
-        "carryShare": 0.139,
+        "carryShare": 0.176,
         "snapShare": 0.296,
         "catchRate": 0.7639,
-        "ypc": 4.1683
+        "ypc": 4.1683,
+        "breakawayRate": 0.036,
+        "rzCarryShare": 0.1665
       }
     },
     "Matthew Hibner": {
@@ -39051,7 +39092,7 @@
       "catchRate": 0.754,
       "yacPerRec": 5.5897,
       "snapShare": 0.4375,
-      "rzTargetShare": 0.0335,
+      "rzTargetShare": 0.0372,
       "recYdsPG": 12.7208,
       "recsPG": 1.3958,
       "usageSource": "blended_2026",
@@ -39087,7 +39128,9 @@
         "aDOT": 5.0,
         "catchRate": 1.0,
         "yacPerRec": 9.0,
-        "snapShare": 0.4375
+        "snapShare": 0.4375,
+        "rzTargetShare": 0.067,
+        "rz_tgts": 1
       },
       "usageBaseline": {
         "targShare": 0.0394,
@@ -39096,7 +39139,8 @@
         "snapShare": 0.411,
         "aDOT": 4.8235,
         "catchRate": 0.7048,
-        "yacPerRec": 4.9076
+        "yacPerRec": 4.9076,
+        "rzTargetShare": 0.0335
       }
     },
     "Nicholas Singleton": {
@@ -39127,7 +39171,7 @@
       "depthPos": "RB",
       "team2026": "TEN",
       "carryShare": 0.0813,
-      "rzCarryShare": 0.0365,
+      "rzCarryShare": 0.044,
       "rzTargetShare": 0.0,
       "targShare": 0.0104,
       "breakawayRate": 0.0,
@@ -39168,13 +39212,19 @@
         "recsPG": 0.0,
         "rushYdsPG": 6.0,
         "ypc": 1.7143,
-        "snapShare": 0.115
+        "snapShare": 0.115,
+        "rzCarryShare": 0.074,
+        "breakawayRate": 0.0,
+        "pbp_carries": 7,
+        "rz_carries": 2
       },
       "usageBaseline": {
         "targShare": 0.0208,
         "carryShare": 0.036,
         "snapShare": 0.202,
-        "ypc": 3.7692
+        "ypc": 3.7692,
+        "breakawayRate": 0.0,
+        "rzCarryShare": 0.0365
       }
     },
     "Josh Cuevas": {
@@ -39547,7 +39597,11 @@
         "catchRate": 0.25,
         "yacPerRec": 7.0,
         "ypc": -8.0,
-        "snapShare": 0.0925
+        "snapShare": 0.0925,
+        "rzCarryShare": 0.0,
+        "breakawayRate": 0.0,
+        "pbp_carries": 1,
+        "rz_carries": 0
       },
       "usageBaseline": {
         "targShare": 0.0433,
@@ -41003,10 +41057,10 @@
       "depthPos": "RB",
       "team2026": "KC",
       "carryShare": 0.1299,
-      "rzCarryShare": 0.147,
-      "rzTargetShare": 0.0145,
+      "rzCarryShare": 0.1665,
+      "rzTargetShare": 0.0155,
       "targShare": 0.0409,
-      "breakawayRate": 0.0355,
+      "breakawayRate": 0.036,
       "ypc": 3.9774,
       "catchRate": 0.8033,
       "snapShare": 0.27,
@@ -41052,7 +41106,7 @@
       },
       "usageBaseline": {
         "targShare": 0.0277,
-        "carryShare": 0.139,
+        "carryShare": 0.176,
         "snapShare": 0.296,
         "catchRate": 0.7639,
         "ypc": 4.1683
@@ -41175,10 +41229,10 @@
       "depthPos": "RB",
       "team2026": "ARI",
       "carryShare": 0.5423,
-      "rzCarryShare": 0.3885,
-      "rzTargetShare": 0.051,
+      "rzCarryShare": 0.4504,
+      "rzTargetShare": 0.0663,
       "targShare": 0.088,
-      "breakawayRate": 0.0435,
+      "breakawayRate": 0.0392,
       "ypc": 4.2139,
       "catchRate": 0.8032,
       "snapShare": 0.48,
@@ -41220,14 +41274,23 @@
         "catchRate": 0.8462,
         "yacPerRec": 2.7273,
         "ypc": 4.0545,
-        "snapShare": 0.48
+        "snapShare": 0.48,
+        "rzTargetShare": 0.107,
+        "rzCarryShare": 0.5,
+        "breakawayRate": 0.036,
+        "pbp_carries": 55,
+        "rz_carries": 10,
+        "rz_tgts": 3
       },
       "usageBaseline": {
         "targShare": 0.0802,
         "carryShare": 0.479,
         "snapShare": 0.577,
         "catchRate": 0.7809,
-        "ypc": 4.4331
+        "ypc": 4.4331,
+        "breakawayRate": 0.0435,
+        "rzTargetShare": 0.051,
+        "rzCarryShare": 0.3885
       }
     },
     "Jordyn Tyson": {
@@ -41369,7 +41432,11 @@
         "catchRate": 0.6667,
         "yacPerRec": 6.9167,
         "ypc": 3.0,
-        "snapShare": 0.5125
+        "snapShare": 0.5125,
+        "rzCarryShare": 0.067,
+        "breakawayRate": 0.0,
+        "pbp_carries": 1,
+        "rz_carries": 1
       },
       "usageBaseline": {
         "targShare": 0.1491,
@@ -41485,7 +41552,7 @@
       "catchRate": 0.6106,
       "yacPerRec": 5.7885,
       "snapShare": 0.9225,
-      "rzTargetShare": 0.162,
+      "rzTargetShare": 0.1863,
       "recYdsPG": 59.2353,
       "recsPG": 4.3125,
       "usageSource": "blended_2026",
@@ -41521,7 +41588,9 @@
         "aDOT": 17.4091,
         "catchRate": 0.5909,
         "yacPerRec": 8.3846,
-        "snapShare": 0.9225
+        "snapShare": 0.9225,
+        "rzTargetShare": 0.235,
+        "rz_tgts": 4
       },
       "usageBaseline": {
         "targShare": 0.1938,
@@ -41530,7 +41599,8 @@
         "snapShare": 0.788,
         "aDOT": 11.5905,
         "catchRate": 0.628,
-        "yacPerRec": 4.4385
+        "yacPerRec": 4.4385,
+        "rzTargetShare": 0.162
       }
     },
     "Antonio Williams": {
@@ -41582,7 +41652,7 @@
       "catchRate": 0.6528,
       "yacPerRec": 3.1121,
       "snapShare": 0.49,
-      "rzTargetShare": 0.061,
+      "rzTargetShare": 0.0698,
       "recYdsPG": 29.3051,
       "recsPG": 2.3709,
       "usageSource": "blended_2026",
@@ -41618,7 +41688,9 @@
         "aDOT": 11.5789,
         "catchRate": 0.6316,
         "yacPerRec": 1.9167,
-        "snapShare": 0.49
+        "snapShare": 0.49,
+        "rzTargetShare": 0.105,
+        "rz_tgts": 2
       },
       "usageBaseline": {
         "targShare": 0.0938,
@@ -41627,7 +41699,8 @@
         "snapShare": 0.5235,
         "aDOT": 11.0942,
         "catchRate": 0.669,
-        "yacPerRec": 3.6859
+        "yacPerRec": 3.6859,
+        "rzTargetShare": 0.061
       }
     },
     "Oscar Delp": {
@@ -41776,7 +41849,7 @@
       "catchRate": 0.6008,
       "yacPerRec": 3.6385,
       "snapShare": 0.72,
-      "rzTargetShare": 0.119,
+      "rzTargetShare": 0.1132,
       "recYdsPG": 43.5714,
       "recsPG": 3.4167,
       "usageSource": "blended_2026",
@@ -41812,7 +41885,9 @@
         "aDOT": 18.4,
         "catchRate": 0.5333,
         "yacPerRec": 4.125,
-        "snapShare": 0.72
+        "snapShare": 0.72,
+        "rzTargetShare": 0.067,
+        "rz_tgts": 1
       },
       "usageBaseline": {
         "targShare": 0.1544,
@@ -41821,7 +41896,8 @@
         "snapShare": 0.706,
         "aDOT": 11.292,
         "catchRate": 0.6413,
-        "yacPerRec": 3.4828
+        "yacPerRec": 3.4828,
+        "rzTargetShare": 0.119
       }
     },
     "Zachariah Branch": {
@@ -41986,18 +42062,18 @@
       "depthRank": 3,
       "depthPos": "WR",
       "team2026": "TB",
-      "targShare": 0.1311,
-      "airYdShare": 0.2503,
-      "wopr": 0.3719,
+      "targShare": 0.1049,
+      "airYdShare": 0.2003,
+      "wopr": 0.2975,
       "aDOT": 13.5209,
       "catchRate": 0.603,
       "yacPerRec": 3.5499,
-      "snapShare": 0.66,
-      "rzTargetShare": 0.061,
+      "snapShare": 0.62,
+      "rzTargetShare": 0.0662,
       "recYdsPG": 29.3051,
       "recsPG": 2.3709,
       "usageSource": "blended_2026",
-      "usageNote": "2026: 4g \u2014 100% 2026 + 0% depth-3 prior",
+      "usageNote": "2026: 5g \u2014 100% 2026 + 0% depth-3 prior",
       "recYdsPG_seasonBlended": 30.7,
       "recsPG_seasonBlended": 2.2,
       "seasonBlendWeights": {
@@ -42009,27 +42085,29 @@
       },
       "seasonBlendNote": "2026: 4g played \u2014 50% 2026 + 50% 2025",
       "rushYdsPG_seasonBlended": 0.0,
-      "games2026": 4,
+      "games2026": 5,
       "blendWeight2026": 1.0,
-      "blendWeight2026PG": 0.5,
+      "blendWeight2026PG": 0.625,
       "usage2026": {
-        "games": 4,
+        "games": 5,
         "targets": 16,
         "receptions": 8,
         "carries": 0,
         "recYds": 128.0,
         "rushYds": 0.0,
-        "targShare": 0.1311,
-        "airYdShare": 0.2503,
-        "wopr": 0.3719,
+        "targShare": 0.1049,
+        "airYdShare": 0.2003,
+        "wopr": 0.2975,
         "carryShare": 0.0,
-        "recYdsPG": 32.0,
-        "recsPG": 2.0,
+        "recYdsPG": 25.6,
+        "recsPG": 1.6,
         "rushYdsPG": 0.0,
         "aDOT": 17.3125,
         "catchRate": 0.5,
         "yacPerRec": 3.125,
-        "snapShare": 0.66
+        "snapShare": 0.62,
+        "rzTargetShare": 0.087,
+        "rz_tgts": 2
       },
       "usageBaseline": {
         "targShare": 0.0938,
@@ -42038,7 +42116,8 @@
         "snapShare": 0.5235,
         "aDOT": 11.0942,
         "catchRate": 0.669,
-        "yacPerRec": 3.6859
+        "yacPerRec": 3.6859,
+        "rzTargetShare": 0.061
       }
     },
     "Zavion Thomas": {
@@ -42180,10 +42259,10 @@
       "depthPos": "RB",
       "team2026": "SF",
       "carryShare": 0.2678,
-      "rzCarryShare": 0.147,
-      "rzTargetShare": 0.0145,
+      "rzCarryShare": 0.2372,
+      "rzTargetShare": 0.0155,
       "targShare": 0.017,
-      "breakawayRate": 0.0355,
+      "breakawayRate": 0.0203,
       "ypc": 4.0385,
       "catchRate": 0.7444,
       "snapShare": 0.2925,
@@ -42225,14 +42304,20 @@
         "catchRate": 0.5,
         "yacPerRec": 10.0,
         "ypc": 3.871,
-        "snapShare": 0.2925
+        "snapShare": 0.2925,
+        "rzCarryShare": 0.318,
+        "breakawayRate": 0.0,
+        "pbp_carries": 31,
+        "rz_carries": 7
       },
       "usageBaseline": {
         "targShare": 0.0277,
-        "carryShare": 0.139,
+        "carryShare": 0.176,
         "snapShare": 0.296,
         "catchRate": 0.7639,
-        "ypc": 4.1683
+        "ypc": 4.1683,
+        "breakawayRate": 0.036,
+        "rzCarryShare": 0.1665
       }
     },
     "Cade Klubnik": {
@@ -42322,7 +42407,7 @@
       "catchRate": 0.5717,
       "yacPerRec": 3.3049,
       "snapShare": 0.7625,
-      "rzTargetShare": 0.061,
+      "rzTargetShare": 0.063,
       "recYdsPG": 29.3051,
       "recsPG": 2.3709,
       "usageSource": "blended_2026",
@@ -42358,7 +42443,9 @@
         "aDOT": 16.4615,
         "catchRate": 0.3846,
         "yacPerRec": 1.4,
-        "snapShare": 0.7625
+        "snapShare": 0.7625,
+        "rzTargetShare": 0.071,
+        "rz_tgts": 2
       },
       "usageBaseline": {
         "targShare": 0.0938,
@@ -42367,7 +42454,8 @@
         "snapShare": 0.5235,
         "aDOT": 11.0942,
         "catchRate": 0.669,
-        "yacPerRec": 3.6859
+        "yacPerRec": 3.6859,
+        "rzTargetShare": 0.061
       }
     },
     "Colbie Young": {
@@ -42756,28 +42844,28 @@
       "aDOT": 4.8235,
       "catchRate": 0.7048,
       "yacPerRec": 4.9076,
-      "snapShare": 0.055,
+      "snapShare": 0.056,
       "rzTargetShare": 0.0335,
       "recYdsPG": 12.7208,
       "recsPG": 1.3958,
       "usageSource": "blended_2026",
-      "usageNote": "2026: 4g \u2014 100% 2026 + 0% depth-2+ prior",
-      "recYdsPG_seasonBlended": 8.0,
-      "recsPG_seasonBlended": 0.9,
+      "usageNote": "2026: 5g \u2014 100% 2026 + 0% depth-2+ prior",
+      "recYdsPG_seasonBlended": 6.4,
+      "recsPG_seasonBlended": 0.7,
       "seasonBlendWeights": {
-        "current": 0.375,
-        "prior1": 0.625,
+        "current": 0.5,
+        "prior1": 0.5,
         "prior2": 0.0,
-        "games": 3,
+        "games": 4,
         "hasPrior2Data": false
       },
-      "seasonBlendNote": "2026: 3g played \u2014 38% 2026 + 62% 2025",
+      "seasonBlendNote": "2026: 4g played \u2014 50% 2026 + 50% 2025",
       "rushYdsPG_seasonBlended": 0.0,
-      "games2026": 4,
+      "games2026": 5,
       "blendWeight2026": 1.0,
-      "blendWeight2026PG": 0.5,
+      "blendWeight2026PG": 0.625,
       "usage2026": {
-        "games": 4,
+        "games": 5,
         "targets": 0,
         "receptions": 0,
         "carries": 0,
@@ -42790,7 +42878,7 @@
         "recYdsPG": 0.0,
         "recsPG": 0.0,
         "rushYdsPG": 0.0,
-        "snapShare": 0.055
+        "snapShare": 0.056
       },
       "usageBaseline": {
         "targShare": 0.0394,
@@ -42836,11 +42924,8 @@
         "games": 0
       },
       "rookieNote": "ROOKIE \u2014 0 NFL games played. Blend: 100% college (, 0.70\u00d7 adj) + 0% NFL.",
-      "depthRank": 3,
-      "depthPos": "RB",
-      "team2026": "WAS",
       "carryShare": 0.1134,
-      "rzCarryShare": 0.0365,
+      "rzCarryShare": 0.0947,
       "rzTargetShare": 0.0,
       "targShare": 0.0052,
       "breakawayRate": 0.0,
@@ -42866,6 +42951,7 @@
       "games2026": 3,
       "blendWeight2026": 0.75,
       "blendWeight2026PG": 0.375,
+      "team2026": "WAS",
       "usage2026": {
         "games": 3,
         "targets": 0,
@@ -42881,13 +42967,19 @@
         "recsPG": 0.0,
         "rushYdsPG": 13.6667,
         "ypc": 3.4167,
-        "snapShare": 0.1233
+        "snapShare": 0.1233,
+        "rzCarryShare": 0.211,
+        "breakawayRate": 0.0,
+        "pbp_carries": 12,
+        "rz_carries": 4
       },
       "usageBaseline": {
         "targShare": 0.0208,
         "carryShare": 0.036,
         "snapShare": 0.202,
-        "ypc": 3.7692
+        "ypc": 3.7692,
+        "breakawayRate": 0.0,
+        "rzCarryShare": 0.0365
       }
     },
     "Barion Brown": {
@@ -42973,7 +43065,11 @@
         "recsPG": 0.0,
         "rushYdsPG": -0.6667,
         "ypc": -1.0,
-        "snapShare": 0.05
+        "snapShare": 0.05,
+        "rzCarryShare": 0.053,
+        "breakawayRate": 0.0,
+        "pbp_carries": 2,
+        "rz_carries": 1
       },
       "usageBaseline": {
         "targShare": 0.0433,
@@ -43031,7 +43127,7 @@
       "catchRate": 0.6162,
       "yacPerRec": 4.237,
       "snapShare": 0.3075,
-      "rzTargetShare": 0.028,
+      "rzTargetShare": 0.0446,
       "recYdsPG": 17.1176,
       "recsPG": 1.4286,
       "usageSource": "blended_2026",
@@ -43067,7 +43163,9 @@
         "aDOT": 7.5,
         "catchRate": 0.8333,
         "yacPerRec": 8.2,
-        "snapShare": 0.3075
+        "snapShare": 0.3075,
+        "rzTargetShare": 0.111,
+        "rz_tgts": 2
       },
       "usageBaseline": {
         "targShare": 0.0433,
@@ -43076,7 +43174,8 @@
         "snapShare": 0.404,
         "aDOT": 11.9026,
         "catchRate": 0.5641,
-        "yacPerRec": 3.4444
+        "yacPerRec": 3.4444,
+        "rzTargetShare": 0.028
       }
     },
     "Demond Claiborne": {
@@ -43167,14 +43266,19 @@
         "catchRate": 1.0,
         "yacPerRec": 9.0,
         "ypc": 2.1667,
-        "snapShare": 0.07
+        "snapShare": 0.07,
+        "rzCarryShare": 0.0,
+        "breakawayRate": 0.0,
+        "pbp_carries": 6,
+        "rz_carries": 0
       },
       "usageBaseline": {
         "targShare": 0.0208,
         "carryShare": 0.036,
         "snapShare": 0.202,
         "catchRate": 0.767,
-        "ypc": 3.7692
+        "ypc": 3.7692,
+        "breakawayRate": 0.0
       }
     },
     "C.J. Williams": {
@@ -43365,10 +43469,10 @@
       "depthPos": "RB",
       "team2026": "IND",
       "carryShare": 0.0979,
-      "rzCarryShare": 0.147,
-      "rzTargetShare": 0.0145,
+      "rzCarryShare": 0.1582,
+      "rzTargetShare": 0.0155,
       "targShare": 0.0259,
-      "breakawayRate": 0.0355,
+      "breakawayRate": 0.0277,
       "ypc": 4.0718,
       "catchRate": 0.7535,
       "snapShare": 0.1525,
@@ -43410,14 +43514,20 @@
         "catchRate": 0.6667,
         "yacPerRec": 3.5,
         "ypc": 3.75,
-        "snapShare": 0.1525
+        "snapShare": 0.1525,
+        "rzCarryShare": 0.136,
+        "breakawayRate": 0.0,
+        "pbp_carries": 12,
+        "rz_carries": 3
       },
       "usageBaseline": {
         "targShare": 0.0277,
-        "carryShare": 0.139,
+        "carryShare": 0.176,
         "snapShare": 0.296,
         "catchRate": 0.7639,
-        "ypc": 4.1683
+        "ypc": 4.1683,
+        "breakawayRate": 0.036,
+        "rzCarryShare": 0.1665
       }
     },
     "Jam Miller": {
@@ -43633,7 +43743,11 @@
         "catchRate": 0.5,
         "yacPerRec": 2.0,
         "ypc": 7.0,
-        "snapShare": 0.14
+        "snapShare": 0.14,
+        "rzCarryShare": 0.0,
+        "breakawayRate": 0.0,
+        "pbp_carries": 2,
+        "rz_carries": 0
       },
       "usageBaseline": {
         "targShare": 0.0433,
@@ -46081,7 +46195,7 @@
       "depthPos": "RB",
       "team2026": "NO",
       "carryShare": 0.0777,
-      "rzCarryShare": 0.0365,
+      "rzCarryShare": 0.0383,
       "rzTargetShare": 0.0,
       "targShare": 0.0203,
       "breakawayRate": 0.0,
@@ -46126,14 +46240,20 @@
         "catchRate": 0.75,
         "yacPerRec": 2.0,
         "ypc": 4.1429,
-        "snapShare": 0.25
+        "snapShare": 0.25,
+        "rzCarryShare": 0.053,
+        "breakawayRate": 0.0,
+        "pbp_carries": 7,
+        "rz_carries": 1
       },
       "usageBaseline": {
         "targShare": 0.0208,
         "carryShare": 0.036,
         "snapShare": 0.202,
         "catchRate": 0.767,
-        "ypc": 3.7692
+        "ypc": 3.7692,
+        "breakawayRate": 0.0,
+        "rzCarryShare": 0.0365
       }
     },
     "Cody Hardy": {
@@ -46696,7 +46816,7 @@
       "catchRate": 0.711,
       "yacPerRec": 4.5604,
       "snapShare": 0.4327,
-      "rzTargetShare": 0.0335,
+      "rzTargetShare": 0.0504,
       "recYdsPG": 12.7208,
       "recsPG": 1.3958,
       "usageSource": "blended_2026",
@@ -46732,7 +46852,9 @@
         "aDOT": 10.25,
         "catchRate": 0.75,
         "yacPerRec": 1.6667,
-        "snapShare": 0.44
+        "snapShare": 0.44,
+        "rzTargetShare": 0.118,
+        "rz_tgts": 2
       },
       "usageBaseline": {
         "targShare": 0.0394,
@@ -46741,7 +46863,8 @@
         "snapShare": 0.411,
         "aDOT": 4.8235,
         "catchRate": 0.7048,
-        "yacPerRec": 4.9076
+        "yacPerRec": 4.9076,
+        "rzTargetShare": 0.0335
       }
     },
     "Kaden Wetjen": {
@@ -47082,7 +47205,7 @@
       "catchRate": 0.6614,
       "yacPerRec": 3.7013,
       "snapShare": 0.8375,
-      "rzTargetShare": 0.162,
+      "rzTargetShare": 0.1514,
       "recYdsPG": 59.2353,
       "recsPG": 4.3125,
       "usageSource": "blended_2026",
@@ -47118,7 +47241,9 @@
         "aDOT": 11.8438,
         "catchRate": 0.6875,
         "yacPerRec": 2.8636,
-        "snapShare": 0.8375
+        "snapShare": 0.8375,
+        "rzTargetShare": 0.067,
+        "rz_tgts": 1
       },
       "usageBaseline": {
         "targShare": 0.1938,
@@ -47127,7 +47252,8 @@
         "snapShare": 0.788,
         "aDOT": 11.5905,
         "catchRate": 0.628,
-        "yacPerRec": 4.4385
+        "yacPerRec": 4.4385,
+        "rzTargetShare": 0.162
       }
     },
     "Skyler Bell": {
@@ -47868,7 +47994,7 @@
       "catchRate": 0.5862,
       "yacPerRec": 3.1284,
       "snapShare": 0.375,
-      "rzTargetShare": 0.028,
+      "rzTargetShare": 0.0406,
       "recYdsPG": 17.1176,
       "recsPG": 1.4286,
       "usageSource": "blended_2026",
@@ -47904,7 +48030,9 @@
         "aDOT": 8.4545,
         "catchRate": 0.6364,
         "yacPerRec": 2.0,
-        "snapShare": 0.375
+        "snapShare": 0.375,
+        "rzTargetShare": 0.091,
+        "rz_tgts": 2
       },
       "usageBaseline": {
         "targShare": 0.0433,
@@ -47913,7 +48041,8 @@
         "snapShare": 0.404,
         "aDOT": 11.9026,
         "catchRate": 0.5641,
-        "yacPerRec": 3.4444
+        "yacPerRec": 3.4444,
+        "rzTargetShare": 0.028
       }
     },
     "Eli Heidenreich": {
@@ -48048,7 +48177,7 @@
       "depthPos": "RB",
       "team2026": "DEN",
       "carryShare": 0.1073,
-      "rzCarryShare": 0.0365,
+      "rzCarryShare": 0.0778,
       "rzTargetShare": 0.0,
       "targShare": 0.0363,
       "breakawayRate": 0.0,
@@ -48093,14 +48222,20 @@
         "catchRate": 1.0,
         "yacPerRec": 6.3333,
         "ypc": 3.9,
-        "snapShare": 0.23
+        "snapShare": 0.23,
+        "rzCarryShare": 0.188,
+        "breakawayRate": 0.0,
+        "pbp_carries": 10,
+        "rz_carries": 3
       },
       "usageBaseline": {
         "targShare": 0.0208,
         "carryShare": 0.036,
         "snapShare": 0.202,
         "catchRate": 0.767,
-        "ypc": 3.7692
+        "ypc": 3.7692,
+        "breakawayRate": 0.0,
+        "rzCarryShare": 0.0365
       }
     },
     "Nate Boerkircher": {
@@ -48152,7 +48287,7 @@
       "catchRate": 0.6766,
       "yacPerRec": 5.2848,
       "snapShare": 0.4625,
-      "rzTargetShare": 0.0335,
+      "rzTargetShare": 0.036,
       "recYdsPG": 12.7208,
       "recsPG": 1.3958,
       "usageSource": "blended_2026",
@@ -48188,7 +48323,9 @@
         "aDOT": 3.75,
         "catchRate": 0.5,
         "yacPerRec": 10.0,
-        "snapShare": 0.4625
+        "snapShare": 0.4625,
+        "rzTargetShare": 0.056,
+        "rz_tgts": 1
       },
       "usageBaseline": {
         "targShare": 0.0394,
@@ -48197,7 +48334,8 @@
         "snapShare": 0.411,
         "aDOT": 4.8235,
         "catchRate": 0.7048,
-        "yacPerRec": 4.9076
+        "yacPerRec": 4.9076,
+        "rzTargetShare": 0.0335
       }
     },
     "Max Klare": {
@@ -48378,10 +48516,10 @@
       "depthPos": "RB",
       "team2026": "SEA",
       "carryShare": 0.2733,
-      "rzCarryShare": 0.0365,
+      "rzCarryShare": 0.0568,
       "rzTargetShare": 0.0,
       "targShare": 0.0619,
-      "breakawayRate": 0.0,
+      "breakawayRate": 0.0148,
       "ypc": 3.9672,
       "catchRate": 0.7242,
       "snapShare": 0.3255,
@@ -48423,14 +48561,20 @@
         "catchRate": 0.5714,
         "yacPerRec": 7.0,
         "ypc": 4.25,
-        "snapShare": 0.3667
+        "snapShare": 0.3667,
+        "rzCarryShare": 0.111,
+        "breakawayRate": 0.036,
+        "pbp_carries": 28,
+        "rz_carries": 3
       },
       "usageBaseline": {
         "targShare": 0.0208,
         "carryShare": 0.036,
         "snapShare": 0.202,
         "catchRate": 0.767,
-        "ypc": 3.7692
+        "ypc": 3.7692,
+        "breakawayRate": 0.0,
+        "rzCarryShare": 0.0365
       }
     },
     "Caleb Douglas": {
@@ -48482,7 +48626,7 @@
       "catchRate": 0.6581,
       "yacPerRec": 4.0022,
       "snapShare": 0.7955,
-      "rzTargetShare": 0.119,
+      "rzTargetShare": 0.1181,
       "recYdsPG": 43.5714,
       "recsPG": 3.4167,
       "usageSource": "blended_2026",
@@ -48518,7 +48662,9 @@
         "aDOT": 11.4,
         "catchRate": 0.7,
         "yacPerRec": 5.8571,
-        "snapShare": 0.885
+        "snapShare": 0.885,
+        "rzTargetShare": 0.111,
+        "rz_tgts": 1
       },
       "usageBaseline": {
         "targShare": 0.1544,
@@ -48527,7 +48673,8 @@
         "snapShare": 0.706,
         "aDOT": 11.292,
         "catchRate": 0.6413,
-        "yacPerRec": 3.4828
+        "yacPerRec": 3.4828,
+        "rzTargetShare": 0.119
       }
     },
     "Will Kacmarek": {
@@ -48758,7 +48905,7 @@
       "catchRate": 0.4601,
       "yacPerRec": 3.2633,
       "snapShare": 0.47,
-      "rzTargetShare": 0.028,
+      "rzTargetShare": 0.0372,
       "recYdsPG": 17.1176,
       "recsPG": 1.4286,
       "usageSource": "blended_2026",
@@ -48794,7 +48941,9 @@
         "aDOT": 14.2,
         "catchRate": 0.2,
         "yacPerRec": 1.0,
-        "snapShare": 0.47
+        "snapShare": 0.47,
+        "rzTargetShare": 0.111,
+        "rz_tgts": 1
       },
       "usageBaseline": {
         "targShare": 0.0433,
@@ -48803,7 +48952,8 @@
         "snapShare": 0.404,
         "aDOT": 11.9026,
         "catchRate": 0.5641,
-        "yacPerRec": 3.4444
+        "yacPerRec": 3.4444,
+        "rzTargetShare": 0.028
       }
     },
     "Louis Hansen": {
@@ -48927,7 +49077,7 @@
       "catchRate": 0.6233,
       "yacPerRec": 3.716,
       "snapShare": 0.7825,
-      "rzTargetShare": 0.119,
+      "rzTargetShare": 0.1345,
       "recYdsPG": 43.5714,
       "recsPG": 3.4167,
       "usageSource": "blended_2026",
@@ -48964,7 +49114,13 @@
         "catchRate": 0.6071,
         "yacPerRec": 4.0588,
         "ypc": 2.25,
-        "snapShare": 0.7825
+        "snapShare": 0.7825,
+        "rzTargetShare": 0.176,
+        "rzCarryShare": 0.0,
+        "breakawayRate": 0.0,
+        "pbp_carries": 4,
+        "rz_carries": 0,
+        "rz_tgts": 3
       },
       "usageBaseline": {
         "targShare": 0.1544,
@@ -48973,7 +49129,8 @@
         "snapShare": 0.706,
         "aDOT": 11.292,
         "catchRate": 0.6413,
-        "yacPerRec": 3.4828
+        "yacPerRec": 3.4828,
+        "rzTargetShare": 0.119
       }
     },
     "Brenen Thompson": {
@@ -49121,7 +49278,7 @@
       "catchRate": 0.6873,
       "yacPerRec": 5.7032,
       "snapShare": 0.225,
-      "rzTargetShare": 0.0335,
+      "rzTargetShare": 0.0333,
       "recYdsPG": 12.7208,
       "recsPG": 1.3958,
       "usageSource": "blended_2026",
@@ -49157,7 +49314,9 @@
         "aDOT": 3.0,
         "catchRate": 0.6,
         "yacPerRec": 12.3333,
-        "snapShare": 0.225
+        "snapShare": 0.225,
+        "rzTargetShare": 0.032,
+        "rz_tgts": 1
       },
       "usageBaseline": {
         "targShare": 0.0394,
@@ -49166,7 +49325,8 @@
         "snapShare": 0.411,
         "aDOT": 4.8235,
         "catchRate": 0.7048,
-        "yacPerRec": 4.9076
+        "yacPerRec": 4.9076,
+        "rzTargetShare": 0.0335
       }
     },
     "Carson Beck": {
@@ -49845,47 +50005,465 @@
       "source": "nflverse",
       "origin": "report"
     },
-    "Cody White": {
-      "name": "Cody White",
+    "Demarcus Robinson": {
+      "name": "Demarcus Robinson",
+      "team": "SF",
+      "pos": "WR",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Tim Patrick": {
+      "name": "Tim Patrick",
+      "team": "NYJ",
+      "pos": "WR",
+      "status": "IR",
+      "detail": "Reserve list (R48)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "James Conner": {
+      "name": "James Conner",
+      "team": "ARI",
+      "pos": "RB",
+      "status": "IR",
+      "detail": "Reserve list (R48)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "David Njoku": {
+      "name": "David Njoku",
+      "team": "LAC",
+      "pos": "TE",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Jeremy McNichols": {
+      "name": "Jeremy McNichols",
+      "team": "WAS",
+      "pos": "RB",
+      "status": "IR",
+      "detail": "Reserve list (R48)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Braxton Berrios": {
+      "name": "Braxton Berrios",
+      "team": "NYG",
+      "pos": "WR",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Christian Kirk": {
+      "name": "Christian Kirk",
+      "team": "SF",
+      "pos": "WR",
+      "status": "IR",
+      "detail": "Reserve list (R48)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Durham Smythe": {
+      "name": "Durham Smythe",
+      "team": "BAL",
+      "pos": "TE",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "D.J. Montgomery": {
+      "name": "D.J. Montgomery",
+      "team": "IND",
+      "pos": "WR",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Josh Oliver": {
+      "name": "Josh Oliver",
+      "team": "MIN",
+      "pos": "TE",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "David Sills": {
+      "name": "David Sills",
+      "team": "TB",
+      "pos": "WR",
+      "status": "IR",
+      "detail": "Reserve list (R48)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Gunner Olszewski": {
+      "name": "Gunner Olszewski",
+      "team": "NYG",
+      "pos": "WR",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "A.J. Brown": {
+      "name": "A.J. Brown",
+      "team": "NE",
+      "pos": "WR",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Travis Etienne": {
+      "name": "Travis Etienne",
+      "team": "NO",
+      "pos": "RB",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Trey Sermon": {
+      "name": "Trey Sermon",
+      "team": "ATL",
+      "pos": "RB",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Hunter Long": {
+      "name": "Hunter Long",
+      "team": "ARI",
+      "pos": "TE",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Nikola Kalinic": {
+      "name": "Nikola Kalinic",
+      "team": "CHI",
+      "pos": "TE",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Cole Turner": {
+      "name": "Cole Turner",
+      "team": "MIA",
+      "pos": "TE",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Grant Calcaterra": {
+      "name": "Grant Calcaterra",
+      "team": "PHI",
+      "pos": "TE",
+      "status": "IR",
+      "detail": "Reserve list (R48)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Jake Tonges": {
+      "name": "Jake Tonges",
+      "team": "SF",
+      "pos": "TE",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Irvin Charles": {
+      "name": "Irvin Charles",
+      "team": "SEA",
+      "pos": "WR",
+      "status": "IR",
+      "detail": "Reserve list (R48)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Isiah Pacheco": {
+      "name": "Isiah Pacheco",
+      "team": "DET",
+      "pos": "RB",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Ty Chandler": {
+      "name": "Ty Chandler",
+      "team": "NO",
+      "pos": "RB",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Skylar Thompson": {
+      "name": "Skylar Thompson",
+      "team": "BAL",
+      "pos": "QB",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Brittain Brown": {
+      "name": "Brittain Brown",
+      "team": "CHI",
+      "pos": "RB",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Jordan Mason": {
+      "name": "Jordan Mason",
+      "team": "MIN",
+      "pos": "RB",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Ronnie Rivers": {
+      "name": "Ronnie Rivers",
+      "team": "LAR",
+      "pos": "RB",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Malik Davis": {
+      "name": "Malik Davis",
+      "team": "DAL",
+      "pos": "RB",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Alec Pierce": {
+      "name": "Alec Pierce",
+      "team": "IND",
+      "pos": "WR",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Calvin Austin III": {
+      "name": "Calvin Austin III",
+      "team": "NYG",
+      "pos": "WR",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Will Mallory": {
+      "name": "Will Mallory",
+      "team": "IND",
+      "pos": "TE",
+      "status": "IR",
+      "detail": "Reserve list (R48)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Tank Bigsby": {
+      "name": "Tank Bigsby",
+      "team": "PHI",
+      "pos": "RB",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Scott Matlock": {
+      "name": "Scott Matlock",
+      "team": "LAC",
+      "pos": "RB",
+      "status": "IR",
+      "detail": "Reserve list (R48)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Andrei Iosivas": {
+      "name": "Andrei Iosivas",
+      "team": "CIN",
+      "pos": "WR",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Tyrell Shavers": {
+      "name": "Tyrell Shavers",
+      "team": "BUF",
+      "pos": "WR",
+      "status": "IR",
+      "detail": "Reserve list (R04)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Julian Hill": {
+      "name": "Julian Hill",
+      "team": "NE",
+      "pos": "TE",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Princeton Fant": {
+      "name": "Princeton Fant",
+      "team": "DAL",
+      "pos": "TE",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Jake Bobo": {
+      "name": "Jake Bobo",
       "team": "SEA",
       "pos": "WR",
       "status": "IR",
       "detail": "Reserve list (R01)",
       "practice": "",
-      "week": 22,
+      "week": 5,
       "source": "nflverse",
       "origin": "roster"
     },
-    "Antonio Gibson": {
-      "name": "Antonio Gibson",
-      "team": "NE",
+    "Tank Dell": {
+      "name": "Tank Dell",
+      "team": "HOU",
+      "pos": "WR",
+      "status": "IR",
+      "detail": "Reserve list (R48)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "De'Von Achane": {
+      "name": "De'Von Achane",
+      "team": "MIA",
       "pos": "RB",
       "status": "IR",
       "detail": "Reserve list (R01)",
       "practice": "",
-      "week": 22,
+      "week": 5,
       "source": "nflverse",
       "origin": "roster"
     },
-    "Deneric Prince": {
-      "name": "Deneric Prince",
-      "team": "NE",
-      "pos": "RB",
+    "Luke Musgrave": {
+      "name": "Luke Musgrave",
+      "team": "GB",
+      "pos": "TE",
       "status": "IR",
-      "detail": "Reserve list (R01)",
+      "detail": "Reserve list (R04)",
       "practice": "",
-      "week": 22,
+      "week": 5,
       "source": "nflverse",
       "origin": "roster"
     },
-    "Kenny McIntosh": {
-      "name": "Kenny McIntosh",
-      "team": "SEA",
-      "pos": "RB",
+    "Jayden Reed": {
+      "name": "Jayden Reed",
+      "team": "GB",
+      "pos": "WR",
       "status": "IR",
       "detail": "Reserve list (R01)",
       "practice": "",
-      "week": 22,
+      "week": 5,
       "source": "nflverse",
       "origin": "roster"
     },
@@ -49894,53 +50472,559 @@
       "team": "SEA",
       "pos": "RB",
       "status": "IR",
-      "detail": "Reserve list (R01)",
+      "detail": "Reserve list (R04)",
       "practice": "",
-      "week": 22,
+      "week": 5,
       "source": "nflverse",
       "origin": "roster"
     },
-    "Terrell Jennings": {
-      "name": "Terrell Jennings",
-      "team": "NE",
-      "pos": "RB",
-      "status": "IR",
-      "detail": "Reserve list (R01)",
-      "practice": "",
-      "week": 22,
-      "source": "nflverse",
-      "origin": "roster"
-    },
-    "Brock Lampe": {
-      "name": "Brock Lampe",
-      "team": "NE",
-      "pos": "RB",
-      "status": "IR",
-      "detail": "Reserve list (R01)",
-      "practice": "",
-      "week": 22,
-      "source": "nflverse",
-      "origin": "roster"
-    },
-    "Lan Larison": {
-      "name": "Lan Larison",
-      "team": "NE",
-      "pos": "RB",
-      "status": "IR",
-      "detail": "Reserve list (R01)",
-      "practice": "",
-      "week": 22,
-      "source": "nflverse",
-      "origin": "roster"
-    },
-    "Tory Horton": {
-      "name": "Tory Horton",
-      "team": "SEA",
+    "Johnny Wilson": {
+      "name": "Johnny Wilson",
+      "team": "PHI",
       "pos": "WR",
       "status": "IR",
       "detail": "Reserve list (R01)",
       "practice": "",
-      "week": 22,
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Chris Collier": {
+      "name": "Chris Collier",
+      "team": "LV",
+      "pos": "RB",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Isaac Guerendo": {
+      "name": "Isaac Guerendo",
+      "team": "SF",
+      "pos": "RB",
+      "status": "IR",
+      "detail": "Reserve list (R04)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "British Brooks": {
+      "name": "British Brooks",
+      "team": "HOU",
+      "pos": "RB",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Mason Tipton": {
+      "name": "Mason Tipton",
+      "team": "NO",
+      "pos": "WR",
+      "status": "IR",
+      "detail": "Reserve list (R04)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Cole Burgess": {
+      "name": "Cole Burgess",
+      "team": "PIT",
+      "pos": "WR",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Tip Reiman": {
+      "name": "Tip Reiman",
+      "team": "ARI",
+      "pos": "TE",
+      "status": "IR",
+      "detail": "Reserve list (R04)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Jalen McMillan": {
+      "name": "Jalen McMillan",
+      "team": "TB",
+      "pos": "WR",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Ricky Pearsall": {
+      "name": "Ricky Pearsall",
+      "team": "SF",
+      "pos": "WR",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Trey Benson": {
+      "name": "Trey Benson",
+      "team": "ARI",
+      "pos": "RB",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Thomas Yassmin": {
+      "name": "Thomas Yassmin",
+      "team": "GB",
+      "pos": "TE",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Savion Williams": {
+      "name": "Savion Williams",
+      "team": "GB",
+      "pos": "WR",
+      "status": "IR",
+      "detail": "Reserve list (R48)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Jayden Higgins": {
+      "name": "Jayden Higgins",
+      "team": "HOU",
+      "pos": "WR",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Dylan Sampson": {
+      "name": "Dylan Sampson",
+      "team": "CLE",
+      "pos": "RB",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Jaylin Lane": {
+      "name": "Jaylin Lane",
+      "team": "WAS",
+      "pos": "WR",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "KeAndre Lambert-Smith": {
+      "name": "KeAndre Lambert-Smith",
+      "team": "LAC",
+      "pos": "WR",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Graham Mertz": {
+      "name": "Graham Mertz",
+      "team": "HOU",
+      "pos": "QB",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Caleb Lohner": {
+      "name": "Caleb Lohner",
+      "team": "DEN",
+      "pos": "TE",
+      "status": "IR",
+      "detail": "Reserve list (R48)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Moliki Matavao": {
+      "name": "Moliki Matavao",
+      "team": "NO",
+      "pos": "TE",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Beaux Collins": {
+      "name": "Beaux Collins",
+      "team": "ATL",
+      "pos": "WR",
+      "status": "IR",
+      "detail": "Reserve list (R48)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Carter Runyon": {
+      "name": "Carter Runyon",
+      "team": "LV",
+      "pos": "TE",
+      "status": "IR",
+      "detail": "Reserve list (R48)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Ben Yurosek": {
+      "name": "Ben Yurosek",
+      "team": "MIN",
+      "pos": "TE",
+      "status": "IR",
+      "detail": "Reserve list (R48)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Jeremiah Webb": {
+      "name": "Jeremiah Webb",
+      "team": "NE",
+      "pos": "WR",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Dont'e Thornton Jr.": {
+      "name": "Dont'e Thornton Jr.",
+      "team": "LV",
+      "pos": "WR",
+      "status": "IR",
+      "detail": "Reserve list (R48)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Arian Smith": {
+      "name": "Arian Smith",
+      "team": "NYJ",
+      "pos": "WR",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Robbie Ouzts": {
+      "name": "Robbie Ouzts",
+      "team": "SEA",
+      "pos": "RB",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Jaxson Dart": {
+      "name": "Jaxson Dart",
+      "team": "NYG",
+      "pos": "QB",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Dillon Gabriel": {
+      "name": "Dillon Gabriel",
+      "team": "CLE",
+      "pos": "QB",
+      "status": "IR",
+      "detail": "Reserve list (R48)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Jack Bech": {
+      "name": "Jack Bech",
+      "team": "LV",
+      "pos": "WR",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Terrance Ferguson": {
+      "name": "Terrance Ferguson",
+      "team": "LAR",
+      "pos": "TE",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Carson Towt": {
+      "name": "Carson Towt",
+      "team": "IND",
+      "pos": "TE",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Ja'Kobi Lane": {
+      "name": "Ja'Kobi Lane",
+      "team": "BAL",
+      "pos": "WR",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Adam Randall": {
+      "name": "Adam Randall",
+      "team": "BAL",
+      "pos": "RB",
+      "status": "IR",
+      "detail": "Reserve list (R48)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Jaren Kanak": {
+      "name": "Jaren Kanak",
+      "team": "TEN",
+      "pos": "TE",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "DJ Rogers": {
+      "name": "DJ Rogers",
+      "team": "DAL",
+      "pos": "TE",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Corey Rucker": {
+      "name": "Corey Rucker",
+      "team": "LV",
+      "pos": "WR",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Jordyn Tyson": {
+      "name": "Jordyn Tyson",
+      "team": "NO",
+      "pos": "WR",
+      "status": "IR",
+      "detail": "Reserve list (R48)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "De'Zhaun Stribling": {
+      "name": "De'Zhaun Stribling",
+      "team": "SF",
+      "pos": "WR",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Joe Royer": {
+      "name": "Joe Royer",
+      "team": "CLE",
+      "pos": "TE",
+      "status": "IR",
+      "detail": "Reserve list (R49)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Hayden Large": {
+      "name": "Hayden Large",
+      "team": "CHI",
+      "pos": "TE",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Chip Trayanum": {
+      "name": "Chip Trayanum",
+      "team": "NYJ",
+      "pos": "RB",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Myles Montgomery": {
+      "name": "Myles Montgomery",
+      "team": "NE",
+      "pos": "RB",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Jameson Geers": {
+      "name": "Jameson Geers",
+      "team": "ARI",
+      "pos": "TE",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Matthew Caldwell": {
+      "name": "Matthew Caldwell",
+      "team": "LAR",
+      "pos": "QB",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Kendrick Law": {
+      "name": "Kendrick Law",
+      "team": "DET",
+      "pos": "WR",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Brock Rechsteiner": {
+      "name": "Brock Rechsteiner",
+      "team": "NO",
+      "pos": "WR",
+      "status": "IR",
+      "detail": "Reserve list (R40)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Eli Stowers": {
+      "name": "Eli Stowers",
+      "team": "PHI",
+      "pos": "TE",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Jonah Coleman": {
+      "name": "Jonah Coleman",
+      "team": "DEN",
+      "pos": "RB",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Omar Cooper Jr.": {
+      "name": "Omar Cooper Jr.",
+      "team": "NYJ",
+      "pos": "WR",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
+      "source": "nflverse",
+      "origin": "roster"
+    },
+    "Jadarian Price": {
+      "name": "Jadarian Price",
+      "team": "SEA",
+      "pos": "RB",
+      "status": "IR",
+      "detail": "Reserve list (R01)",
+      "practice": "",
+      "week": 5,
       "source": "nflverse",
       "origin": "roster"
     }
@@ -49976,12 +51060,12 @@
         "recsPG": 2.2188
       },
       "2": {
-        "carryShare": 0.139,
+        "carryShare": 0.176,
         "n": 26,
-        "rzCarryShare": 0.147,
-        "rzTargetShare": 0.0145,
+        "rzCarryShare": 0.1665,
+        "rzTargetShare": 0.0155,
         "targShare": 0.0277,
-        "breakawayRate": 0.0355,
+        "breakawayRate": 0.036,
         "ypc": 4.1683,
         "catchRate": 0.7639,
         "snapShare": 0.296,
@@ -62697,16 +63781,16 @@
     "teamCount": 32,
     "playerCount": 1003,
     "rookieCount": 214,
-    "injuryCount": 11,
+    "injuryCount": 95,
     "gameCount": 50,
     "currentSeasonPlayers": 397,
     "depthPriorPlayers": 322,
-    "injuryBackupCount": 11
+    "injuryBackupCount": 95
   },
   "v727": {
     "version": "v7.27",
     "season": 2026,
-    "throughDate": "2026-10-05",
+    "throughDate": "2026-10-08",
     "players": {
       "Philip Rivers": {
         "pid": "00-0022942",
@@ -67413,55 +68497,55 @@
         "pos": "QB",
         "team": "DAL",
         "g": [
-          4,
+          5,
           17,
           8
         ],
         "s": {
           "pass_yds": [
-            266.25,
+            276.2,
             267.7647,
             247.25,
-            271.6239,
-            264.707,
-            262.4936,
-            296.6667
+            284.6312,
+            273.2164,
+            268.5707,
+            309.0
           ],
           "pass_tds": [
-            2.0,
+            1.8,
             1.7647,
             1.375,
-            1.5836,
-            1.6543,
-            1.6993,
-            2.0
+            1.4127,
+            1.5527,
+            1.6531,
+            1.0
           ],
           "dropbacks": [
-            39.0,
+            39.6,
             36.9412,
             38.125,
-            38.6893,
-            37.2398,
-            36.9309,
-            40.6667
+            39.6594,
+            38.0098,
+            37.4109,
+            43.6667
           ],
           "rush_yds": [
-            16.5,
+            13.2,
             10.4118,
             6.75,
-            13.5843,
-            12.9813,
-            12.2998,
-            17.3333
+            9.6055,
+            10.9134,
+            11.2671,
+            8.6667
           ],
           "carries": [
-            3.0,
+            2.4,
             3.1176,
             1.625,
-            2.8894,
-            2.974,
-            3.01,
-            3.3333
+            2.0431,
+            2.4983,
+            2.7483,
+            2.0
           ],
           "rec_yds": [
             0.0,
@@ -67498,12 +68582,12 @@
             0.0
           ],
           "cshare": [
-            0.1277,
+            0.1121,
             0.114,
-            0.1071
+            0.1022
           ],
           "dbshare": [
-            0.9341,
+            0.9474,
             0.9222
           ]
         }
@@ -71613,7 +72697,7 @@
         "pos": "WR",
         "team": "TB",
         "g": [
-          4,
+          5,
           9,
           7
         ],
@@ -71646,61 +72730,61 @@
             0.0
           ],
           "rush_yds": [
-            3.75,
+            3.6,
             0.0,
             0.2857,
-            2.073,
-            1.7076,
-            1.3094,
-            4.0
+            2.3448,
+            1.9208,
+            1.4853,
+            1.0
           ],
           "carries": [
-            0.5,
+            0.6,
             0.0,
             0.1429,
-            0.2521,
-            0.231,
-            0.2096,
+            0.4712,
+            0.3559,
+            0.2871,
             0.3333
           ],
           "rec_yds": [
-            35.5,
+            35.8,
             40.0,
             82.2857,
-            36.2048,
-            41.937,
-            48.8201,
-            34.0
+            36.4293,
+            40.8535,
+            46.44,
+            31.0
           ],
           "recs": [
-            4.0,
+            3.8,
             3.6667,
             7.1429,
-            4.2164,
-            4.2733,
-            4.5801,
+            3.8596,
+            4.0531,
+            4.3659,
             4.0
           ],
           "targets": [
-            4.5,
+            4.2,
             5.6667,
             8.8571,
-            4.9891,
-            5.3271,
-            5.9417,
+            4.4058,
+            4.9342,
+            5.5909,
             4.6667
           ]
         },
         "sh": {
           "tshare": [
-            0.1429,
+            0.1391,
             0.1753,
-            0.1406
+            0.1272
           ],
           "cshare": [
-            0.0206,
+            0.0221,
             0.0,
-            0.0129
+            0.0169
           ],
           "dbshare": [
             0.0,
@@ -83413,7 +84497,7 @@
         "pos": "WR",
         "team": "DAL",
         "g": [
-          4,
+          5,
           13,
           15
         ],
@@ -83446,61 +84530,61 @@
             0.0
           ],
           "rush_yds": [
-            -1.5,
+            -1.2,
             0.1538,
             4.6667,
-            -1.7485,
-            -0.8701,
-            -0.2519,
+            -1.2366,
+            -0.7392,
+            -0.2665,
             -2.0
           ],
           "carries": [
-            0.5,
+            0.4,
             0.0769,
             0.9333,
-            0.4006,
-            0.2916,
-            0.2594,
+            0.2832,
+            0.2426,
+            0.226,
             0.3333
           ],
           "rec_yds": [
-            124.5,
+            101.4,
             82.8462,
             79.6,
-            119.1546,
-            101.7646,
-            94.116,
-            151.3333
+            86.8902,
+            86.9751,
+            86.9095,
+            103.3333
           ],
           "recs": [
-            9.25,
+            7.8,
             5.7692,
             6.7333,
-            9.2033,
-            7.63,
-            6.9886,
-            10.6667
+            7.0932,
+            6.7241,
+            6.5272,
+            8.6667
           ],
           "targets": [
-            11.5,
+            10.2,
             9.0,
             10.1333,
-            11.6339,
-            10.1785,
-            9.7234,
-            12.6667
+            9.6905,
+            9.342,
+            9.2721,
+            11.3333
           ]
         },
         "sh": {
           "tshare": [
-            0.3067,
+            0.2656,
             0.2458,
-            0.2701
+            0.2407
           ],
           "cshare": [
-            0.0213,
+            0.0187,
             0.0027,
-            0.0119
+            0.0146
           ],
           "dbshare": [
             0.0,
@@ -88413,7 +89497,7 @@
         "pos": "RB",
         "team": "TB",
         "g": [
-          4,
+          5,
           17,
           16
         ],
@@ -88446,61 +89530,61 @@
             0.0
           ],
           "rush_yds": [
-            6.5,
+            8.8,
             31.5882,
             18.125,
-            11.3899,
-            18.6988,
-            22.6217,
-            3.6667
+            13.3268,
+            18.6154,
+            22.3685,
+            6.3333
           ],
           "carries": [
-            3.25,
+            3.4,
             6.7059,
             4.6875,
-            4.0516,
-            4.9978,
-            5.5696,
-            2.6667
+            4.0365,
+            4.8391,
+            5.4394,
+            3.3333
           ],
           "rec_yds": [
-            11.0,
+            10.8,
             28.5882,
             7.25,
-            21.5653,
-            25.1626,
-            25.5456,
-            13.6667
+            18.1782,
+            22.7603,
+            24.3028,
+            15.3333
           ],
           "recs": [
-            2.0,
+            2.2,
             4.2941,
             1.0,
-            2.9299,
-            3.4845,
-            3.6618,
+            2.9506,
+            3.4124,
+            3.6306,
             2.3333
           ],
           "targets": [
-            3.0,
+            3.2,
             5.0,
             1.375,
-            3.9431,
-            4.4307,
-            4.5198,
+            3.96,
+            4.3698,
+            4.5122,
             3.6667
           ]
         },
         "sh": {
           "tshare": [
-            0.0952,
+            0.106,
             0.1545,
-            0.1179
+            0.1263
           ],
           "cshare": [
-            0.134,
+            0.125,
             0.2801,
-            0.1724
+            0.1375
           ],
           "dbshare": [
             0.0,
@@ -89513,7 +90597,7 @@
         "pos": "RB",
         "team": "DAL",
         "g": [
-          4,
+          5,
           16,
           17
         ],
@@ -89546,61 +90630,61 @@
             0.0
           ],
           "rush_yds": [
-            57.75,
+            55.2,
             75.0625,
             30.1765,
-            62.5823,
-            63.424,
-            64.2758,
-            63.3333
+            57.4347,
+            60.5685,
+            63.0317,
+            68.3333
           ],
           "carries": [
-            15.5,
+            14.8,
             15.75,
             8.1765,
-            16.0062,
-            15.3964,
-            14.8856,
+            14.8332,
+            14.8711,
+            14.7173,
             16.6667
           ],
           "rec_yds": [
-            19.25,
+            18.8,
             8.5625,
             20.3529,
-            14.4938,
-            12.5531,
-            11.9172,
-            15.3333
+            15.2285,
+            13.2834,
+            12.4458,
+            14.3333
           ],
           "recs": [
-            3.75,
+            3.4,
             2.1875,
             3.0588,
-            3.1234,
-            2.6801,
-            2.5582,
-            3.3333
+            2.7943,
+            2.5719,
+            2.5119,
+            3.0
           ],
           "targets": [
-            4.25,
+            4.0,
             3.1875,
             4.1176,
-            3.7647,
-            3.4515,
-            3.4281,
-            4.0
+            3.5407,
+            3.3797,
+            3.3926,
+            3.6667
           ]
         },
         "sh": {
           "tshare": [
-            0.1133,
+            0.1042,
             0.085,
-            0.1005
+            0.0961
           ],
           "cshare": [
-            0.6596,
+            0.6916,
             0.5793,
-            0.5217
+            0.5762
           ],
           "dbshare": [
             0.0,
@@ -91713,7 +92797,7 @@
         "pos": "WR",
         "team": "DAL",
         "g": [
-          4,
+          5,
           17,
           14
         ],
@@ -91764,38 +92848,38 @@
             0.0
           ],
           "rec_yds": [
-            56.25,
+            71.0,
             84.0588,
             64.2857,
-            63.4554,
-            66.96,
-            71.3294,
-            65.6667
+            82.9499,
+            77.1314,
+            76.8628,
+            95.6667
           ],
           "recs": [
-            4.5,
+            5.4,
             5.4706,
             4.2143,
-            4.2393,
-            4.6232,
-            4.867,
-            5.0
+            5.6341,
+            5.3348,
+            5.2812,
+            6.0
           ],
           "targets": [
-            7.0,
+            8.2,
             8.0588,
             7.3571,
-            6.5294,
-            7.076,
-            7.4443,
-            7.3333
+            8.4251,
+            8.0362,
+            7.9884,
+            9.0
           ]
         },
         "sh": {
           "tshare": [
-            0.1867,
+            0.2135,
             0.2196,
-            0.1706
+            0.2037
           ],
           "cshare": [
             0.0,
@@ -96113,7 +97197,7 @@
         "pos": "WR",
         "team": "DAL",
         "g": [
-          3,
+          4,
           15,
           15
         ],
@@ -96146,61 +97230,61 @@
             0.0
           ],
           "rush_yds": [
-            3.3333,
+            2.5,
             5.9333,
             6.1333,
-            5.1453,
-            5.6106,
-            6.2406,
+            3.6381,
+            4.7129,
+            5.699,
             3.3333
           ],
           "carries": [
-            0.6667,
+            0.5,
             1.1333,
             1.0667,
-            0.8679,
-            0.9644,
-            1.0756,
+            0.6137,
+            0.8084,
+            0.9745,
             0.6667
           ],
           "rec_yds": [
-            5.6667,
+            9.75,
             26.4,
             28.0,
-            13.4036,
-            17.8937,
-            20.651,
-            5.6667
+            15.9192,
+            18.4688,
+            20.3954,
+            10.3333
           ],
           "recs": [
-            0.6667,
+            1.0,
             1.7333,
             2.0667,
-            0.84,
-            1.104,
-            1.3319,
-            0.6667
+            1.1796,
+            1.2415,
+            1.3637,
+            1.0
           ],
           "targets": [
-            1.0,
+            1.75,
             2.5333,
             3.4667,
-            1.394,
-            1.7416,
-            2.0964,
-            1.0
+            2.1572,
+            2.0984,
+            2.2426,
+            2.0
           ]
         },
         "sh": {
           "tshare": [
-            0.0286,
+            0.0476,
             0.0677,
-            0.0455
+            0.0433
           ],
           "cshare": [
-            0.029,
+            0.0244,
             0.0408,
-            0.0301
+            0.0192
           ],
           "dbshare": [
             0.0,
@@ -97013,7 +98097,7 @@
         "pos": "TE",
         "team": "DAL",
         "g": [
-          4,
+          5,
           17,
           14
         ],
@@ -97049,53 +98133,53 @@
             0.0,
             0.0588,
             0.0,
-            0.0092,
-            0.0286,
-            0.0399,
+            0.0065,
+            0.024,
+            0.0366,
             0.0
           ],
           "carries": [
             0.0,
             0.0588,
             0.0,
-            0.0092,
-            0.0286,
-            0.0399,
+            0.0065,
+            0.024,
+            0.0366,
             0.0
           ],
           "rec_yds": [
-            20.75,
+            20.4,
             35.2941,
             35.2857,
-            19.4067,
-            22.7885,
-            26.5925,
-            25.6667
+            19.2861,
+            22.1327,
+            25.7134,
+            17.6667
           ],
           "recs": [
             3.0,
             4.8235,
             4.2143,
-            2.8795,
-            3.1458,
-            3.6314,
-            3.3333
+            2.9146,
+            3.1151,
+            3.5434,
+            3.0
           ],
           "targets": [
-            3.75,
+            4.2,
             6.0,
             6.1429,
-            3.8831,
-            4.1812,
-            4.738,
-            4.3333
+            4.5029,
+            4.463,
+            4.8072,
+            5.0
           ]
         },
         "sh": {
           "tshare": [
-            0.1,
+            0.1094,
             0.1635,
-            0.09
+            0.1065
           ],
           "cshare": [
             0.0,
@@ -98013,7 +99097,7 @@
         "pos": "TE",
         "team": "TB",
         "g": [
-          4,
+          5,
           15,
           14
         ],
@@ -98064,38 +99148,38 @@
             0.0
           ],
           "rec_yds": [
-            39.25,
+            36.4,
             38.1333,
             42.8571,
-            42.2722,
-            40.6021,
-            39.3574,
-            43.6667
+            37.2126,
+            38.0945,
+            38.0472,
+            39.3333
           ],
           "recs": [
-            3.75,
+            3.6,
             3.9333,
             4.2143,
-            3.9401,
-            3.9379,
-            3.8771,
-            4.0
+            3.6646,
+            3.7836,
+            3.7806,
+            3.3333
           ],
           "targets": [
-            5.75,
+            5.4,
             5.4,
             6.2143,
-            5.7798,
-            5.6052,
-            5.502,
-            6.0
+            5.2582,
+            5.3397,
+            5.3299,
+            5.3333
           ]
         },
         "sh": {
           "tshare": [
-            0.1825,
+            0.1788,
             0.1636,
-            0.1875
+            0.2081
           ],
           "cshare": [
             0.0,
@@ -100113,7 +101197,7 @@
         "pos": "TE",
         "team": "DAL",
         "g": [
-          2,
+          3,
           14,
           10
         ],
@@ -100164,38 +101248,38 @@
             0.0
           ],
           "rec_yds": [
-            10.5,
+            10.0,
             9.4286,
             24.1,
-            12.0162,
-            12.1595,
-            12.6667,
-            11.0
+            11.1328,
+            11.6593,
+            12.3742,
+            10.0
           ],
           "recs": [
             1.0,
             1.0,
             2.7,
-            1.0961,
-            1.145,
-            1.2575,
+            1.0679,
+            1.1219,
+            1.2361,
             1.0
           ],
           "targets": [
             1.0,
             1.6429,
             3.6,
-            1.2286,
-            1.4632,
-            1.7439,
+            1.1616,
+            1.387,
+            1.6703,
             1.0
           ]
         },
         "sh": {
           "tshare": [
-            0.027,
+            0.0259,
             0.0435,
-            0.0364
+            0.0326
           ],
           "cshare": [
             0.0,
@@ -103213,7 +104297,7 @@
         "pos": "RB",
         "team": "DAL",
         "g": [
-          3,
+          4,
           11,
           13
         ],
@@ -103246,61 +104330,61 @@
             0.0
           ],
           "rush_yds": [
-            2.6667,
+            3.25,
             6.4545,
             2.9231,
-            5.4337,
-            6.082,
-            5.6034,
-            2.6667
+            5.3066,
+            5.9073,
+            5.5414,
+            2.0
           ],
           "carries": [
-            0.6667,
+            0.75,
             1.4545,
             0.9231,
-            1.2788,
-            1.417,
-            1.3346,
+            1.197,
+            1.3481,
+            1.295,
             0.6667
           ],
           "rec_yds": [
-            0.6667,
+            0.5,
             9.9091,
             8.5385,
-            4.2347,
-            6.0231,
-            6.464,
+            2.9931,
+            5.0193,
+            5.7141,
             0.6667
           ],
           "recs": [
-            0.3333,
+            0.25,
             1.1818,
             0.9231,
-            0.7057,
-            0.8249,
-            0.8595,
+            0.4989,
+            0.6911,
+            0.7763,
             0.3333
           ],
           "targets": [
-            0.3333,
+            0.25,
             1.3636,
             1.2308,
-            0.7633,
-            0.9351,
-            1.0159,
+            0.5396,
+            0.7838,
+            0.9198,
             0.3333
           ]
         },
         "sh": {
           "tshare": [
-            0.0091,
+            0.0066,
             0.0408,
-            0.0246
+            0.0141
           ],
           "cshare": [
-            0.0312,
+            0.039,
             0.0494,
-            0.0745
+            0.0795
           ],
           "dbshare": [
             0.0,
@@ -104713,7 +105797,7 @@
         "pos": "RB",
         "team": "TB",
         "g": [
-          1,
+          2,
           14,
           11
         ],
@@ -104746,61 +105830,61 @@
             0.0
           ],
           "rush_yds": [
-            10.0,
+            14.0,
             22.8571,
             28.0,
-            9.9861,
-            16.4594,
-            21.1221,
-            4.6667
+            12.3248,
+            16.4065,
+            19.4639,
+            8.0
           ],
           "carries": [
-            3.0,
+            4.0,
             6.1429,
             4.5455,
-            4.0993,
-            5.0516,
-            5.5053,
-            3.0
+            4.3624,
+            5.0207,
+            5.3566,
+            4.0
           ],
           "rec_yds": [
             0.0,
             2.4286,
             9.9091,
-            0.7199,
-            1.8524,
-            3.0652,
+            0.505,
+            1.4162,
+            2.1468,
             0.0
           ],
           "recs": [
             0.0,
             0.5714,
             0.8182,
-            0.0941,
-            0.2758,
-            0.4459,
+            0.0663,
+            0.2244,
+            0.3733,
             0.0
           ],
           "targets": [
             0.0,
             0.7857,
             1.0909,
-            0.2807,
-            0.49,
-            0.6749,
-            0.3333
+            0.1983,
+            0.4045,
+            0.5833,
+            0.0
           ]
         },
         "sh": {
           "tshare": [
             0.0,
             0.0244,
-            0.0055
+            0.0056
           ],
           "cshare": [
-            0.0968,
+            0.1143,
             0.2251,
-            0.1311
+            0.1202
           ],
           "dbshare": [
             0.0,
@@ -105813,7 +106897,7 @@
         "pos": "TE",
         "team": "TB",
         "g": [
-          1,
+          2,
           4,
           5
         ],
@@ -105864,38 +106948,38 @@
             0.0
           ],
           "rec_yds": [
-            0.0,
+            2.5,
             2.75,
             23.0,
-            5.488,
-            8.903,
-            10.5599,
-            3.6667
+            5.3447,
+            8.2475,
+            9.9612,
+            1.6667
           ],
           "recs": [
-            0.0,
+            0.5,
             0.25,
             2.2,
-            0.5123,
-            0.8234,
-            0.9735,
+            0.6555,
+            0.853,
+            0.9764,
             0.3333
           ],
           "targets": [
             1.0,
             1.0,
             2.8,
-            1.286,
-            1.5153,
-            1.6045,
+            1.202,
+            1.4288,
+            1.5394,
             1.0
           ]
         },
         "sh": {
           "tshare": [
-            0.027,
+            0.0323,
             0.0305,
-            0.035
+            0.0311
           ],
           "cshare": [
             0.0,
@@ -105913,7 +106997,7 @@
         "pos": "WR",
         "team": "DAL",
         "g": [
-          2,
+          3,
           5,
           14
         ],
@@ -105949,53 +107033,53 @@
             0.0,
             0.0,
             0.3571,
-            0.002,
-            0.0294,
-            0.0902,
+            0.0014,
+            0.0248,
+            0.0827,
             0.0
           ],
           "carries": [
             0.0,
             0.0,
             0.1429,
-            0.0009,
-            0.0122,
-            0.0367,
+            0.0006,
+            0.0103,
+            0.0337,
             0.0
           ],
           "rec_yds": [
-            5.0,
+            10.0,
             5.0,
             11.9286,
-            4.3677,
-            6.0001,
-            7.6038,
-            3.3333
+            8.9454,
+            8.1972,
+            8.4903,
+            10.0
           ],
           "recs": [
-            0.5,
+            1.0,
             0.2,
             1.2143,
-            0.3547,
-            0.5123,
-            0.7225,
-            0.3333
+            0.8364,
+            0.7439,
+            0.8048,
+            1.0
           ],
           "targets": [
-            1.5,
+            2.3333,
             1.0,
             3.0,
-            1.4196,
-            1.632,
-            1.9641,
-            1.3333
+            2.1753,
+            2.0062,
+            2.1212,
+            2.3333
           ]
         },
         "sh": {
           "tshare": [
-            0.038,
+            0.0579,
             0.0281,
-            0.0333
+            0.0467
           ],
           "cshare": [
             0.0,
@@ -108413,7 +109497,7 @@
         "pos": "RB",
         "team": "TB",
         "g": [
-          4,
+          5,
           10,
           17
         ],
@@ -108446,61 +109530,61 @@
             0.0
           ],
           "rush_yds": [
-            60.25,
+            81.2,
             58.8,
             66.0,
-            60.3771,
-            61.6691,
-            63.7937,
-            65.3333
+            91.0291,
+            78.415,
+            73.628,
+            90.6667
           ],
           "carries": [
-            14.0,
+            15.4,
             17.3,
             12.1765,
-            15.6379,
-            15.8455,
-            15.8353,
-            16.0
+            17.2092,
+            16.6959,
+            16.4063,
+            17.3333
           ],
           "rec_yds": [
-            15.25,
+            14.2,
             27.7,
             23.0588,
-            11.8894,
-            17.3783,
-            21.4179,
-            4.3333
+            11.3338,
+            16.1286,
+            20.1146,
+            7.3333
           ],
           "recs": [
-            3.25,
+            3.0,
             3.0,
             2.7647,
-            2.2793,
-            2.6712,
-            2.9118,
-            2.0
+            2.1972,
+            2.5517,
+            2.7769,
+            1.3333
           ],
           "targets": [
-            3.75,
+            3.6,
             3.5,
             3.0588,
-            2.8956,
-            3.2711,
-            3.4498,
-            2.6667
+            2.9259,
+            3.2179,
+            3.3651,
+            2.3333
           ]
         },
         "sh": {
           "tshare": [
-            0.119,
+            0.1192,
             0.1084,
-            0.1198
+            0.1156
           ],
           "cshare": [
-            0.5773,
+            0.5662,
             0.5925,
-            0.5871
+            0.5787
           ],
           "dbshare": [
             0.0,
@@ -109613,7 +110697,7 @@
         "pos": "WR",
         "team": "DAL",
         "g": [
-          4,
+          5,
           13,
           7
         ],
@@ -109649,53 +110733,53 @@
             0.0,
             1.9231,
             0.0,
-            0.052,
-            0.338,
-            0.6846,
+            0.0368,
+            0.2842,
+            0.6278,
             0.0
           ],
           "carries": [
             0.0,
             0.3077,
             0.0,
-            0.0094,
-            0.0576,
-            0.113,
+            0.0067,
+            0.0484,
+            0.1036,
             0.0
           ],
           "rec_yds": [
-            26.0,
+            38.8,
             36.5385,
             14.5714,
-            32.5922,
-            33.1729,
-            31.846,
-            27.3333
+            49.4121,
+            42.4113,
+            37.5974,
+            49.6667
           ],
           "recs": [
-            3.25,
+            3.2,
             3.0769,
             1.4286,
-            3.4897,
-            3.3392,
-            3.0734,
-            3.6667
+            3.3464,
+            3.2903,
+            3.091,
+            3.0
           ],
           "targets": [
-            5.75,
+            5.4,
             4.3077,
             2.0,
-            5.7024,
-            5.2119,
-            4.6574,
-            6.3333
+            5.204,
+            5.0267,
+            4.6384,
+            5.6667
           ]
         },
         "sh": {
           "tshare": [
-            0.1533,
+            0.1406,
             0.1189,
-            0.1553
+            0.1574
           ],
           "cshare": [
             0.0,
@@ -110413,7 +111497,7 @@
         "pos": "TE",
         "team": "DAL",
         "g": [
-          3,
+          4,
           10,
           6
         ],
@@ -110464,38 +111548,38 @@
             0.0
           ],
           "rec_yds": [
-            11.0,
+            8.25,
             9.0,
             14.6667,
-            12.1113,
-            12.0752,
-            11.5705,
-            11.0
+            8.5605,
+            10.092,
+            10.404,
+            6.3333
           ],
           "recs": [
-            1.0,
+            0.75,
             0.9,
             1.5,
-            0.9069,
-            1.0022,
-            1.0508,
-            1.0
+            0.641,
+            0.8376,
+            0.9449,
+            0.3333
           ],
           "targets": [
-            1.3333,
+            1.5,
             1.3,
             2.3333,
-            1.4389,
-            1.4874,
-            1.5333,
+            1.6034,
+            1.5716,
+            1.5803,
             1.3333
           ]
         },
         "sh": {
           "tshare": [
-            0.0336,
+            0.0373,
             0.0351,
-            0.0459
+            0.0495
           ],
           "cshare": [
             0.0,
@@ -116913,7 +117997,7 @@
         "pos": "WR",
         "team": "TB",
         "g": [
-          4,
+          5,
           17,
           0
         ],
@@ -116946,61 +118030,61 @@
             0.0
           ],
           "rush_yds": [
-            -0.75,
+            2.2,
             0.5294,
             null,
-            -0.4371,
-            -0.3007,
-            -0.0923,
-            -1.0
+            3.7935,
+            2.026,
+            1.2815,
+            4.6667
           ],
           "carries": [
-            0.25,
+            0.4,
             0.1176,
             null,
-            0.1476,
-            0.1292,
-            0.1235,
+            0.3974,
+            0.2709,
+            0.209,
             0.3333
           ],
           "rec_yds": [
-            38.5,
+            38.4,
             55.1765,
             null,
-            32.8094,
-            37.7542,
-            43.5662,
-            30.3333
+            34.3304,
+            37.7942,
+            43.0236,
+            37.6667
           ],
           "recs": [
-            3.75,
+            4.2,
             3.7059,
             null,
-            3.1645,
-            3.2633,
-            3.4321,
-            3.3333
+            3.9954,
+            3.7085,
+            3.6825,
+            4.3333
           ],
           "targets": [
-            6.0,
+            6.6,
             7.4706,
             null,
-            5.6736,
-            6.1174,
-            6.6129,
-            6.0
+            6.6483,
+            6.5864,
+            6.8457,
+            7.3333
           ]
         },
         "sh": {
           "tshare": [
-            0.1905,
+            0.2185,
             0.2276,
-            0.1667
+            0.2081
           ],
           "cshare": [
-            0.0103,
+            0.0147,
             0.0042,
-            0.0065
+            0.0112
           ],
           "dbshare": [
             0.0,
@@ -119613,7 +120697,7 @@
         "pos": "WR",
         "team": "TB",
         "g": [
-          4,
+          5,
           15,
           0
         ],
@@ -119646,61 +120730,61 @@
             0.0
           ],
           "rush_yds": [
-            1.5,
+            1.2,
             1.4667,
             null,
-            3.0461,
-            2.141,
-            1.7688,
+            2.153,
+            1.7894,
+            1.5904,
             3.3333
           ],
           "carries": [
-            0.5,
+            0.4,
             0.4667,
             null,
-            0.5249,
-            0.5136,
-            0.5045,
+            0.371,
+            0.4292,
+            0.4536,
             0.3333
           ],
           "rec_yds": [
-            18.5,
+            27.6,
             21.4667,
             null,
-            17.3099,
-            17.8155,
-            19.0829,
-            24.6667
+            30.9985,
+            25.4007,
+            23.6113,
+            29.6667
           ],
           "recs": [
             1.0,
             1.8667,
             null,
-            1.2924,
-            1.3861,
-            1.5317,
+            1.2067,
+            1.3227,
+            1.4781,
             1.3333
           ],
           "targets": [
-            2.25,
+            2.0,
             2.9333,
             null,
-            2.1522,
-            2.3347,
-            2.5547,
-            2.6667
+            1.8144,
+            2.1155,
+            2.3979,
+            1.6667
           ]
         },
         "sh": {
           "tshare": [
-            0.0714,
+            0.0662,
             0.0898,
-            0.0625
+            0.0636
           ],
           "cshare": [
-            0.0206,
+            0.0147,
             0.0174,
-            0.0194
+            0.0169
           ],
           "dbshare": [
             0.0,
@@ -129413,55 +130497,55 @@
         "pos": "QB",
         "team": "TB",
         "g": [
-          2,
+          3,
           0,
           0
         ],
         "s": {
           "pass_yds": [
-            74.0,
+            112.3333,
             null,
             null,
-            86.6964,
-            80.3956,
-            77.2038,
-            74.0
+            133.0483,
+            123.0189,
+            117.7405,
+            112.3333
           ],
           "pass_tds": [
-            0.5,
+            0.6667,
             null,
             null,
-            0.5858,
-            0.5432,
-            0.5216,
-            0.5
+            0.7735,
+            0.7225,
+            0.6951,
+            0.6667
           ],
           "dropbacks": [
-            16.5,
+            19.6667,
             null,
             null,
-            18.8162,
-            17.6668,
-            17.0845,
-            16.5
+            22.0711,
+            20.9373,
+            20.3172,
+            19.6667
           ],
           "rush_yds": [
-            32.0,
+            29.0,
             null,
             null,
-            35.9462,
-            33.9878,
-            32.9958,
-            32.0
+            30.0805,
+            29.6755,
+            29.3714,
+            29.0
           ],
           "carries": [
-            4.5,
+            5.3333,
             null,
             null,
-            5.1005,
-            4.8025,
-            4.6515,
-            4.5
+            5.9611,
+            5.6649,
+            5.5031,
+            5.3333
           ],
           "rec_yds": [
             0.0,
@@ -129498,12 +130582,12 @@
             0.0
           ],
           "cshare": [
-            0.1731,
+            0.1758,
             null,
-            0.1731
+            0.1758
           ],
           "dbshare": [
-            0.4024,
+            0.5221,
             null
           ]
         }
@@ -131463,21 +132547,21 @@
         ]
       },
       "DAL": {
-        "tg_cur": 4,
+        "tg_cur": 5,
         "t_pass": [
-          37.5,
+          38.4,
           36.7059
         ],
         "t_rush": [
-          23.5,
+          21.4,
           27.3529
         ],
         "t_db": [
-          41.75,
+          41.8,
           40.0588
         ],
         "pts": [
-          30.5,
+          27.6,
           27.7059
         ]
       },
@@ -131862,21 +132946,21 @@
         ]
       },
       "TB": {
-        "tg_cur": 4,
+        "tg_cur": 5,
         "t_pass": [
-          31.5,
+          30.2,
           32.8235
         ],
         "t_rush": [
-          24.25,
+          27.2,
           27.7647
         ],
         "t_db": [
-          39.5,
+          37.8,
           37.5294
         ],
         "pts": [
-          19.0,
+          20.0,
           22.3529
         ]
       },
@@ -132674,17 +133758,17 @@
       },
       "DAL": {
         "QB": {
-          "n": 4,
+          "n": 5,
           "pass_yds": [
-            242.5,
+            231.8,
             265.9412
           ],
           "pass_tds": [
-            2.25,
+            2.0,
             2.0588
           ],
           "rush_yds": [
-            47.0,
+            42.2,
             23.4118
           ],
           "rec_yds": [
@@ -132697,7 +133781,7 @@
           ]
         },
         "RB": {
-          "n": 4,
+          "n": 5,
           "pass_yds": [
             0.0,
             0.0
@@ -132707,20 +133791,20 @@
             0.0
           ],
           "rush_yds": [
-            97.25,
+            118.0,
             95.2353
           ],
           "rec_yds": [
-            16.75,
+            17.4,
             43.2353
           ],
           "recs": [
-            3.0,
+            3.4,
             5.0
           ]
         },
         "WR": {
-          "n": 4,
+          "n": 5,
           "pass_yds": [
             0.0,
             0.0
@@ -132730,20 +133814,20 @@
             0.0
           ],
           "rush_yds": [
-            6.0,
+            8.2,
             6.8235
           ],
           "rec_yds": [
-            168.25,
+            162.4,
             171.0
           ],
           "recs": [
-            12.0,
+            11.6,
             12.1176
           ]
         },
         "TE": {
-          "n": 4,
+          "n": 5,
           "pass_yds": [
             0.0,
             0.0
@@ -132757,11 +133841,11 @@
             0.0
           ],
           "rec_yds": [
-            52.75,
+            48.2,
             51.7059
           ],
           "recs": [
-            5.5,
+            5.2,
             5.2941
           ]
         }
@@ -134648,17 +135732,17 @@
       },
       "TB": {
         "QB": {
-          "n": 4,
+          "n": 5,
           "pass_yds": [
-            214.25,
+            234.6,
             254.8235
           ],
           "pass_tds": [
-            1.5,
+            1.4,
             1.7647
           ],
           "rush_yds": [
-            12.75,
+            10.2,
             20.5882
           ],
           "rec_yds": [
@@ -134671,7 +135755,7 @@
           ]
         },
         "RB": {
-          "n": 4,
+          "n": 5,
           "pass_yds": [
             0.0,
             0.0
@@ -134681,20 +135765,20 @@
             0.0
           ],
           "rush_yds": [
-            62.5,
+            60.0,
             78.8235
           ],
           "rec_yds": [
-            40.25,
+            35.6,
             50.5882
           ],
           "recs": [
-            6.25,
+            5.4,
             4.6471
           ]
         },
         "WR": {
-          "n": 4,
+          "n": 5,
           "pass_yds": [
             0.0,
             0.0
@@ -134704,20 +135788,20 @@
             0.0
           ],
           "rush_yds": [
-            2.5,
+            2.0,
             1.7647
           ],
           "rec_yds": [
-            105.75,
+            138.8,
             147.5294
           ],
           "recs": [
-            8.75,
+            10.6,
             11.7059
           ]
         },
         "TE": {
-          "n": 4,
+          "n": 5,
           "pass_yds": [
             0.0,
             0.0
@@ -134727,15 +135811,15 @@
             0.0
           ],
           "rush_yds": [
-            0.75,
+            0.6,
             -0.1176
           ],
           "rec_yds": [
-            68.25,
+            60.2,
             57.0
           ],
           "recs": [
-            6.5,
+            6.0,
             5.8824
           ]
         }
@@ -134932,23 +136016,23 @@
     "league": {
       "QB": {
         "pass_yds": [
-          234.3516,
+          234.6308,
           224.682
         ],
         "pass_tds": [
-          1.5703,
+          1.5615,
           1.4798
         ],
         "rush_yds": [
-          16.6641,
+          16.5846,
           17.7996
         ],
         "rec_yds": [
-          0.0078,
+          0.0077,
           0.0754
         ],
         "recs": [
-          0.0078,
+          0.0077,
           0.0165
         ]
       },
@@ -134962,21 +136046,21 @@
           0.0055
         ],
         "rush_yds": [
-          91.7656,
+          92.2846,
           94.9357
         ],
         "rec_yds": [
-          30.5547,
+          30.3692,
           31.6526
         ],
         "recs": [
-          4.4453,
+          4.4308,
           4.2757
         ]
       },
       "WR": {
         "pass_yds": [
-          0.2344,
+          0.2308,
           0.079
         ],
         "pass_tds": [
@@ -134984,15 +136068,15 @@
           0.0037
         ],
         "rush_yds": [
-          2.6406,
+          2.7308,
           3.7426
         ],
         "rec_yds": [
-          150.5547,
+          151.3923,
           138.921
         ],
         "recs": [
-          11.4141,
+          11.4538,
           10.9871
         ]
       },
@@ -135006,15 +136090,15 @@
           0.0018
         ],
         "rush_yds": [
-          0.1797,
+          0.1769,
           0.5257
         ],
         "rec_yds": [
-          52.3672,
+          52.0077,
           53.4228
         ],
         "recs": [
-          5.2812,
+          5.2615,
           5.2702
         ]
       }
@@ -135025,8 +136109,8 @@
     "season": 2026,
     "week": 5,
     "live": true,
-    "builtAt": "2026-10-09T00:22Z",
-    "throughDate": "2026-10-05",
+    "builtAt": "2026-10-09T17:37Z",
+    "throughDate": "2026-10-08",
     "model": {
       "halfLifeDays": 60,
       "featureSet": "adj_full+raw",
@@ -135038,8 +136122,8 @@
         2025,
         2026
       ],
-      "wimp": 0.020819,
-      "refereesFromESPN": 1
+      "wimp": 0.020818,
+      "refereesFromESPN": 0
     },
     "key": {
       "tot": {
@@ -135249,13 +136333,13 @@
         "referee": null,
         "teams": {
           "ATL": {
-            "core": 0.5827,
+            "core": 0.5848,
             "impliedNfl": 23.25,
             "projNfl": 24.32,
             "pts": null
           },
           "BAL": {
-            "core": 0.3977,
+            "core": 0.4023,
             "impliedNfl": 20.25,
             "projNfl": 21.07,
             "pts": null
@@ -135273,15 +136357,15 @@
         "referee": null,
         "teams": {
           "BUF": {
-            "core": 0.6633,
+            "core": 0.6546,
             "impliedNfl": 25.75,
-            "projNfl": 26.95,
+            "projNfl": 26.94,
             "pts": null
           },
           "LAR": {
-            "core": 0.1088,
+            "core": 0.1048,
             "impliedNfl": 28.75,
-            "projNfl": 29.46,
+            "projNfl": 29.45,
             "pts": null
           }
         }
@@ -135292,20 +136376,20 @@
         "away": "CHI",
         "gameday": "2026-10-11",
         "gametime": "13:00",
-        "nflSpread": -2.5,
+        "nflSpread": -1.5,
         "nflTotal": 45.5,
         "referee": null,
         "teams": {
           "CHI": {
-            "core": -0.2418,
-            "impliedNfl": 24.0,
-            "projNfl": 24.26,
+            "core": -0.2612,
+            "impliedNfl": 23.5,
+            "projNfl": 23.73,
             "pts": null
           },
           "GB": {
-            "core": 0.8557,
-            "impliedNfl": 21.5,
-            "projNfl": 22.8,
+            "core": 0.8318,
+            "impliedNfl": 22.0,
+            "projNfl": 23.29,
             "pts": null
           }
         }
@@ -135317,19 +136401,19 @@
         "gameday": "2026-10-11",
         "gametime": "13:00",
         "nflSpread": -6.5,
-        "nflTotal": 42.5,
+        "nflTotal": 43.5,
         "referee": null,
         "teams": {
           "CIN": {
-            "core": -0.8686,
-            "impliedNfl": 24.5,
-            "projNfl": 24.14,
+            "core": -0.8857,
+            "impliedNfl": 25.0,
+            "projNfl": 24.63,
             "pts": null
           },
           "MIA": {
-            "core": 0.3823,
-            "impliedNfl": 18.0,
-            "projNfl": 18.76,
+            "core": 0.3785,
+            "impliedNfl": 18.5,
+            "projNfl": 19.26,
             "pts": null
           }
         }
@@ -135345,15 +136429,15 @@
         "referee": null,
         "teams": {
           "CLE": {
-            "core": -2.1192,
+            "core": -2.2431,
             "impliedNfl": 18.5,
-            "projNfl": 16.77,
+            "projNfl": 16.64,
             "pts": null
           },
           "NYJ": {
-            "core": -1.9197,
+            "core": -2.0271,
             "impliedNfl": 21.0,
-            "projNfl": 19.52,
+            "projNfl": 19.41,
             "pts": null
           }
         }
@@ -135369,15 +136453,15 @@
         "referee": null,
         "teams": {
           "DEN": {
-            "core": 0.1539,
+            "core": 0.1451,
             "impliedNfl": 22.5,
-            "projNfl": 23.12,
+            "projNfl": 23.11,
             "pts": null
           },
           "LAC": {
-            "core": 0.2506,
+            "core": 0.2433,
             "impliedNfl": 19.0,
-            "projNfl": 19.65,
+            "projNfl": 19.64,
             "pts": null
           }
         }
@@ -135393,15 +136477,15 @@
         "referee": null,
         "teams": {
           "ARI": {
-            "core": -0.8465,
+            "core": -0.8292,
             "impliedNfl": 24.5,
-            "projNfl": 24.16,
+            "projNfl": 24.18,
             "pts": null
           },
           "DET": {
-            "core": -1.3217,
+            "core": -1.309,
             "impliedNfl": 30.0,
-            "projNfl": 29.3,
+            "projNfl": 29.32,
             "pts": null
           }
         }
@@ -135417,15 +136501,15 @@
         "referee": null,
         "teams": {
           "HOU": {
-            "core": -1.1833,
+            "core": -1.1976,
             "impliedNfl": 22.5,
-            "projNfl": 21.79,
+            "projNfl": 21.77,
             "pts": null
           },
           "TEN": {
-            "core": 0.3879,
+            "core": 0.3741,
             "impliedNfl": 15.0,
-            "projNfl": 15.7,
+            "projNfl": 15.69,
             "pts": null
           }
         }
@@ -135437,19 +136521,19 @@
         "gameday": "2026-10-11",
         "gametime": "13:00",
         "nflSpread": 2.5,
-        "nflTotal": 44.5,
+        "nflTotal": 43.5,
         "referee": null,
         "teams": {
           "IND": {
-            "core": -2.0752,
-            "impliedNfl": 21.0,
-            "projNfl": 19.36,
+            "core": -1.8368,
+            "impliedNfl": 20.5,
+            "projNfl": 19.09,
             "pts": null
           },
           "PIT": {
-            "core": -1.6766,
-            "impliedNfl": 23.5,
-            "projNfl": 22.31,
+            "core": -1.4415,
+            "impliedNfl": 23.0,
+            "projNfl": 22.04,
             "pts": null
           }
         }
@@ -135465,15 +136549,15 @@
         "referee": null,
         "teams": {
           "LV": {
-            "core": -0.2596,
+            "core": -0.2696,
             "impliedNfl": 21.0,
-            "projNfl": 21.18,
+            "projNfl": 21.17,
             "pts": null
           },
           "NE": {
-            "core": -0.328,
+            "core": -0.3352,
             "impliedNfl": 24.5,
-            "projNfl": 24.68,
+            "projNfl": 24.67,
             "pts": null
           }
         }
@@ -135489,15 +136573,15 @@
         "referee": null,
         "teams": {
           "MIN": {
-            "core": 0.3388,
+            "core": 0.3217,
             "impliedNfl": 22.0,
-            "projNfl": 22.8,
+            "projNfl": 22.78,
             "pts": null
           },
           "NO": {
-            "core": -0.3509,
+            "core": -0.3551,
             "impliedNfl": 19.5,
-            "projNfl": 19.56,
+            "projNfl": 19.55,
             "pts": null
           }
         }
@@ -135513,15 +136597,15 @@
         "referee": null,
         "teams": {
           "NYG": {
-            "core": -1.2495,
+            "core": -0.2859,
             "impliedNfl": 19.0,
-            "projNfl": 18.15,
+            "projNfl": 19.11,
             "pts": null
           },
           "WAS": {
-            "core": -1.0413,
+            "core": -0.0739,
             "impliedNfl": 22.5,
-            "projNfl": 21.93,
+            "projNfl": 22.89,
             "pts": null
           }
         }
@@ -135537,15 +136621,15 @@
         "referee": null,
         "teams": {
           "JAX": {
-            "core": 0.3766,
+            "core": 0.361,
             "impliedNfl": 24.5,
-            "projNfl": 25.39,
+            "projNfl": 25.37,
             "pts": null
           },
           "PHI": {
-            "core": -0.3613,
+            "core": -0.376,
             "impliedNfl": 17.0,
-            "projNfl": 16.99,
+            "projNfl": 16.98,
             "pts": null
           }
         }
@@ -135561,15 +136645,15 @@
         "referee": null,
         "teams": {
           "SEA": {
-            "core": 0.2484,
+            "core": 0.2445,
             "impliedNfl": 24.25,
             "projNfl": 25.0,
             "pts": null
           },
           "SF": {
-            "core": 0.4036,
+            "core": 0.3941,
             "impliedNfl": 21.25,
-            "projNfl": 22.1,
+            "projNfl": 22.09,
             "pts": null
           }
         }
@@ -135585,16 +136669,16 @@
         "referee": "Alex Moore",
         "teams": {
           "DAL": {
-            "core": 0.6014,
+            "core": 0.733,
             "impliedNfl": 29.5,
-            "projNfl": 30.72,
-            "pts": null
+            "projNfl": 30.85,
+            "pts": 16
           },
           "TB": {
-            "core": 0.158,
+            "core": 0.2896,
             "impliedNfl": 20.0,
-            "projNfl": 20.57,
-            "pts": null
+            "projNfl": 20.71,
+            "pts": 24
           }
         }
       }
@@ -136044,13 +137128,13 @@
         },
         "Chris Godwin Jr.": {
           "pid": "00-0033921",
-          "n": 10,
+          "n": 11,
           "car": 1.0,
-          "ypc10": 5.1989,
+          "ypc10": 4.6774,
           "med8": 3.5,
           "lr": 0.0,
           "pos": "WR",
-          "last": "2026-09-20"
+          "last": "2026-10-08"
         },
         "Kareem Hunt": {
           "pid": "00-0033923",
@@ -136804,13 +137888,13 @@
         },
         "Kenny Gainwell": {
           "pid": "00-0036919",
-          "n": 66,
-          "car": 4.585,
-          "ypc10": 2.7378,
+          "n": 67,
+          "car": 4.455,
+          "ypc10": 3.0894,
           "med8": 12.5,
-          "lr": 0.0124,
+          "lr": 0.00993,
           "pos": "RB",
-          "last": "2026-10-04"
+          "last": "2026-10-08"
         },
         "Michael Carter": {
           "pid": "00-0036924",
@@ -136884,13 +137968,13 @@
         },
         "Javonte Williams": {
           "pid": "00-0036997",
-          "n": 56,
-          "car": 15.658,
-          "ypc10": 3.5291,
-          "med8": 58.0,
-          "lr": 0.01689,
+          "n": 57,
+          "car": 14.845,
+          "ypc10": 3.4041,
+          "med8": 49.5,
+          "lr": 0.02882,
           "pos": "RB",
-          "last": "2026-10-04"
+          "last": "2026-10-08"
         },
         "Trey Lance": {
           "pid": "00-0037012",
@@ -137534,13 +138618,13 @@
         },
         "Hunter Luepke": {
           "pid": "00-0038738",
-          "n": 19,
-          "car": 2.002,
-          "ypc10": 4.2053,
+          "n": 20,
+          "car": 1.778,
+          "ypc10": 4.3053,
           "med8": 6.0,
           "lr": 0.0,
           "pos": "RB",
-          "last": "2026-09-20"
+          "last": "2026-10-08"
         },
         "Jaleel McLaughlin": {
           "pid": "00-0038794",
@@ -137564,13 +138648,13 @@
         },
         "Sean Tucker": {
           "pid": "00-0038951",
-          "n": 29,
-          "car": 4.579,
-          "ypc10": 2.4525,
+          "n": 30,
+          "car": 4.672,
+          "ypc10": 2.7255,
           "med8": 7.5,
-          "lr": 0.00718,
+          "lr": 0.00547,
           "pos": "RB",
-          "last": "2026-10-04"
+          "last": "2026-10-08"
         },
         "Marvin Mims Jr.": {
           "pid": "00-0038976",
@@ -137774,13 +138858,13 @@
         },
         "Bucky Irving": {
           "pid": "00-0039361",
-          "n": 31,
-          "car": 15.73,
-          "ypc10": 3.4573,
-          "med8": 60.5,
-          "lr": 0.01164,
+          "n": 32,
+          "car": 16.901,
+          "ypc10": 3.673,
+          "med8": 66.0,
+          "lr": 0.03473,
           "pos": "RB",
-          "last": "2026-10-04"
+          "last": "2026-10-08"
         },
         "Sione Vaki": {
           "pid": "00-0039364",
@@ -138214,13 +139298,13 @@
         },
         "Emeka Egbuka": {
           "pid": "00-0040129",
-          "n": 3,
+          "n": 4,
           "car": 1.0,
-          "ypc10": 1.0259,
-          "med8": 0.0,
+          "ypc10": 4.1712,
+          "med8": 4.5,
           "lr": 0.0,
           "pos": "WR",
-          "last": "2026-09-20"
+          "last": "2026-10-08"
         },
         "Jaylin Noel": {
           "pid": "00-0040138",
@@ -138681,6 +139765,16 @@
           "lr": 0.0,
           "pos": "RB",
           "last": "2026-10-04"
+        },
+        "Jalon Daniels": {
+          "pid": "00-0041251",
+          "n": 3,
+          "car": 5.803,
+          "ypc10": 4.4759,
+          "med8": 23.0,
+          "lr": 0.05625,
+          "pos": "QB",
+          "last": "2026-10-08"
         },
         "CJ Donaldson": {
           "pid": "00-0041326",
