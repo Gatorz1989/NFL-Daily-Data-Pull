@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-14T15:50:14.220073",
+  "generated": "2026-10-15T15:35:55.793960",
   "season": 2025,
   "baseline_season": 2025,
   "current_season": 2026,
@@ -3700,7 +3700,7 @@
       "catchRate": 0.5428571428571428,
       "aDOT": 8.742857142857142,
       "yacPerRec": 2.3157894736842106,
-      "rzTargetShare": 0.023,
+      "rzTargetShare": 0.022,
       "snapShare": 0.389,
       "usageSource": "baseline"
     },
@@ -8513,7 +8513,7 @@
     "Jake Browning": {
       "name": "Jake Browning",
       "pos": "QB",
-      "team": "CIN",
+      "team": "LAC",
       "games": 5,
       "passYdsPG": 154.2,
       "cpoe": 0.3757,
@@ -13891,7 +13891,7 @@
       "yacPerRec": 2.429,
       "rzTargetShare": 0.043,
       "snapShare": 0.3225,
-      "depthRank": 5,
+      "depthRank": 6,
       "depthPos": "TE",
       "team2026": "ARI",
       "usageSource": "blended_2026",
@@ -31655,7 +31655,7 @@
       "source": "roster_2026_skeleton",
       "rzTargetShare": 0.012,
       "snapShare": 0.032,
-      "depthRank": 5,
+      "depthRank": 6,
       "depthPos": "WR",
       "team2026": "ARI",
       "targShare": 0.044,
@@ -32021,7 +32021,7 @@
       "nflGames": 0,
       "source": "roster_2026_skeleton",
       "snapShare": 0.0755,
-      "depthRank": 4,
+      "depthRank": 5,
       "depthPos": "WR",
       "team2026": "ARI",
       "targShare": 0.011,
@@ -32564,9 +32564,6 @@
       "isRookie": false,
       "nflGames": 0,
       "source": "roster_2026_skeleton",
-      "depthRank": 6,
-      "depthPos": "WR",
-      "team2026": "SEA",
       "targShare": 0.044,
       "airYdShare": 0.0626,
       "wopr": 0.1137,
@@ -34490,7 +34487,7 @@
       "nflGames": 0,
       "source": "roster_2026_skeleton",
       "snapShare": 0.181,
-      "depthRank": 7,
+      "depthRank": 6,
       "depthPos": "WR",
       "team2026": "SEA",
       "targShare": 0.044,
@@ -34614,7 +34611,7 @@
     "Shedrick Jackson": {
       "name": "Shedrick Jackson",
       "pos": "WR",
-      "team": "BAL",
+      "team": "ARI",
       "games": 0,
       "isRookie": false,
       "nflGames": 0,
@@ -35729,6 +35726,9 @@
       "isRookie": false,
       "nflGames": 0,
       "source": "roster_2026_skeleton",
+      "depthRank": 4,
+      "depthPos": "TE",
+      "team2026": "ARI",
       "targShare": 0.0394,
       "airYdShare": 0.0236,
       "wopr": 0.0735,
@@ -36156,7 +36156,7 @@
       "nflGames": 0,
       "source": "roster_2026_skeleton",
       "snapShare": 0.37,
-      "depthRank": 4,
+      "depthRank": 5,
       "depthPos": "TE",
       "team2026": "ARI",
       "targShare": 0.0394,
@@ -39235,7 +39235,7 @@
     "Jarquez Hunter": {
       "name": "Jarquez Hunter",
       "pos": "RB",
-      "team": "MIA",
+      "team": "NO",
       "games": 0,
       "isRookie": false,
       "nflGames": 0,
@@ -43051,7 +43051,7 @@
         "games": 0
       },
       "rookieNote": "ROOKIE \u2014 0 NFL games played. Blend: 100% college (, 0.70\u00d7 adj) + 0% NFL.",
-      "depthRank": 6,
+      "depthRank": 4,
       "depthPos": "WR",
       "team2026": "ARI",
       "targShare": 0.0602,
@@ -46355,7 +46355,7 @@
       "nflGames": 0,
       "source": "roster_2026_skeleton",
       "rookieNote": "Rookie \u2014 no college data found. Using league avg baseline.",
-      "depthRank": 6,
+      "depthRank": 7,
       "depthPos": "TE",
       "team2026": "ARI",
       "targShare": 0.0394,
@@ -49440,6 +49440,17 @@
     }
   },
   "injuries": {
+    "Zach Charbonnet": {
+      "name": "Zach Charbonnet",
+      "team": "SEA",
+      "pos": "RB",
+      "status": "Out",
+      "detail": "Knee",
+      "practice": "Limited Participation in Practice",
+      "week": 6,
+      "source": "nflverse",
+      "origin": "report"
+    },
     "Demarcus Robinson": {
       "name": "Demarcus Robinson",
       "team": "SF",
@@ -49566,7 +49577,7 @@
       "team": "NE",
       "pos": "WR",
       "status": "IR",
-      "detail": "Reserve list (R01)",
+      "detail": "Reserve list (R48)",
       "practice": "",
       "week": 6,
       "source": "nflverse",
@@ -49869,17 +49880,6 @@
       "source": "nflverse",
       "origin": "roster"
     },
-    "Zach Charbonnet": {
-      "name": "Zach Charbonnet",
-      "team": "SEA",
-      "pos": "RB",
-      "status": "IR",
-      "detail": "Reserve list (R04)",
-      "practice": "",
-      "week": 6,
-      "source": "nflverse",
-      "origin": "roster"
-    },
     "Johnny Wilson": {
       "name": "Johnny Wilson",
       "team": "PHI",
@@ -50072,7 +50072,7 @@
       "team": "CLE",
       "pos": "RB",
       "status": "IR",
-      "detail": "Reserve list (R01)",
+      "detail": "Reserve list (R48)",
       "practice": "",
       "week": 6,
       "source": "nflverse",
@@ -50281,7 +50281,7 @@
       "team": "BAL",
       "pos": "WR",
       "status": "IR",
-      "detail": "Reserve list (R01)",
+      "detail": "Reserve list (R48)",
       "practice": "",
       "week": 6,
       "source": "nflverse",
@@ -50457,7 +50457,7 @@
       "team": "PHI",
       "pos": "TE",
       "status": "IR",
-      "detail": "Reserve list (R01)",
+      "detail": "Reserve list (R48)",
       "practice": "",
       "week": 6,
       "source": "nflverse",
@@ -50479,7 +50479,7 @@
       "team": "NYJ",
       "pos": "WR",
       "status": "IR",
-      "detail": "Reserve list (R01)",
+      "detail": "Reserve list (R48)",
       "practice": "",
       "week": 6,
       "source": "nflverse",
@@ -50626,13 +50626,6 @@
     }
   },
   "games": [
-    {
-      "home": "DEN",
-      "away": "SEA",
-      "week": 6,
-      "date": "2026-10-15",
-      "gameId": "2026_06_SEA_DEN"
-    },
     {
       "home": "JAX",
       "away": "HOU",
@@ -50975,6 +50968,13 @@
       "week": 9,
       "date": "2026-11-08",
       "gameId": "2026_09_NYG_PHI"
+    },
+    {
+      "home": "WAS",
+      "away": "LA",
+      "week": 9,
+      "date": "2026-11-08",
+      "gameId": "2026_09_LA_WAS"
     }
   ],
   "rookieData": {
@@ -135102,7 +135102,7 @@
     "season": 2026,
     "week": 6,
     "live": true,
-    "builtAt": "2026-10-14T15:52Z",
+    "builtAt": "2026-10-15T15:38Z",
     "throughDate": "2026-10-12",
     "model": {
       "halfLifeDays": 60,
@@ -135417,20 +135417,20 @@
         "away": "CHI",
         "gameday": "2026-10-18",
         "gametime": "13:00",
-        "nflSpread": -2.5,
-        "nflTotal": 49.5,
+        "nflSpread": -1.5,
+        "nflTotal": 51.5,
         "referee": null,
         "teams": {
           "ATL": {
             "core": 1.4453,
-            "impliedNfl": 23.5,
-            "projNfl": 25.5,
+            "impliedNfl": 25.0,
+            "projNfl": 27.04,
             "pts": null
           },
           "CHI": {
             "core": 0.0049,
-            "impliedNfl": 26.0,
-            "projNfl": 26.62,
+            "impliedNfl": 26.5,
+            "projNfl": 27.13,
             "pts": null
           }
         }
@@ -135446,15 +135446,15 @@
         "referee": null,
         "teams": {
           "DAL": {
-            "core": -1.1608,
+            "core": -1.1395,
             "impliedNfl": 26.0,
-            "projNfl": 25.46,
+            "projNfl": 25.48,
             "pts": null
           },
           "GB": {
-            "core": -1.1169,
+            "core": -1.0956,
             "impliedNfl": 27.5,
-            "projNfl": 27.04,
+            "projNfl": 27.06,
             "pts": null
           }
         }
@@ -135470,15 +135470,15 @@
         "referee": null,
         "teams": {
           "HOU": {
-            "core": -2.564,
+            "core": -2.6698,
             "impliedNfl": 20.0,
-            "projNfl": 17.91,
+            "projNfl": 17.81,
             "pts": null
           },
           "JAX": {
-            "core": -1.1647,
+            "core": -1.2705,
             "impliedNfl": 22.5,
-            "projNfl": 21.87,
+            "projNfl": 21.76,
             "pts": null
           }
         }
@@ -135562,19 +135562,19 @@
         "gameday": "2026-10-18",
         "gametime": "13:00",
         "nflSpread": -2.5,
-        "nflTotal": 40.5,
+        "nflTotal": 39.5,
         "referee": null,
         "teams": {
           "PIT": {
-            "core": -0.5091,
-            "impliedNfl": 21.5,
-            "projNfl": 21.5,
+            "core": 0.0234,
+            "impliedNfl": 21.0,
+            "projNfl": 21.52,
             "pts": null
           },
           "TB": {
-            "core": -0.7087,
-            "impliedNfl": 19.0,
-            "projNfl": 18.74,
+            "core": -0.1762,
+            "impliedNfl": 18.5,
+            "projNfl": 18.76,
             "pts": null
           }
         }
@@ -135590,15 +135590,15 @@
         "referee": null,
         "teams": {
           "DEN": {
-            "core": 0.0629,
+            "core": 0.7362,
             "impliedNfl": 19.0,
-            "projNfl": 19.51,
+            "projNfl": 20.19,
             "pts": null
           },
           "SEA": {
-            "core": 0.036,
+            "core": 0.3744,
             "impliedNfl": 21.5,
-            "projNfl": 22.05,
+            "projNfl": 22.39,
             "pts": null
           }
         }
