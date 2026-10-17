@@ -2061,6 +2061,7 @@ def build_player_profiles(dfs, season):
             players = _gated
             print(f"  Non-QB passers excluded from QB profiles: {len(_dropped_nonqb)} {_dropped_nonqb[:8]}")
             _hybrids = []
+            _qb_conflicts = []
             def _merge_profiles(_prev, _new, _key):
                 # same key from two sources: a real stats profile for a NON-QB (Taysom Hill = TE) and his PBP passing
                 # profile are ONE player. Keep the stats profile (position, games, every rate over ALL games played) and
@@ -2074,6 +2075,23 @@ def build_player_profiles(dfs, season):
                     _a['isHybrid'] = True; _a['passGames'] = _b.get('games')
                     _hybrids.append(_a.get('name') or _key)
                     return _a
+                # v4.9 QB MERGE GUARD — two QB records under one name key. (1) Two DIFFERENT gsis ids are two different people who
+                # share a name after normalising (a rookie and a veteran, say): never blend them; keep the passer with more attempts
+                # and report the other. (2) The same person from two sources: the PBP passing fields win, but nothing else the other
+                # record carries (rookie flag, college blend, draft data) is thrown away.
+                _pb = _new if _new.get('source') == 'pbp_passer' else (_prev if _prev.get('source') == 'pbp_passer' else None)
+                _ot = _prev if _pb is _new else _new
+                if _pb is not None and _ot is not None and _ot is not _pb and _ot.get('pos') in ('QB', None):
+                    _g1, _g2 = str(_ot.get('_gsis', '') or ''), str(_pb.get('_gsis', '') or '')
+                    if _g1 and _g2 and _g1 != _g2:
+                        _keep, _drop = ((_pb, _ot) if int(_pb.get('_attempts', 0)) >= int(_ot.get('_attempts', 0)) else (_ot, _pb))
+                        _qb_conflicts.append(f"{_key}: {_keep.get('name')} kept, {_drop.get('name')} dropped (different ids)")
+                        return _keep
+                    _m = dict(_ot); _m.update(_pb)
+                    for _f in ('isRookie', 'rookieNote', 'college', 'draftRound', 'draftPick', 'collegeBlend', 'rookieBlend'):
+                        if _ot.get(_f) and not _pb.get(_f):
+                            _m[_f] = _ot[_f]
+                    return _m
                 return _new
             _renamed3 = 0; _new_pl = {}
             for _k3, _pd3 in players.items():
@@ -2098,6 +2116,14 @@ def build_player_profiles(dfs, season):
             for _pq in _new_pl.values():
                 _pq.pop('_gsis', None); _pq.pop('_attempts', None)    # internal bookkeeping, not part of the output
             print(f"  Hybrid players merged into one profile: {_hybrids}")
+            if _qb_conflicts:
+                print(f"  QB merge guard — name collisions between different players: {_qb_conflicts}")
+            # v4.9 PASSER CHECK — a passer still carrying an abbreviated name ('C.Tune') was never matched to a roster id. List
+            # them so a split profile is visible in the data file instead of hiding as a second, tiny QB.
+            _unresolved_qb = sorted({str(_v.get('name')) for _v in _new_pl.values() if _v.get('source') == 'pbp_passer' and re.match(r'^[A-Z]\.[A-Za-z]', str(_v.get('name', '')))})
+            print(f"  Passers still on an abbreviated name (unresolved): {_unresolved_qb}")
+            globals()['_UNRESOLVED_QB_NAMES'] = _unresolved_qb
+            globals()['_QB_MERGE_CONFLICTS'] = list(_qb_conflicts)
             players = _new_pl
             _added3 = 0
             for _gi5, _inf5 in _gsis_full3.items():
@@ -4028,6 +4054,9 @@ def save_output(teams, players, injury_map, games, college_data, season, roster_
             'currentSeasonPlayers': sum(1 for p in players.values() if p.get('games2026')),
             'depthPriorPlayers':    sum(1 for p in players.values() if p.get('usageSource') == 'depth_prior'),
             'injuryBackupCount':    len(injury_map),
+            'unresolvedQbNames':    list(globals().get('_UNRESOLVED_QB_NAMES', [])),   # v4.9: passers never matched to a roster id
+            'qbMergeConflicts':     list(globals().get('_QB_MERGE_CONFLICTS', [])),    # v4.9: same normalised name, different players
+            'pullScriptVersion':    'v4.9',
         }
     }
 
