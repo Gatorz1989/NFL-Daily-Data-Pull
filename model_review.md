@@ -1,6 +1,6 @@
 # Model Review
 
-Generated 2026-10-20T18:11:02Z from seasons 2024, 2025, 2026.
+Generated 2026-10-23T17:38:44Z from seasons 2024, 2025, 2026.
 
 ## Scorecard
 
